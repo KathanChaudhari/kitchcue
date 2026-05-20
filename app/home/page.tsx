@@ -15,7 +15,7 @@ export default function HomeTabPage() {
       <AppNav active="home" />
 
       <PageContainer>
-        <MobileHeader title="Home" actionHref="/stock/add" />
+        <MobileHeader title="Home" />
 
         <div className="grid gap-4 pb-24 lg:grid-cols-4 lg:pb-8">
           <div className="space-y-4 lg:col-span-2">
