@@ -5,26 +5,51 @@ type InventoryItemCardProps = {
   level: number;
 };
 
-export function InventoryItemCard({ name, category, amount, level }: InventoryItemCardProps) {
+export function InventoryItemCard({
+  name,
+  category,
+  amount,
+  level
+}: InventoryItemCardProps) {
   const isLow = level < 35;
 
   return (
-    <article className="rounded-2xl bg-white p-4 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h2 className="font-bold">{name}</h2>
-          <p className="mt-1 text-sm text-[#7a6b58]">{category} · {amount}</p>
+    <div className="border-b border-[#efe7da] py-3 last:border-b-0">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h2 className="truncate text-sm font-semibold text-[#20201d]">
+              {name}
+            </h2>
+
+            {isLow ? (
+              <span className="text-[10px] font-bold uppercase tracking-wide text-[#bc6c25]">
+                Low
+              </span>
+            ) : null}
+          </div>
+
+          <p className="mt-1 text-xs text-[#7a6b58]">
+            {category} · {amount}
+          </p>
         </div>
-        <button className="rounded-full bg-[#f7efe4] px-3 py-1 text-xs font-bold text-[#6b5c49]" type="button">
+
+        <button
+          className="shrink-0 text-xs font-medium text-[#6b5c49] transition hover:text-[#20201d]"
+          type="button"
+        >
           Empty
         </button>
       </div>
-      <div className="mt-4 h-3 rounded-full bg-[#f0eadf]">
+
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full">
         <div
-          className={`h-3 rounded-full ${isLow ? "bg-[#bc6c25]" : "bg-[#606c38]"}`}
+          className={`h-full rounded-full ${
+            isLow ? "bg-[#bc6c25]" : "bg-[#606c38]"
+          }`}
           style={{ width: `${level}%` }}
         />
       </div>
-    </article>
+    </div>
   );
 }
