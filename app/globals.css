@@ -7,9 +7,11 @@
   --surface-muted: #1c211e;
   --card: #171b18;
   --card-soft: #20261f;
+  --card-elevated: #1f2121;
   --border: #2b332d;
   --foreground: #f7f3ed;
   --muted: #b7ada2;
+  --primary-soft: #d7e6d4;
   --primary: #87a28a;
   --secondary: #b38b6d;
   --tertiary: #82c4c5;
@@ -23,6 +25,7 @@ html.light {
   --surface-muted: #f7efe4;
   --card: #ffffff;
   --card-soft: #f7efe4;
+  --card-elevated: #1f2121;
   --border: #eadfce;
   --foreground: #20201d;
   --muted: #7a6b58;

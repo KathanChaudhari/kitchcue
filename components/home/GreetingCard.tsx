@@ -1,11 +1,11 @@
 export function GreetingCard() {
   return (
-    <section className="grid overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card)] shadow-sm md:grid-cols-[1.3fr_0.7fr]">
+    <section className="grid overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--card-elevated)] shadow-sm md:grid-cols-[1.3fr_0.7fr]">
       <div className="p-6 sm:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--secondary)]">
           Today in your kitchen
         </p>
-        <h2 className="mt-3 text-3xl font-bold sm:text-4xl">Good morning chef</h2>
+        <h2 className="mt-3 text-3xl font-bold sm:text-4xl text-[var(--primary)]">Good morning chef</h2>
         <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--muted)] sm:text-base">
           Kitchen is on, low on milk and dinner is planned for tonight.
         </p>

@@ -29,7 +29,7 @@ export function AppNav({ active }: AppNavProps) {
   return (
     <nav
       className={`
-        fixed z-10 border-[var(--border)] bg-[#1f2020] backdrop-blur transition-all duration-300
+        fixed z-10 border-[var(--border)] bg-[var(--card-elevated)] backdrop-blur transition-all duration-300
 
         inset-x-0 bottom-0 mx-auto max-w-md border-t px-3 pb-3 pt-2
 
