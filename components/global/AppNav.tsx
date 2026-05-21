@@ -13,9 +13,9 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { href: "/home", label: "Home", icon: "⌂", key: "home" },
+  { href: "/home", label: "Dashboard", icon: "⌂", key: "home" },
   { href: "/assistant", label: "Assistant", icon: "✦", key: "assistant" },
-  { href: "/stock", label: "Stock", icon: "▦", key: "stock" },
+  { href: "/stock", label: "Stocks", icon: "▦", key: "stock" },
   { href: "/profile", label: "Profile", icon: "◌", key: "profile" }
 ];
 
@@ -29,7 +29,7 @@ export function AppNav({ active }: AppNavProps) {
   return (
     <nav
       className={`
-        fixed z-10 border-[#eadfce] bg-white/95 backdrop-blur transition-all duration-300
+        fixed z-10 border-[var(--border)] bg-[#1f2020] backdrop-blur transition-all duration-300
 
         inset-x-0 bottom-0 mx-auto max-w-md border-t px-3 pb-3 pt-2
 
@@ -45,10 +45,10 @@ export function AppNav({ active }: AppNavProps) {
       >
         {!isCollapsed && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b06a2b]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--secondary)]">
               smart way
             </p>
-            <h2 className="mt-1 text-xl font-bold text-[#20201d]">
+            <h2 className="mt-1 text-xl font-bold text-[var(--foreground)]">
               KitchCue
             </h2>
           </div>
@@ -57,7 +57,7 @@ export function AppNav({ active }: AppNavProps) {
         <button
           type="button"
           onClick={() => setIsCollapsed((value) => !value)}
-          className="grid h-10 w-10 place-items-center rounded-2xl bg-[#f7efe4] text-sm font-bold text-[#7a6b58] transition hover:bg-[#eadfce]"
+          className="grid h-10 w-10 place-items-center rounded-2xl bg-[var(--card-soft)] text-sm font-bold text-[var(--muted)] transition hover:border hover:border-[var(--primary)]"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? "☰" : "‹"}
@@ -83,8 +83,8 @@ export function AppNav({ active }: AppNavProps) {
                 }
                 ${
                   isActive
-                    ? "bg-[#20201d] text-white"
-                    : "text-[#7a6b58] hover:bg-[#f7efe4]"
+                    ? "bg-[var(--primary)] text-[var(--ink)]"
+                    : "text-[#b7b7b7] hover:bg-[#2f3b31]"
                 }
               `}
             >

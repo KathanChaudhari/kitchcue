@@ -3,34 +3,31 @@ import { MobileHeader } from "@/components/global/MobileHeader";
 import { PageContainer } from "@/components/global/PageContainer";
 import { GreetingCard } from "@/components/home/GreetingCard";
 import { LowStockCard } from "@/components/home/LowStockCard";
-import { NearExpiryCard } from "@/components/home/NearExpiryCard";
-import { QuickActionRow } from "@/components/home/QuickActionRow";
+import { NotesCard } from "@/components/home/NotesCard";
 import { RecentActivityList } from "@/components/home/RecentActivityList";
-import { ReminderCardList } from "@/components/home/ReminderCardList";
-import { SuggestedMealCard } from "@/components/home/SuggestedMealCard";
+import { ShoppingListCard } from "@/components/home/ShoppingListCard";
 
 export default function HomeTabPage() {
   return (
     <>
       <AppNav active="home" />
 
-      <PageContainer>
-        <MobileHeader title="Home" />
+      <PageContainer headerTitle="Dashboard" searchPlaceholder="Search pantry, meals, notes">
+        <MobileHeader title="Dashboard" />
 
-        <div className="grid gap-4 pb-24 lg:grid-cols-4 lg:pb-8">
-          <div className="space-y-4 lg:col-span-2">
+        <div className="space-y-4 pb-24 lg:pb-8">
+          <div>
             <GreetingCard />
-            <QuickActionRow />
-            <ReminderCardList />
           </div>
 
-          <div className="space-y-4 lg:col-span-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             <LowStockCard />
-            <div className="grid gap-4 sm:grid-cols-2">
-              <NearExpiryCard />
-              <SuggestedMealCard />
-            </div>
+            <ShoppingListCard />
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
             <RecentActivityList />
+            <NotesCard />
           </div>
         </div>
       </PageContainer>

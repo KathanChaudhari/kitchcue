@@ -16,12 +16,12 @@ export function MobileHeader({
   return (
     <header className="flex items-center justify-between pb-4 pt-5">
       <div>
-        {eyebrow ? <p className="text-sm font-medium text-[#7a6b58]">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-sm font-medium text-[var(--muted)]">{eyebrow}</p> : null}
         <h1 className="text-2xl font-bold">{title}</h1>
       </div>
       {actionHref ? (
         <Link
-          className="grid h-11 w-11 place-items-center rounded-full bg-[#20201d] text-lg font-bold text-white shadow-sm"
+          className="grid h-11 w-11 place-items-center rounded-full bg-[var(--primary)] text-lg font-bold text-[var(--ink)] shadow-sm"
           href={actionHref}
           aria-label={actionLabel}
         >

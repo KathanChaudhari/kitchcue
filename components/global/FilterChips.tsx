@@ -10,7 +10,9 @@ export function FilterChips({ options, active }: FilterChipsProps) {
         <button
           key={option}
           className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${
-            option === active ? "bg-[#20201d] text-white" : "bg-white text-[#7a6b58]"
+            option === active
+              ? "bg-[var(--primary)] text-[var(--ink)]"
+              : "bg-[var(--card)] text-[var(--muted)]"
           }`}
           type="button"
         >

@@ -60,23 +60,23 @@ export function InventoryList() {
         return (
           <div
             key={section.title}
-            className="overflow-hidden rounded-3xl border border-[#eadfce] bg-white/70"
+            className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)]"
           >
             <button
               type="button"
               onClick={() => toggleSection(section.title)}
-              className="sticky top-0 z-[1] flex w-full items-center justify-between bg-white/95 px-4 py-3 text-left backdrop-blur"
+              className="sticky top-0 z-[1] flex w-full items-center justify-between bg-[color-mix(in_srgb,var(--card)_92%,transparent)] px-4 py-3 text-left backdrop-blur"
             >
               <div>
-                <h2 className="text-sm font-bold text-[#20201d]">
+                <h2 className="text-sm font-bold text-[var(--foreground)]">
                   {section.title}
                 </h2>
-                <p className="text-xs text-[#7a6b58]">
+                <p className="text-xs text-[var(--muted)]">
                   {section.items.length} items
                 </p>
               </div>
 
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-[#f7efe4] text-sm font-bold text-[#7a6b58]">
+              <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--card-soft)] text-sm font-bold text-[var(--muted)]">
                 {isOpen ? "−" : "+"}
               </span>
             </button>

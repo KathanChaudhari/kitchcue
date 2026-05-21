@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#fffaf4"
+  themeColor: "#0b0d0c"
 };
 
 export default function RootLayout({
@@ -18,8 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('kitchcue-theme')==='light')document.documentElement.classList.add('light')}catch(e){}"
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

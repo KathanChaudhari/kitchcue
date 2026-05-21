@@ -12,7 +12,7 @@ export default function StockPage() {
     <>
       <AppNav active="stock" />
 
-      <PageContainer>
+      <PageContainer headerTitle="Stocks" searchPlaceholder="Search pantry items">
         <MobileHeader title="Stock" eyebrow="Kitchen inventory" actionHref="/stock/add-stock" />
 
         <div className="grid gap-4 pb-24 lg:grid-cols-[20rem_1fr] lg:pb-8">

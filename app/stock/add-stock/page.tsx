@@ -5,10 +5,10 @@ import { UploadReceiptSheet } from "@/components/stock/UploadReceiptSheet";
 
 export default function AddStockItemPage() {
   return (
-    <PageContainer>
+    <PageContainer headerTitle="Add Stock" searchPlaceholder="Search pantry items">
       <div className="flex items-center justify-between pb-4 pt-5">
         <h1 className="text-2xl font-bold">Add item</h1>
-        <Link className="rounded-full bg-white px-4 py-2 text-sm font-bold shadow-sm" href="/stock">
+        <Link className="rounded-full bg-[var(--card)] px-4 py-2 text-sm font-bold shadow-sm" href="/stock">
           Close
         </Link>
       </div>

@@ -4,8 +4,8 @@ export function NotificationSection() {
   return (
     <SectionCard title="Notifications">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-[#7a6b58]">Low stock reminders</p>
-        <span className="rounded-full bg-[#606c38] px-3 py-1 text-xs font-bold text-white">On</span>
+        <p className="text-sm font-semibold text-[var(--muted)]">Low stock reminders</p>
+        <span className="rounded-full bg-[var(--primary)] px-3 py-1 text-xs font-bold text-[var(--ink)]">On</span>
       </div>
     </SectionCard>
   );

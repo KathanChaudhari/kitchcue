@@ -12,7 +12,7 @@ export default function AssistantPage() {
     <>
       <AppNav active="assistant" />
 
-      <PageContainer>
+      <PageContainer headerTitle="Assistant" searchPlaceholder="Search chats and prompts">
         <MobileHeader title="Assistant" eyebrow="Cook smarter" />
 
         <div className="grid gap-4 pb-40 lg:grid-cols-[22rem_1fr] lg:pb-8">

@@ -38,14 +38,14 @@ export function UserInfoCard() {
     <SectionCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#606c38] text-xl font-bold text-white">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[var(--primary)] text-xl font-bold text-[var(--ink)]">
             {initials}
           </div>
 
           {!isEditing ? (
             <div>
               <h2 className="font-bold">{userInfo.name}</h2>
-              <p className="text-sm text-[#7a6b58]">
+              <p className="text-sm text-[var(--muted)]">
                 {userInfo.age} · {userInfo.city} · {userInfo.kitchenType}
               </p>
             </div>
@@ -56,7 +56,7 @@ export function UserInfoCard() {
                 onChange={(event) =>
                   setDraft({ ...draft, name: event.target.value })
                 }
-                className="rounded-xl border border-[#eadfce] bg-white px-3 py-2 text-sm outline-none focus:border-[#606c38]"
+                className="rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-3 py-2 text-sm outline-none focus:border-[var(--primary)]"
                 placeholder="Name"
               />
 
@@ -66,7 +66,7 @@ export function UserInfoCard() {
                   onChange={(event) =>
                     setDraft({ ...draft, age: event.target.value })
                   }
-                  className="rounded-xl border border-[#eadfce] bg-white px-3 py-2 text-sm outline-none focus:border-[#606c38]"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-3 py-2 text-sm outline-none focus:border-[var(--primary)]"
                   placeholder="Age"
                 />
 
@@ -75,7 +75,7 @@ export function UserInfoCard() {
                   onChange={(event) =>
                     setDraft({ ...draft, city: event.target.value })
                   }
-                  className="rounded-xl border border-[#eadfce] bg-white px-3 py-2 text-sm outline-none focus:border-[#606c38]"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-3 py-2 text-sm outline-none focus:border-[var(--primary)]"
                   placeholder="City"
                 />
               </div>
@@ -85,7 +85,7 @@ export function UserInfoCard() {
                 onChange={(event) =>
                   setDraft({ ...draft, kitchenType: event.target.value })
                 }
-                className="rounded-xl border border-[#eadfce] bg-white px-3 py-2 text-sm outline-none focus:border-[#606c38]"
+                className="rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-3 py-2 text-sm outline-none focus:border-[var(--primary)]"
                 placeholder="Kitchen type"
               />
             </div>
@@ -96,7 +96,7 @@ export function UserInfoCard() {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="rounded-full bg-[#f7efe4] px-3 py-1.5 text-xs font-bold text-[#7a6b58] transition hover:bg-[#eadfce]"
+            className="rounded-full bg-[var(--card-soft)] px-3 py-1.5 text-xs font-bold text-[var(--muted)] transition hover:text-[var(--foreground)]"
           >
             Edit
           </button>
@@ -108,7 +108,7 @@ export function UserInfoCard() {
           <button
             type="button"
             onClick={handleSave}
-            className="rounded-full bg-[#20201d] px-4 py-2 text-sm font-bold text-white"
+            className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--ink)]"
           >
             Save
           </button>
@@ -116,7 +116,7 @@ export function UserInfoCard() {
           <button
             type="button"
             onClick={handleCancel}
-            className="rounded-full bg-[#f7efe4] px-4 py-2 text-sm font-bold text-[#7a6b58]"
+            className="rounded-full bg-[var(--card-soft)] px-4 py-2 text-sm font-bold text-[var(--muted)]"
           >
             Cancel
           </button>
