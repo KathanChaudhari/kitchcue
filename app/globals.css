@@ -2,20 +2,39 @@
 
 :root {
   color-scheme: dark;
-  --background: #0b0d0c;
-  --surface: #141715;
-  --surface-muted: #1c211e;
-  --card: #171b18;
-  --card-soft: #20261f;
-  --card-elevated: #1f2121;
-  --border: #2b332d;
-  --foreground: #f7f3ed;
-  --muted: #b7ada2;
-  --primary-soft: #d7e6d4;
-  --primary: #87a28a;
-  --secondary: #b38b6d;
-  --tertiary: #82c4c5;
-  --ink: #0b0d0c;
+
+  --background: #121414;
+  --surface: #121414;
+  --surface-muted: #1b1c1c;
+
+  --card: #1f2121;
+  --card-soft: #1b1c1c;
+
+  --surface-high: #292a2a;
+  --surface-highest: #343535;
+
+  --border: #434842;
+  --border-soft: rgba(67, 72, 66, 0.4);
+
+  --foreground: #e3e2e2;
+  --foreground-soft: #c3c8c0;
+  --muted: #8d928b;
+
+  --primary: #b2ceb4;
+  --primary-soft: #cdeacf;
+  --primary-muted: #87a28a;
+  --on-primary: #1e3623;
+
+  --secondary: #eabe9d;
+  --secondary-muted: #d8ad8d;
+  --secondary-container: #5f4027;
+  --on-secondary-container: #d8ad8d;
+
+  --tertiary: #90d2d3;
+
+  --error: #ffb4ab;
+
+  --ink: #121414;
 }
 
 html.light {
@@ -25,7 +44,6 @@ html.light {
   --surface-muted: #f7efe4;
   --card: #ffffff;
   --card-soft: #f7efe4;
-  --card-elevated: #1f2121;
   --border: #eadfce;
   --foreground: #20201d;
   --muted: #7a6b58;

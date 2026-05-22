@@ -5,12 +5,12 @@ import { PageContainer } from "@/components/global/PageContainer";
 
 export default function LoginPage() {
   return (
-    <PageContainer size="narrow">
+    <div >
       <MobileHeader title="Login" eyebrow="Welcome back" />
       <div className="space-y-4 pb-8">
         <LoginForm />
         <SocialAuthButtons />
       </div>
-    </PageContainer>
+    </div>
   );
 }

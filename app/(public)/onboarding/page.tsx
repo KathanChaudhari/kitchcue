@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { MobileHeader } from "@/components/global/MobileHeader";
-import { PageContainer } from "@/components/global/PageContainer";
 import { SectionCard } from "@/components/global/SectionCard";
 
 const steps = ["Household size", "Food preferences", "Kitchen essentials"];
 
 export default function OnboardingPage() {
   return (
-    <PageContainer size="narrow"  className="min-h-screen flex flex-col justify-center">
+    <div className="flex min-h-full flex-col justify-center">
       <MobileHeader title="Set up KitchCue" eyebrow="Onboarding" />
       <div className="space-y-4 pb-8">
         {steps.map((step, index) => (
@@ -27,6 +26,6 @@ export default function OnboardingPage() {
           Finish setup
         </Link>
       </div>
-    </PageContainer>
+    </div>
   );
 }

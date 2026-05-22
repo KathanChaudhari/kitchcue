@@ -5,8 +5,7 @@ import { PageContainer } from "@/components/global/PageContainer";
 
 export default function SignupPage() {
   return (
-    <PageContainer
-    size="narrow"
+    <div
     className="min-h-screen flex flex-col justify-center"
   >
     <MobileHeader
@@ -18,6 +17,6 @@ export default function SignupPage() {
       <SignupForm />
       <SocialAuthButtons />
     </div>
-  </PageContainer>
+  </div>
   );
 }

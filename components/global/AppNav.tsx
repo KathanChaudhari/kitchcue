@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type NavKey = "home" | "assistant" | "stock" | "profile";
@@ -19,17 +20,23 @@ const navItems: NavItem[] = [
   { href: "/profile", label: "Profile", icon: "◌", key: "profile" }
 ];
 
-type AppNavProps = {
-  active: NavKey;
-};
+function getActiveNav(pathname: string): NavKey {
+  if (pathname.startsWith("/assistant")) return "assistant";
+  if (pathname.startsWith("/stock")) return "stock";
+  if (pathname.startsWith("/profile")) return "profile";
 
-export function AppNav({ active }: AppNavProps) {
+  return "home";
+}
+
+export function AppNav() {
+  const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const active = getActiveNav(pathname);
 
   return (
     <nav
       className={`
-        fixed z-10 border-[var(--border)] bg-[var(--card-elevated)] backdrop-blur transition-all duration-300
+        fixed z-10 border-[var(--border)] bg-[var(--card)] backdrop-blur transition-all duration-300
 
         inset-x-0 bottom-0 mx-auto max-w-md border-t px-3 pb-3 pt-2
 

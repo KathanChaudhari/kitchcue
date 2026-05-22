@@ -5,7 +5,6 @@ import { PageContainer } from "@/components/global/PageContainer";
 
 export default function Home() {
   return (
-    <PageContainer>
       <div className="grid gap-6 pb-10 lg:min-h-screen lg:flex lg:flex-col lg:items-center lg:py-10">
         <HeroSection />
         <div className="space-y-4 lg:flex lg:gap-4">
@@ -13,6 +12,5 @@ export default function Home() {
           <DemoChatPreview />
         </div>
       </div>
-    </PageContainer>
   );
 }
