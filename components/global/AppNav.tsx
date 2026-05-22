@@ -40,8 +40,10 @@ export function AppNav() {
 
         inset-x-0 bottom-0 mx-auto max-w-md border-t px-3 pb-3 pt-2
 
-        lg:inset-x-auto lg:left-0 lg:top-0 lg:h-screen
+        lg:sticky lg:top-0 lg:inset-x-auto lg:bottom-auto lg:mx-0 lg:h-screen
+        lg:max-w-none lg:shrink-0
         lg:border-r lg:border-t-0 lg:px-4 lg:py-6
+
         ${isCollapsed ? "lg:w-20" : "lg:w-64"}
       `}
     >

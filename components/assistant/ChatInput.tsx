@@ -1,12 +1,52 @@
+"use client";
+
+import { SlidersHorizontal, SendHorizontal } from "lucide-react";
+import { FormEvent, useState } from "react";
+
 export function ChatInput() {
+  const [message, setMessage] = useState("");
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!message.trim()) return;
+
+    // Later, call your API here:
+    // await fetch("/api/assistant", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ message }),
+    // });
+
+    setMessage("");
+  }
+
   return (
-    <form className="fixed inset-x-0 bottom-20 z-10 mx-auto flex max-w-md gap-2 bg-[var(--background)] px-5 py-3 lg:static lg:max-w-none lg:bg-transparent lg:px-0 lg:py-0">
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg"
+    >
+      <button
+        type="button"
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[var(--muted)] transition hover:bg-[var(--card-soft)] hover:text-[var(--foreground)]"
+        aria-label="Assistant settings"
+      >
+        <SlidersHorizontal size={17} />
+      </button>
+
       <input
-        className="h-12 flex-1 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-4 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)]"
-        placeholder="Ask what to cook..."
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        className="h-9 flex-1 bg-transparent text-[13px] text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]"
+        placeholder="Ask KitchCue anything..."
       />
-      <button className="h-12 rounded-2xl bg-[var(--primary)] px-4 text-sm font-bold text-[var(--ink)]" type="button">
-        Send
+
+      <button
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--primary-soft)] text-[var(--ink)] transition hover:opacity-90"
+        type="submit"
+        aria-label="Send message"
+      >
+        <SendHorizontal size={17} />
       </button>
     </form>
   );

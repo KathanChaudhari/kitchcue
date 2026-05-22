@@ -18,7 +18,7 @@ export function RecentActivityList() {
   return (
     <SectionCard>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-[var(--primary)]">
+        <h2 className="text-xl font-bold text-[var(--primary)]">
           Recent Activity
         </h2>
       </div>
@@ -40,7 +40,7 @@ export function RecentActivityList() {
               </p>
 
               <div className="rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-4">
-                <h3 className="text-lg font-bold">
+                <h3 className="text-md font-bold">
                   {activity.title}
                 </h3>
 

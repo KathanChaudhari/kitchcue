@@ -25,17 +25,17 @@ export function LowStockCard() {
     <SectionCard>
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--secondary)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--secondary)]">
             Low stock alert
           </p>
 
-          <h2 className="mt-1 text-2xl font-bold text-[var(--primary)]">
+          <h2 className="mt-1 text-xl font-bold text-[var(--primary)]">
             Restock soon
           </h2>
         </div>
 
         <Link
-          className="text-sm font-bold text-[var(--secondary)] transition hover:opacity-80"
+          className="text-xs font-bold text-[var(--secondary)] transition hover:opacity-80"
           href="/stock"
         >
           View pantry →

@@ -15,7 +15,7 @@ export function ShoppingListCard() {
       <div className="mb-6 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
 
-          <h2 className="text-2xl font-bold text-[var(--primary)]">
+          <h2 className="text-xl font-bold text-[var(--primary)]">
             Shpping List
           </h2>
         </div>

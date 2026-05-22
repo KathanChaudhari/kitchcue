@@ -22,7 +22,7 @@ export function NotesCard() {
   return (
     <SectionCard>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-[var(--primary)]">
+        <h2 className="text-xl font-bold text-[var(--primary)]">
           Notices
         </h2>
       </div>
@@ -34,33 +34,53 @@ export function NotesCard() {
           return (
             <div
               key={notice.title}
-              className={`rounded-2xl border p-4 ${
-                notice.tone === "warning"
-                  ? "border-[#5a3d28] bg-[#2a1d16]"
-                  : "border-[#314437] bg-[#1b2620]"
-              }`}
+              className={`
+                rounded-2xl border p-4
+                ${
+                  notice.tone === "warning"
+                    ? "border-[var(--secondary-container)] bg-[var(--surface-muted)]"
+                    : "border-[var(--border)] bg-[var(--card-soft)]"
+                }
+              `}
             >
               <div className="flex gap-3">
-                <Icon
-                  className={`mt-0.5 h-5 w-5 ${
-                    notice.tone === "warning"
-                      ? "text-[#f0b27a]"
-                      : "text-[var(--primary)]"
-                  }`}
-                />
-
-                <div>
-                  <h3
-                    className={`text-base font-bold ${
+                <div
+                  className={`
+                    flex h-10 w-10 items-center justify-center rounded-full
+                    ${
                       notice.tone === "warning"
-                        ? "text-[#f3c69a]"
-                        : "text-[var(--primary)]"
-                    }`}
+                        ? "bg-[var(--secondary-container)]"
+                        : "bg-[var(--surface-high)]"
+                    }
+                  `}
+                >
+                  <Icon
+                    className={`
+                      h-5 w-5
+                      ${
+                        notice.tone === "warning"
+                          ? "text-[var(--secondary)]"
+                          : "text-[var(--primary)]"
+                      }
+                    `}
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <h3
+                    className={`
+                      text-sm font-bold
+                      ${
+                        notice.tone === "warning"
+                          ? "text-[var(--secondary)]"
+                          : "text-[var(--primary)]"
+                      }
+                    `}
                   >
                     {notice.title}
                   </h3>
 
-                  <p className="mt-2 text-sm leading-6 text-[var(--foreground)]/80">
+                  <p className="mt-2 text-sm leading-6 text-[var(--foreground-soft)]">
                     {notice.description}
                   </p>
                 </div>
