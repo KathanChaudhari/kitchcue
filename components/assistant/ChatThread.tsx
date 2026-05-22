@@ -18,7 +18,7 @@ const messages = [
 
 export function ChatThread() {
   return (
-    <div className="mx-auto w-full w-full py-6">
+    <div className="mx-auto w-full  py-6">
       <div className="mb-6 flex items-center gap-4">
         <div className="h-px flex-1 bg-[var(--border)]" />
         <span className="text-xs font-bold text-[var(--muted)]">Today</span>

@@ -1,55 +1,39 @@
 type InventoryItemCardProps = {
   name: string;
-  category: string;
   amount: string;
   level: number;
 };
 
 export function InventoryItemCard({
   name,
-  category,
   amount,
   level
 }: InventoryItemCardProps) {
   const isLow = level < 35;
 
   return (
-    <div className="border-b border-[var(--border)] py-3 last:border-b-0">
-      <div className="flex items-center justify-between gap-3">
+    <article className="w-fit min-w-[180px] rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-4 py-3 transition hover:border-[var(--primary)]">
+      <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h2 className="truncate text-sm font-semibold text-[var(--foreground)]">
-              {name}
-            </h2>
+          <h3 className="whitespace-nowrap text-sm font-extrabold text-[var(--foreground)]">
+            {name}
+          </h3>
 
-            {isLow ? (
-              <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--secondary)]">
-                Low
-              </span>
-            ) : null}
-          </div>
-
-          <p className="mt-1 text-xs text-[var(--muted)]">
-            {category} · {amount}
+          <p className="mt-1 whitespace-nowrap text-xs font-medium text-[var(--muted)]">
+            {amount}
           </p>
         </div>
 
-        <button
-          className="shrink-0 text-xs font-medium text-[var(--muted)] transition hover:text-[var(--foreground)]"
-          type="button"
-        >
-          Empty
-        </button>
-      </div>
-
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full">
-        <div
-          className={`h-full rounded-full ${
-            isLow ? "bg-[var(--secondary)]" : "bg-[var(--primary)]"
+        <span
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${
+            isLow
+              ? "bg-[color-mix(in_srgb,var(--secondary)_35%,transparent)] text-[var(--secondary)]"
+              : "bg-[color-mix(in_srgb,var(--primary)_35%,transparent)] text-[var(--primary)]"
           }`}
-          style={{ width: `${level}%` }}
-        />
+        >
+          {isLow ? "Low" : "Good"}
+        </span>
       </div>
-    </div>
+    </article>
   );
 }
