@@ -28,10 +28,7 @@ export function ProfileHeroCard() {
           </div>
         </div>
 
-        <button className="inline-flex h-9 items-center gap-2 rounded-xl border border-[var(--border)] px-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)]">
-          <Pencil size={15} />
-          <span className="hidden sm:inline">Edit</span>
-        </button>
+        
       </div>
     </section>
   );
