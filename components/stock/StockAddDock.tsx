@@ -24,6 +24,7 @@ export function StockAddDock() {
     setMode(null);
     setMessage("");
     setSelectedImage(null);
+    setIsOpen(false);
   }
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -50,13 +51,13 @@ export function StockAddDock() {
         />
       ) : null}
 
-{!mode ? (
-  <StockAddActions
-    isOpen={isOpen}
-    onToggle={() => setIsOpen((prev) => !prev)}
-    onOpenMode={openMode}
-  />
-) : null}
+      {!mode ? (
+        <StockAddActions
+          isOpen={isOpen}
+          onToggle={() => setIsOpen((prev) => !prev)}
+          onOpenMode={openMode}
+        />
+      ) : null}
     </>
   );
 }

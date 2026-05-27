@@ -32,12 +32,12 @@ export function StockAddInput({
               <img
                 src={selectedImage}
                 alt="Selected stock upload"
-                className="max-h-52 w-full object-cover"
+                className="max-h-44 w-full object-cover sm:max-h-52"
               />
             </div>
           ) : null}
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <button
               type="button"
               onClick={() => cameraInputRef.current?.click()}

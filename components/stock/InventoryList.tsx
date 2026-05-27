@@ -89,10 +89,10 @@ export function InventoryList() {
             <button
               type="button"
               onClick={() => toggleSection(section.title)}
-              className="flex w-full items-center justify-between gap-4 px-4 py-2.5 text-left transition hover:bg-[var(--card-soft)]"
+              className="flex w-full items-center justify-between gap-4 px-3.5 py-2.5 text-left transition hover:bg-[var(--card-soft)] sm:px-4"
             >
               <div>
-                <h2 className="text-base font-extrabold text-[var(--foreground)]">
+                <h2 className="text-[15px] font-extrabold text-[var(--foreground)] sm:text-base">
                   {section.title}
                 </h2>
   
@@ -111,7 +111,7 @@ export function InventoryList() {
   
             {isOpen ? (
               <div className="border-t border-[var(--border)] px-3 py-3">
-                <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-wrap gap-2">
                   {section.items.map((item) => (
                     <InventoryItemCard key={item.name} {...item} />
                   ))}

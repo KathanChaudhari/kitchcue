@@ -63,9 +63,9 @@ export function StockAddPanel({
   return (
     <div
       ref={panelRef}
-      className="fixed bottom-6 right-5 z-40 w-[calc(100vw-2.5rem)] max-w-md overflow-hidden rounded-3xl border border-[color-mix(in_srgb,var(--tertiary)_45%,var(--border))] bg-[var(--surface-muted)] shadow-2xl lg:bottom-6 lg:right-8"
+      className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] left-4 right-4 z-40 flex max-h-[calc(100dvh-8rem)] flex-col overflow-hidden rounded-3xl border border-[color-mix(in_srgb,var(--tertiary)_45%,var(--border))] bg-[var(--surface-muted)] shadow-2xl sm:left-auto sm:right-5 sm:w-[min(28rem,calc(100vw-2rem))] lg:bottom-6 lg:right-8"
     >
-      <div className="border-b border-[color-mix(in_srgb,var(--tertiary)_45%,var(--border))] bg-[color-mix(in_srgb,var(--tertiary)_32%,var(--card))] px-4 py-3">
+      <div className="shrink-0 border-b border-[color-mix(in_srgb,var(--tertiary)_45%,var(--border))] bg-[color-mix(in_srgb,var(--tertiary)_32%,var(--card))] px-4 py-3">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-base font-extrabold text-[var(--foreground)]">
@@ -87,7 +87,7 @@ export function StockAddPanel({
         </div>
       </div>
 
-      <div className="space-y-3 p-4">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 sm:p-4">
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-3">
           <p className="text-sm font-medium leading-relaxed text-[var(--foreground)]">
             {helperByMode[mode]}

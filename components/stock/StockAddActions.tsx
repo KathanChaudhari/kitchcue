@@ -16,7 +16,7 @@ export function StockAddActions({
   onOpenMode
 }: StockAddActionsProps) {
   return (
-    <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-2 lg:right-8">
+    <div className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] right-4 z-50 flex flex-col items-end gap-2 sm:right-5 lg:bottom-6 lg:right-8">
       {isOpen ? (
         <div className="flex flex-col items-end gap-2">
           <button

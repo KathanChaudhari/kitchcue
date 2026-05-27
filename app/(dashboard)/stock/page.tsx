@@ -19,8 +19,8 @@ export default function StockPage() {
         </div>
       </div>
 
-      <main className="mx-auto w-full max-w-7xl px-5 pb-24 pt-5 lg:px-10 lg:pb-8 lg:pt-8 xl:px-14">
-        <div className="mb-5 flex items-start justify-between gap-4">
+      <main className="mx-auto w-full max-w-7xl px-4 pb-28 pt-4 sm:px-5 lg:px-10 lg:pb-8 lg:pt-8 xl:px-14">
+        <div className="mb-4 space-y-4 lg:mb-5">
           <div>
             <h1 className="text-2xl font-extrabold tracking-tight text-[var(--foreground)] lg:text-[28px]">
               Current Stocks
@@ -31,13 +31,25 @@ export default function StockPage() {
             </p>
           </div>
 
-          <button
-            type="button"
-            className="flex h-10 shrink-0 items-center gap-2 rounded-xl border border-[var(--border)] px-4 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--card)]"
-          >
-            <SlidersHorizontal className="size-4" />
-            Filter
-          </button>
+          <div className="flex items-center gap-2">
+            <label className="relative min-w-0 flex-1 lg:hidden">
+              <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--muted)]" />
+
+              <input
+                type="search"
+                placeholder="Search inventory..."
+                className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] pl-10 pr-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)]"
+              />
+            </label>
+
+            <button
+              type="button"
+              className="flex h-10 shrink-0 items-center gap-2 rounded-xl border border-[var(--border)] px-3 text-sm font-bold text-[var(--foreground)] transition hover:bg-[var(--card)] sm:px-4"
+            >
+              <SlidersHorizontal className="size-4" />
+              <span className="hidden sm:inline">Filter</span>
+            </button>
+          </div>
         </div>
 
         <InventoryList />

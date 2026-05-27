@@ -12,14 +12,14 @@ export function InventoryItemCard({
   const isLow = level < 35;
 
   return (
-    <article className="w-fit min-w-[180px] rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-4 py-3 transition hover:border-[var(--primary)]">
+    <article className="w-full rounded-xl border border-[var(--border)] bg-[var(--card-soft)] px-4 py-3 transition hover:border-[var(--primary)] sm:w-fit sm:min-w-[180px]">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h3 className="whitespace-nowrap text-sm font-extrabold text-[var(--foreground)]">
+          <h3 className="truncate text-sm font-extrabold text-[var(--foreground)] sm:whitespace-nowrap">
             {name}
           </h3>
 
-          <p className="mt-1 whitespace-nowrap text-xs font-medium text-[var(--muted)]">
+          <p className="mt-1 truncate text-xs font-medium text-[var(--muted)] sm:whitespace-nowrap">
             {amount}
           </p>
         </div>
