@@ -1,49 +1,50 @@
-import { PlayCircle, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export function LandingHero() {
   return (
-    <section className="relative flex min-h-[760px] items-center overflow-hidden pt-16 lg:min-h-screen">
+    <section className="relative flex min-h-[660px] items-end overflow-hidden px-4 pb-14 pt-24 sm:min-h-[760px] sm:items-center sm:pb-0 lg:min-h-screen lg:px-6">
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center sm:bg-center"
         style={{
           backgroundImage: "url('/images/kitchcue-hero.png')"
         }}
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(11,13,12,0.96)_0%,rgba(11,13,12,0.82)_35%,rgba(11,13,12,0.58)_65%,rgba(11,13,12,0.74)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,13,12,0.25)_0%,rgba(11,13,12,0.05)_45%,rgba(11,13,12,1)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,20,20,0.42)_0%,rgba(18,20,20,0.72)_42%,rgba(18,20,20,1)_100%)] sm:bg-[linear-gradient(90deg,rgba(11,13,12,0.96)_0%,rgba(11,13,12,0.82)_35%,rgba(11,13,12,0.58)_65%,rgba(11,13,12,0.74)_100%)]" />
+      <div className="absolute inset-0 hidden sm:block sm:bg-[linear-gradient(180deg,rgba(11,13,12,0.25)_0%,rgba(11,13,12,0.05)_45%,rgba(11,13,12,1)_100%)]" />
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 lg:px-6">
-        <div className="max-w-2xl space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--primary)_35%,transparent)] bg-[color-mix(in_srgb,var(--primary)_13%,transparent)] px-3 py-1.5 text-xs font-medium text-[var(--primary)]">
-            <Sparkles size={13} />
-            Next-Gen Culinary Intelligence
+      <div className="relative z-10 mx-auto w-full max-w-7xl">
+        <div className="max-w-md space-y-5 sm:max-w-2xl sm:space-y-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--primary)_35%,transparent)] bg-[color-mix(in_srgb,var(--primary)_13%,transparent)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)] sm:text-xs sm:normal-case sm:tracking-normal">
+            <Sparkles size={12} />
+            AI Kitchen Intelligence
           </div>
 
-          <h1 className="max-w-[680px] text-5xl font-black leading-[0.95] tracking-[-0.05em] text-[var(--foreground)] sm:text-6xl lg:text-7xl">
-            Master Your Kitchen with{" "}
-            <span className="text-[var(--primary)]">Intelligence.</span>
+          <h1 className="max-w-[420px] text-[34px] font-black leading-[0.98] tracking-[-0.06em] text-[var(--foreground)] sm:max-w-[680px] sm:text-6xl lg:text-7xl">
+            Master The Art of{" "}
+            <span className="text-[var(--primary)]">Precision</span> Cooking.
           </h1>
 
-          <p className="max-w-xl text-sm leading-6 text-[var(--foreground)]/90 sm:text-base">
-            Precision inventory tracking, AI-powered meal planning, and
-            culinary expertise at your fingertips. Transform how you cook, shop,
-            and eat.
+          <p className="max-w-[340px] text-xs leading-5 text-[var(--foreground)]/90 sm:max-w-xl sm:text-base sm:leading-6">
+            Elevate your culinary journey with smart inventory tracking,
+            atmospheric recipe discovery, and professional kitchen management.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="grid gap-3 pt-2 sm:flex sm:flex-wrap">
             <Link
               href="/signup"
-              className="rounded-xl bg-[var(--primary)] px-6 py-3 text-sm font-bold text-[var(--ink)] transition hover:opacity-90"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--primary)] px-6 text-xs font-bold text-[var(--ink)] transition hover:opacity-90 sm:w-auto sm:text-sm"
             >
-              Get Started Free
+              Get Started
             </Link>
 
-            <button className="inline-flex items-center gap-2 rounded-xl border border-[var(--outline)] px-6 py-3 text-sm font-bold text-[var(--foreground)] transition hover:bg-white/5">
-              <PlayCircle size={17} />
-              Watch Video
-            </button>
+            <Link
+              href="#features"
+              className="inline-flex h-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:bg-white/5 sm:w-auto sm:text-sm"
+            >
+              Explore Features
+            </Link>
           </div>
         </div>
       </div>

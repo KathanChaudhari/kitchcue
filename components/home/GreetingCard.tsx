@@ -1,31 +1,31 @@
 export function GreetingCard() {
   return (
-    <section className="grid overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-sm md:grid-cols-[1.3fr_0.7fr]">
-      <div className="flex flex-col justify-center p-5 sm:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--secondary)]">
+    <section className="lg:grid lg:overflow-hidden lg:rounded-3xl lg:border lg:border-[var(--border)] lg:bg-[var(--card)] lg:shadow-sm lg:md:grid-cols-[1.3fr_0.7fr]">
+      <div className="flex flex-col justify-center lg:p-6">
+        <p className="hidden text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--secondary)] lg:block">
           Today in your kitchen
         </p>
 
-        <h2 className="mt-2 text-2xl font-bold text-[var(--primary)] sm:text-3xl">
-          Good morning, chef
+        <h2 className="text-2xl font-bold text-[var(--foreground)] lg:mt-2 lg:text-3xl lg:text-[var(--primary)]">
+          Good morning, Chef!
         </h2>
 
-        <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--foreground)]">
-          Your kitchen is looking organized. You have 3 items running low and a planned dinner for tonight.
+        <p className="mt-3 max-w-lg text-base leading-7 text-[var(--foreground-soft)] lg:mt-2 lg:text-sm lg:leading-6">
+          Your kitchen is ready for a new creation.
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-2.5">
-          <button className="cursor-pointer rounded-full bg-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--ink)] transition hover:opacity-90">
-            Start Cooking
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5 lg:flex-row lg:gap-2.5">
+          <button className="rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-left text-base font-bold text-[var(--foreground)] shadow-sm transition hover:border-[var(--primary)] lg:rounded-full lg:bg-[var(--primary)] lg:px-5 lg:py-2 lg:text-xs lg:text-[var(--ink)]">
+            + New Recipe
           </button>
 
-          <button className="cursor-pointer rounded-full border border-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--primary)] transition hover:bg-[var(--primary)]/10">
+          <button className="hidden cursor-pointer rounded-full border border-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 lg:block">
             View Meal Plan
           </button>
         </div>
       </div>
 
-      <div className="p-5 pt-0 md:p-6 md:pl-0">
+      <div className="hidden p-6 pl-0 lg:block">
         <div
           className="h-full min-h-40 rounded-2xl bg-cover bg-center"
           aria-label="Warm kitchen counter with fresh ingredients"

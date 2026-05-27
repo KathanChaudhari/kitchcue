@@ -16,17 +16,17 @@ export default function HomeTabPage() {
         />
       </div>
 
-      <MobileHeader title="Dashboard" />
+      <MobileHeader title="KitchCue" />
 
-      <div className="space-y-3 pb-24 lg:pb-8">
+      <div className="space-y-7 pb-24 pt-4 lg:space-y-3 lg:pb-8 lg:pt-0">
         <GreetingCard />
 
-        <div className="grid gap-3 lg:grid-cols-[0.7fr_0.3fr]">
+        <div className="grid gap-7 lg:gap-3 lg:grid-cols-[0.7fr_0.3fr]">
           <LowStockCard />
           <ShoppingListCard />
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-7 lg:gap-4 lg:grid-cols-2">
           <RecentActivityList />
           <NotesCard />
         </div>
