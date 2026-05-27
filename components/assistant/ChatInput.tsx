@@ -11,12 +11,7 @@ export function ChatInput() {
 
     if (!message.trim()) return;
 
-    // Later, call your API here:
-    // await fetch("/api/assistant", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ message }),
-    // });
+    console.log("Message:", message);
 
     setMessage("");
   }
@@ -24,29 +19,30 @@ export function ChatInput() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg"
+      className="flex w-full items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl"
     >
       <button
         type="button"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[var(--muted)] transition hover:bg-[var(--card-soft)] hover:text-[var(--foreground)]"
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[var(--border)] bg-[var(--card-soft)] text-[var(--muted)] transition hover:text-[var(--foreground)]"
         aria-label="Assistant settings"
       >
-        <SlidersHorizontal size={17} />
+        <SlidersHorizontal size={18} />
       </button>
 
       <input
         value={message}
         onChange={(event) => setMessage(event.target.value)}
-        className="h-9 flex-1 bg-transparent text-[13px] text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]"
-        placeholder="Ask KitchCue anything..."
+        className="h-10 min-w-0 flex-1 rounded-xl bg-[var(--surface)] px-3 text-sm font-medium text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]"
+        placeholder="Ask KitchCue..."
       />
 
       <button
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--primary-soft)] text-[var(--ink)] transition hover:opacity-90"
+        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--primary)] text-[var(--ink)] transition hover:opacity-90 disabled:opacity-50"
         type="submit"
+        disabled={!message.trim()}
         aria-label="Send message"
       >
-        <SendHorizontal size={17} />
+        <SendHorizontal size={18} />
       </button>
     </form>
   );
