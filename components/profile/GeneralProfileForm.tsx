@@ -63,52 +63,62 @@ export function GeneralProfileForm() {
   }
 
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm">
-      <div className="mb-4 flex items-center justify-between border-b border-[var(--border)] pb-3">
-        <div className="flex items-center gap-2">
-          <UserRound size={16} className="text-[var(--primary-soft)]" />
+    <section className="min-h-[calc(100dvh-7rem)] bg-[var(--card)] p-3.5 shadow-sm sm:p-4 lg:min-h-0 lg:rounded-2xl lg:border lg:border-[var(--border)]">
+      <div className="mb-4 flex items-start justify-between gap-3 border-b border-[var(--border)] pb-3">
+  <div className="flex min-w-0 items-start gap-2">
+    <Link
+      href="/profile"
+      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--surface)] active:scale-95 sm:hidden"
+      aria-label="Back to profile"
+    >
+      <ArrowLeft size={15} />
+    </Link>
 
-          <div>
-            <h2 className="text-sm font-bold text-[var(--primary-soft)]">
-              Personal details
-            </h2>
-            <p className="text-[11px] text-[var(--muted)]">
-              Used to personalize recipes and meal suggestions.
-            </p>
-          </div>
-        </div>
+    <UserRound
+      size={16}
+      className="mt-1 hidden shrink-0 text-[var(--primary-soft)] sm:block"
+    />
 
-        <div className="flex items-center gap-2">
-          {!isEditing ? (
-            <button
-              type="button"
-              onClick={() => setIsEditing(true)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[var(--primary)] px-3 text-xs font-bold text-[var(--ink)] transition hover:opacity-90 active:scale-95"
-            >
-              <Pencil size={14} />
-              Edit
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[var(--border)] px-3 text-xs font-bold text-[var(--foreground)] transition hover:bg-[var(--surface)] active:scale-95"
-            >
-              <X size={14} />
-              Cancel
-            </button>
-          )}
+    <div className="min-w-0">
+      <h2 className="text-sm font-bold text-[var(--primary-soft)]">
+        Personal details
+      </h2>
+      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--muted)]">
+        Used to personalize recipes and meal suggestions.
+      </p>
+    </div>
+  </div>
 
-          <Link
-            href="/profile"
-            className="hidden h-9 items-center gap-1.5 rounded-lg border border-[var(--border)] px-3 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface)] sm:flex"
-          >
-            <ArrowLeft size={14} />
-            Back
-          </Link>
-        </div>
-      </div>
+  <div className="flex shrink-0 items-center gap-2">
+    {!isEditing ? (
+      <button
+        type="button"
+        onClick={() => setIsEditing(true)}
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[var(--primary)] px-2.5 text-[11px] font-bold text-[var(--ink)] transition hover:opacity-90 active:scale-95 sm:h-9 sm:px-3 sm:text-xs"
+      >
+        <Pencil size={13} />
+        Edit
+      </button>
+    ) : (
+      <button
+        type="button"
+        onClick={handleCancel}
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-[var(--border)] px-2.5 text-[11px] font-bold text-[var(--foreground)] transition hover:bg-[var(--surface)] active:scale-95 sm:h-9 sm:px-3 sm:text-xs"
+      >
+        <X size={13} />
+        Cancel
+      </button>
+    )}
 
+    <Link
+      href="/profile"
+      className="hidden h-9 items-center gap-1.5 rounded-lg border border-[var(--border)] px-3 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface)] sm:flex"
+    >
+      <ArrowLeft size={14} />
+      Back
+    </Link>
+  </div>
+</div>
       {!isEditing && (
         <div className="mb-4 rounded-xl border border-[color-mix(in_srgb,var(--primary)_24%,var(--border))] bg-[color-mix(in_srgb,var(--primary)_7%,var(--card))] px-3 py-2">
           <p className="text-[11px] font-medium text-[var(--muted)]">

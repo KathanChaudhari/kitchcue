@@ -36,9 +36,10 @@ export function NotificationSection() {
   }
 
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
+    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 sm:p-4">
       <div className="mb-3 flex items-center gap-2 border-b border-[var(--border)] pb-3">
-        <Bell size={16} className="text-[var(--primary-soft)]" />
+        <Bell size={16} className="shrink-0 text-[var(--primary-soft)]" />
+
         <h3 className="text-sm font-bold text-[var(--primary-soft)]">
           Notifications
         </h3>
@@ -48,33 +49,34 @@ export function NotificationSection() {
         {notifications.map((item) => (
           <div
             key={item.id}
-            className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3"
+            className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5 sm:p-3"
           >
-            <div>
-              <p className="text-[13px] font-bold text-[var(--foreground)]">
+            <div className="min-w-0">
+              <p className="text-[12px] font-bold text-[var(--foreground)] sm:text-[13px]">
                 {item.title}
               </p>
-              <p className="mt-0.5 text-[11px] text-[var(--muted)]">
+
+              <p className="mt-0.5 max-w-[15rem] text-[10px] leading-relaxed text-[var(--muted)] sm:max-w-none sm:text-[11px]">
                 {item.description}
               </p>
             </div>
 
             <button
-  type="button"
-  onClick={() => toggleNotification(item.id)}
-  aria-pressed={item.enabled}
-  className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-out active:scale-95 ${
-    item.enabled
-      ? "bg-[var(--primary)]"
-      : "bg-[var(--surface-muted)]"
-  }`}
->
-  <span
-    className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-[var(--foreground)] shadow-sm transition-transform duration-300 ease-out ${
-      item.enabled ? "translate-x-5" : "translate-x-0"
-    }`}
-  />
-</button>
+              type="button"
+              onClick={() => toggleNotification(item.id)}
+              aria-pressed={item.enabled}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-out active:scale-95 ${
+                item.enabled
+                  ? "bg-[var(--primary)]"
+                  : "bg-[var(--surface-muted)]"
+              }`}
+            >
+              <span
+                className={`absolute left-1 top-1 h-4 w-4 rounded-full bg-[var(--foreground)] shadow-sm transition-transform duration-300 ease-out ${
+                  item.enabled ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
           </div>
         ))}
       </div>

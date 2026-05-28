@@ -31,10 +31,10 @@ function Chip({
 }) {
   return (
     <span
-      className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold ${
+      className={`max-w-full truncate rounded-lg px-2 py-1 text-[10px] font-semibold sm:px-2.5 sm:text-[11px] ${
         active
           ? "bg-[color-mix(in_srgb,var(--primary)_26%,var(--card))] text-[var(--primary-soft)]"
-          : "bg-[var(--surface)] text-[var(--muted)]"
+          : "bg-[var(--card)] text-[var(--muted)]"
       }`}
     >
       {children}
@@ -52,8 +52,8 @@ function PreferenceGroup({
   active?: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3">
-      <p className="mb-2 text-[11px] font-bold text-[var(--muted)]">
+    <div className="min-w-0 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5 sm:p-3">
+      <p className="mb-2 text-[10px] font-bold text-[var(--muted)] sm:text-[11px]">
         {title}
       </p>
 
@@ -70,18 +70,18 @@ function PreferenceGroup({
 
 export function PreferenceSummarySection() {
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-      <div className="mb-3 flex items-center justify-between border-b border-[var(--border)] pb-3">
-        <div className="flex items-center gap-2">
-          <HeartPulse size={16} className="text-[var(--primary-soft)]" />
-          <h3 className="text-sm font-bold text-[var(--primary-soft)]">
+    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 sm:p-4">
+      <div className="mb-3 flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <HeartPulse size={16} className="shrink-0 text-[var(--primary-soft)]" />
+          <h3 className="truncate text-sm font-bold text-[var(--primary-soft)]">
             Preferences
           </h3>
         </div>
 
         <Link
           href="/profile/preferences"
-          className="flex items-center gap-1 text-xs font-semibold text-[var(--secondary)] transition hover:opacity-80"
+          className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-[var(--secondary)] transition hover:opacity-80 sm:text-xs"
         >
           Advanced
           <ChevronRight size={14} />
@@ -90,11 +90,11 @@ export function PreferenceSummarySection() {
 
       <div className="space-y-3">
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <p className="text-[11px] font-bold text-[var(--muted)]">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-[10px] font-bold text-[var(--muted)] sm:text-[11px]">
               Spice level
             </p>
-            <span className="text-[11px] font-semibold text-[var(--secondary)]">
+            <span className="shrink-0 text-[10px] font-semibold text-[var(--secondary)] sm:text-[11px]">
               Medium · 3 / 5
             </span>
           </div>
@@ -113,7 +113,7 @@ export function PreferenceSummarySection() {
           </div>
         </div>
 
-        <div className="grid gap-2.5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2.5 xs:grid-cols-2 sm:grid-cols-2">
           {summaryItems.map((group) => (
             <PreferenceGroup
               key={group.title}
@@ -124,11 +124,11 @@ export function PreferenceSummarySection() {
           ))}
         </div>
 
-        <div className="rounded-xl border border-[color-mix(in_srgb,var(--primary)_25%,var(--border))] bg-[color-mix(in_srgb,var(--primary)_8%,var(--card))] p-3">
-          <p className="text-[11px] font-medium text-[var(--muted)]">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--primary)_25%,var(--border))] bg-[color-mix(in_srgb,var(--primary)_8%,var(--card))] p-2.5 sm:p-3">
+          <p className="text-[10px] font-medium text-[var(--muted)] sm:text-[11px]">
             Cooking style
           </p>
-          <p className="mt-1 text-[13px] font-bold text-[var(--foreground)]">
+          <p className="mt-1 text-[12px] font-bold text-[var(--foreground)] sm:text-[13px]">
             Quick meals · Healthy · Indian / Japanese
           </p>
         </div>
