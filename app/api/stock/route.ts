@@ -7,12 +7,15 @@ export async function GET(request: Request) {
   try {
     const user = await getCurrentUser(request);
     const { searchParams } = new URL(request.url);
+
     const query = searchParams.get("q");
+    const category = searchParams.get("category");
     const lowOnly = searchParams.get("low") === "true";
 
     const items = await prisma.inventoryItem.findMany({
       where: {
         userId: user.id,
+
         ...(query
           ? {
               name: {
@@ -21,6 +24,16 @@ export async function GET(request: Request) {
               }
             }
           : {}),
+
+        ...(category
+          ? {
+              category: {
+                equals: category,
+                mode: "insensitive"
+              }
+            }
+          : {}),
+
         ...(lowOnly
           ? {
               minimumQuantity: {
