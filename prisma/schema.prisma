@@ -7,9 +7,9 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String  @unique
   passwordHash  String?
   image         String?
   age           Int?
@@ -21,44 +21,44 @@ model User {
   weightKg      Float?
   householdSize Int?
 
-  preferences   UserPreference?
-  inventory     InventoryItem[]
-  chatSessions  ChatSession[]
-  notifications Notification[]
+  preferences          UserPreference?
+  inventory            InventoryItem[]
+  chatSessions         ChatSession[]
+  notifications        Notification[]
   notificationSettings NotificationSetting[]
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserPreference {
-  id                  String   @id @default(cuid())
-  userId              String   @unique
+  id     String @id @default(cuid())
+  userId String @unique
 
-  healthGoals          String[]
-  dietType             String?
-  allergies            String[]
-  medicalConditions    String[]
-  likedIngredients     String[]
-  cuisinePreferences   String[]
-  dislikedIngredients  String[]
-  texturePreferences   String[]
-  cookingStyles        String[]
-  cookingSkill         String?
-  cookingTime          String?
-  appliances           String[]
-  householdSize        Int?
-  spiceLevel           Int?
+  healthGoals         String[]
+  dietType            String?
+  allergies           String[]
+  medicalConditions   String[]
+  likedIngredients    String[]
+  cuisinePreferences  String[]
+  dislikedIngredients String[]
+  texturePreferences  String[]
+  cookingStyles       String[]
+  cookingSkill        String?
+  cookingTime         String?
+  appliances          String[]
+  householdSize       Int?
+  spiceLevel          Int?
 
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model InventoryItem {
-  id              String   @id @default(cuid())
-  userId          String
+  id     String @id @default(cuid())
+  userId String
 
   name            String
   quantity        Float?
@@ -71,62 +71,68 @@ model InventoryItem {
   notes           String?
   status          String?
 
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ChatSession {
-  id        String        @id @default(cuid())
-  userId    String
-  title     String?
+  id     String  @id @default(cuid())
+  userId String
+  title  String? @default("New chat")
 
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages  ChatMessage[]
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
 
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([updatedAt])
 }
 
 model ChatMessage {
-  id          String      @id @default(cuid())
-  sessionId   String
-  role        String
-  content     String
+  id        String @id @default(cuid())
+  sessionId String
+  role      String
+  content   String
 
-  session     ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime    @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([createdAt])
 }
 
 model Notification {
-  id        String    @id @default(cuid())
-  userId    String
+  id     String @id @default(cuid())
+  userId String
 
-  title     String
-  message   String
-  type      String?
-  isRead    Boolean   @default(false)
+  title   String
+  message String
+  type    String?
+  isRead  Boolean @default(false)
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 }
 
 model NotificationSetting {
-  id          String   @id @default(cuid())
-  userId      String
+  id     String @id @default(cuid())
+  userId String
 
   key         String
   title       String
   description String?
-  enabled     Boolean  @default(true)
+  enabled     Boolean @default(true)
 
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, key])
 }

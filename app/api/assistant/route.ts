@@ -8,14 +8,25 @@ export async function GET(request: Request) {
     const user = await getCurrentUser(request);
 
     const sessions = await prisma.chatSession.findMany({
-      where: { userId: user.id },
+      where: {
+        userId: user.id
+      },
       include: {
         messages: {
-          orderBy: { createdAt: "asc" },
+          orderBy: {
+            createdAt: "asc"
+          },
           take: 1
+        },
+        _count: {
+          select: {
+            messages: true
+          }
         }
       },
-      orderBy: { updatedAt: "desc" }
+      orderBy: {
+        updatedAt: "desc"
+      }
     });
 
     return ok(sessions);
@@ -34,7 +45,7 @@ export async function POST(request: Request) {
     const session = await prisma.chatSession.create({
       data: {
         userId: user.id,
-        title: data.title ?? "New chat"
+        title: data.title?.trim() || "New chat"
       }
     });
 
