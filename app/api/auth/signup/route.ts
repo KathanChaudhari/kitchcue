@@ -8,19 +8,24 @@ export async function POST(request: Request) {
   if (error) return error;
 
   try {
+    const email = data.email.toLowerCase().trim();
+    const name = data.name.trim();
+
     const existingUser = await prisma.user.findUnique({
-      where: { email: data.email }
+      where: { email }
     });
 
     if (existingUser) {
       return fail("An account already exists with this email", 409);
     }
 
+    const passwordHash = await hashPassword(data.password);
+
     const user = await prisma.user.create({
       data: {
-        name: data.name,
-        email: data.email,
-        passwordHash: hashPassword(data.password),
+        name,
+        email,
+        passwordHash,
         preferences: {
           create: {
             healthGoals: [],
@@ -33,6 +38,22 @@ export async function POST(request: Request) {
             cookingStyles: [],
             appliances: []
           }
+        },
+        notificationSettings: {
+          create: [
+            {
+              key: "expiry_reminders",
+              title: "Expiry reminders",
+              description: "Notify me when food items are close to expiry",
+              enabled: true
+            },
+            {
+              key: "low_stock",
+              title: "Low stock alerts",
+              description: "Notify me when pantry items are running low",
+              enabled: true
+            }
+          ]
         }
       },
       select: {

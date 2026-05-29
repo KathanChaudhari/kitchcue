@@ -1,3 +1,4 @@
+
 import { getCurrentUser } from "@/lib/server/auth";
 import { created, handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
@@ -5,7 +6,7 @@ import { stockItemCreateSchema } from "@/lib/validation/stock";
 
 export async function GET(request: Request) {
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
     const { searchParams } = new URL(request.url);
 
     const query = searchParams.get("q");
@@ -68,7 +69,7 @@ export async function POST(request: Request) {
   if (error) return error;
 
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const item = await prisma.inventoryItem.create({
       data: {
