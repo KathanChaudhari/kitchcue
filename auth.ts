@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { prisma } from "@/lib/server/prisma";
@@ -68,8 +69,54 @@ export const authOptions: NextAuthOptions = {
           image: user.image
         };
       }
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
     })
   ],
+
+  events: {
+    async createUser({ user }) {
+      if (!user.id) return;
+
+      await prisma.userPreference.create({
+        data: {
+          userId: user.id,
+          healthGoals: [],
+          allergies: [],
+          medicalConditions: [],
+          likedIngredients: [],
+          cuisinePreferences: [],
+          dislikedIngredients: [],
+          texturePreferences: [],
+          cookingStyles: [],
+          appliances: []
+        }
+      });
+
+      await prisma.notificationSetting.createMany({
+        data: [
+          {
+            userId: user.id,
+            key: "expiry_reminders",
+            title: "Expiry reminders",
+            description: "Notify me when food items are close to expiry",
+            enabled: true
+          },
+          {
+            userId: user.id,
+            key: "low_stock",
+            title: "Low stock alerts",
+            description: "Notify me when pantry items are running low",
+            enabled: true
+          }
+        ],
+        skipDuplicates: true
+      });
+    }
+  },
 
   callbacks: {
     async jwt({ token, user }) {
