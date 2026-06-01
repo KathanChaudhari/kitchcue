@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Mic, Send, Upload } from "lucide-react";
+import { Camera, Loader2, Mic, Send, Upload } from "lucide-react";
 
 type AddMode = "text" | "audio" | "picture";
 
@@ -12,6 +12,8 @@ type StockAddInputProps = {
   cameraInputRef: React.RefObject<HTMLInputElement | null>;
   onMessageChange: (value: string) => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  isSubmitting?: boolean;
 };
 
 export function StockAddInput({
@@ -21,8 +23,13 @@ export function StockAddInput({
   fileInputRef,
   cameraInputRef,
   onMessageChange,
-  onImageChange
+  onImageChange,
+  onSubmit,
+  isSubmitting = false
 }: StockAddInputProps) {
+  const canSubmit =
+    mode === "picture" ? Boolean(selectedImage || message.trim()) : Boolean(message.trim());
+
   return (
     <>
       {mode === "picture" ? (
@@ -108,9 +115,15 @@ export function StockAddInput({
 
           <button
             type="button"
-            className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-xl border border-[var(--border)] bg-[var(--card-soft)] text-[var(--foreground)] transition hover:bg-[var(--card)]"
+            onClick={onSubmit}
+            disabled={!canSubmit || isSubmitting}
+            className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-xl border border-[var(--border)] bg-[var(--card-soft)] text-[var(--foreground)] transition hover:bg-[var(--card)] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <Send className="size-4" />
+            {isSubmitting ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Send className="size-4" />
+            )}
           </button>
         </div>
       ) : null}

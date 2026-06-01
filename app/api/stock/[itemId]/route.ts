@@ -1,81 +1,77 @@
 import { getCurrentUser } from "@/lib/server/auth";
-import { fail, handleApiError, ok, parseJson } from "@/lib/server/api";
+import { handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
-import { stockItemUpdateSchema } from "@/lib/validation/stock";
+import { stockItemCreateSchema } from "@/lib/validation/stock";
 
-type RouteContext = {
-  params: Promise<{
+type Params = {
+  params: {
     itemId: string;
-  }>;
+  };
 };
 
-export async function GET(request: Request, context: RouteContext) {
-  try {
-    const user = await getCurrentUser(request);
-    const { itemId } = await context.params;
+export async function PATCH(request: Request, { params }: Params) {
+  const { data, error } = await parseJson(
+    request,
+    stockItemCreateSchema.partial()
+  );
 
-    const item = await prisma.inventoryItem.findFirst({
-      where: {
-        id: itemId,
-        userId: user.id
-      }
-    });
-
-    if (!item) return fail("Stock item not found", 404);
-
-    return ok(item);
-  } catch (routeError) {
-    return handleApiError(routeError);
-  }
-}
-
-export async function PATCH(request: Request, context: RouteContext) {
-  const { data, error } = await parseJson(request, stockItemUpdateSchema);
   if (error) return error;
 
   try {
-    const user = await getCurrentUser(request);
-    const { itemId } = await context.params;
+    const user = await getCurrentUser();
 
     const existingItem = await prisma.inventoryItem.findFirst({
       where: {
-        id: itemId,
+        id: params.itemId,
         userId: user.id
       }
     });
 
-    if (!existingItem) return fail("Stock item not found", 404);
+    if (!existingItem) {
+      return Response.json(
+        { message: "Stock item not found" },
+        { status: 404 }
+      );
+    }
 
-    const item = await prisma.inventoryItem.update({
-      where: { id: itemId },
+    const updatedItem = await prisma.inventoryItem.update({
+      where: {
+        id: params.itemId
+      },
       data
     });
 
-    return ok(item);
+    return ok(updatedItem);
   } catch (routeError) {
     return handleApiError(routeError);
   }
 }
 
-export async function DELETE(request: Request, context: RouteContext) {
+export async function DELETE(_request: Request, { params }: Params) {
   try {
-    const user = await getCurrentUser(request);
-    const { itemId } = await context.params;
+    const user = await getCurrentUser();
 
     const existingItem = await prisma.inventoryItem.findFirst({
       where: {
-        id: itemId,
+        id: params.itemId,
         userId: user.id
       }
     });
 
-    if (!existingItem) return fail("Stock item not found", 404);
+    if (!existingItem) {
+      return Response.json(
+        { message: "Stock item not found" },
+        { status: 404 }
+      );
+    }
 
     await prisma.inventoryItem.delete({
-      where: { id: itemId }
+      where: {
+        id: params.itemId
+      }
     });
 
-    return ok({ id: itemId });
+    return ok({ success: true });
   } catch (routeError) {
     return handleApiError(routeError);
   }

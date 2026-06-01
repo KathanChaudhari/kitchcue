@@ -15,6 +15,8 @@ type StockAddPanelProps = {
   onMessageChange: (value: string) => void;
   onClose: () => void;
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  isSubmitting?: boolean;
 };
 
 const titleByMode = {
@@ -39,7 +41,9 @@ export function StockAddPanel({
   cameraInputRef,
   onMessageChange,
   onClose,
-  onImageChange
+  onImageChange,
+  onSubmit,
+  isSubmitting = false
 }: StockAddPanelProps) {
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -102,6 +106,8 @@ export function StockAddPanel({
           cameraInputRef={cameraInputRef}
           onMessageChange={onMessageChange}
           onImageChange={onImageChange}
+          onSubmit={onSubmit}
+          isSubmitting={isSubmitting}
         />
       </div>
     </div>

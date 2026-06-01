@@ -3,14 +3,20 @@
 import { useRef, useState } from "react";
 import { StockAddActions } from "@/components/stock/StockAddActions";
 import { StockAddPanel } from "@/components/stock/StockAddPanel";
+import { createStockItem } from "@/lib/client/stock";
 
 type AddMode = "text" | "audio" | "picture" | null;
 
-export function StockAddDock() {
+type StockAddDockProps = {
+  onItemCreated?: () => void;
+};
+
+export function StockAddDock({ onItemCreated }: StockAddDockProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<AddMode>(null);
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
@@ -36,6 +42,29 @@ export function StockAddDock() {
     setMode("picture");
   }
 
+  async function handleSubmit() {
+    if (!message.trim()) return;
+
+    try {
+      setIsSubmitting(true);
+
+      await createStockItem({
+        name: message.trim(),
+        quantity: 1,
+        unit: "unit",
+        category: "Other",
+        status: "Available"
+      });
+
+      closePanel();
+      onItemCreated?.();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <>
       {mode ? (
@@ -48,6 +77,8 @@ export function StockAddDock() {
           onMessageChange={setMessage}
           onClose={closePanel}
           onImageChange={handleImageChange}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
         />
       ) : null}
 
