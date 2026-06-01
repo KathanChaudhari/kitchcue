@@ -13,15 +13,8 @@ export async function GET() {
         id: true,
         name: true,
         email: true,
+        emailVerified: true,
         image: true,
-        age: true,
-        gender: true,
-        liveIn: true,
-        from: true,
-        role: true,
-        heightCm: true,
-        weightKg: true,
-        householdSize: true,
         createdAt: true,
         updatedAt: true,
 
@@ -50,16 +43,13 @@ export async function PATCH(request: Request) {
         id: true,
         name: true,
         email: true,
+        emailVerified: true,
         image: true,
-        age: true,
-        gender: true,
-        liveIn: true,
-        from: true,
-        role: true,
-        heightCm: true,
-        weightKg: true,
-        householdSize: true,
-        updatedAt: true
+        createdAt: true,
+        updatedAt: true,
+
+        preferences: true,
+        notificationSettings: true
       }
     });
 

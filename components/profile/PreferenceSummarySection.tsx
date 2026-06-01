@@ -1,26 +1,10 @@
+import { UserPreference } from "@/app/types/profile";
 import { ChevronRight, HeartPulse } from "lucide-react";
 import Link from "next/link";
 
-const summaryItems = [
-  {
-    title: "Health goals",
-    items: ["Lose weight", "Gain muscle", "Eat healthy"],
-    active: true
-  },
-  {
-    title: "Avoid",
-    items: ["Peanuts", "Shellfish", "Diabetes"]
-  },
-  {
-    title: "Likes",
-    items: ["Garlic", "Paneer", "Rice"],
-    active: true
-  },
-  {
-    title: "Diet",
-    items: ["Vegetarian", "High protein"]
-  }
-];
+type PreferenceSummarySectionProps = {
+  preferences: UserPreference | null;
+};
 
 function Chip({
   children,
@@ -42,6 +26,14 @@ function Chip({
   );
 }
 
+function EmptyChip() {
+  return (
+    <span className="rounded-lg bg-[var(--card)] px-2 py-1 text-[10px] font-semibold text-[var(--muted)] sm:px-2.5 sm:text-[11px]">
+      Not set
+    </span>
+  );
+}
+
 function PreferenceGroup({
   title,
   items,
@@ -58,22 +50,76 @@ function PreferenceGroup({
       </p>
 
       <div className="flex flex-wrap gap-1.5">
-        {items.map((item) => (
-          <Chip key={item} active={active}>
-            {item}
-          </Chip>
-        ))}
+        {items.length > 0 ? (
+          items.map((item) => (
+            <Chip key={item} active={active}>
+              {item}
+            </Chip>
+          ))
+        ) : (
+          <EmptyChip />
+        )}
       </div>
     </div>
   );
 }
 
-export function PreferenceSummarySection() {
+function getSpiceLabel(level: number | null | undefined) {
+  if (!level) return "Not set";
+  if (level <= 1) return "Very mild";
+  if (level === 2) return "Mild";
+  if (level === 3) return "Medium";
+  if (level === 4) return "Spicy";
+  return "Very spicy";
+}
+
+export function PreferenceSummarySection({
+  preferences
+}: PreferenceSummarySectionProps) {
+  const spiceLevel = preferences?.spiceLevel || 0;
+
+  const avoidItems = [
+    ...(preferences?.allergies || []),
+    ...(preferences?.medicalConditions || [])
+  ];
+
+  const dietItems = [
+    ...(preferences?.dietType ? [preferences.dietType] : []),
+    ...(preferences?.cuisinePreferences || [])
+  ];
+
+  const summaryItems = [
+    {
+      title: "Health goals",
+      items: preferences?.healthGoals || [],
+      active: true
+    },
+    {
+      title: "Avoid",
+      items: avoidItems
+    },
+    {
+      title: "Likes",
+      items: preferences?.likedIngredients || [],
+      active: true
+    },
+    {
+      title: "Diet",
+      items: dietItems
+    }
+  ];
+
+  const cookingStyleText =
+    preferences?.cookingStyles && preferences.cookingStyles.length > 0
+      ? preferences.cookingStyles.join(" · ")
+      : "Not set";
+
   return (
     <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 sm:p-4">
       <div className="mb-3 flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
         <div className="flex min-w-0 items-center gap-2">
           <HeartPulse size={16} className="shrink-0 text-[var(--primary-soft)]" />
+
           <h3 className="truncate text-sm font-bold text-[var(--primary-soft)]">
             Preferences
           </h3>
@@ -94,8 +140,10 @@ export function PreferenceSummarySection() {
             <p className="text-[10px] font-bold text-[var(--muted)] sm:text-[11px]">
               Spice level
             </p>
+
             <span className="shrink-0 text-[10px] font-semibold text-[var(--secondary)] sm:text-[11px]">
-              Medium · 3 / 5
+              {getSpiceLabel(spiceLevel)}{" "}
+              {spiceLevel ? `· ${spiceLevel} / 5` : ""}
             </span>
           </div>
 
@@ -104,7 +152,7 @@ export function PreferenceSummarySection() {
               <div
                 key={level}
                 className={`h-2 rounded-full ${
-                  level <= 3
+                  level <= spiceLevel
                     ? "bg-[var(--secondary)]"
                     : "bg-[var(--surface)]"
                 }`}
@@ -128,8 +176,9 @@ export function PreferenceSummarySection() {
           <p className="text-[10px] font-medium text-[var(--muted)] sm:text-[11px]">
             Cooking style
           </p>
+
           <p className="mt-1 text-[12px] font-bold text-[var(--foreground)] sm:text-[13px]">
-            Quick meals · Healthy · Indian / Japanese
+            {cookingStyleText}
           </p>
         </div>
       </div>

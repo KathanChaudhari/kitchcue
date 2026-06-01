@@ -1,38 +1,61 @@
 "use client";
 
+import { NotificationSetting } from "@/app/types/profile";
 import { Bell } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const defaultNotifications = [
+type NotificationSectionProps = {
+  settings: NotificationSetting[];
+};
+
+const fallbackNotifications = [
   {
-    id: "expiry",
+    key: "expiry",
     title: "Expiry reminders",
     description: "Remind me before ingredients expire.",
     enabled: true
   },
   {
-    id: "low-stock",
+    key: "low-stock",
     title: "Low stock alerts",
     description: "Notify me when pantry items are running low.",
     enabled: true
   },
   {
-    id: "meal-suggestions",
+    key: "meal-suggestions",
     title: "Meal suggestions",
     description: "Send helpful ideas based on my current stock.",
     enabled: false
   }
 ];
 
-export function NotificationSection() {
-  const [notifications, setNotifications] = useState(defaultNotifications);
+export function NotificationSection({ settings }: NotificationSectionProps) {
+  const [notifications, setNotifications] = useState(fallbackNotifications);
 
-  function toggleNotification(id: string) {
+  useEffect(() => {
+    if (!settings.length) {
+      setNotifications(fallbackNotifications);
+      return;
+    }
+
+    setNotifications(
+      settings.map((item) => ({
+        key: item.key,
+        title: item.title,
+        description: item.description || "",
+        enabled: item.enabled
+      }))
+    );
+  }, [settings]);
+
+  function toggleNotification(key: string) {
     setNotifications((current) =>
       current.map((item) =>
-        item.id === id ? { ...item, enabled: !item.enabled } : item
+        item.key === key ? { ...item, enabled: !item.enabled } : item
       )
     );
+
+    // Later we will call PATCH /api/me/notifications here
   }
 
   return (
@@ -48,7 +71,7 @@ export function NotificationSection() {
       <div className="space-y-2.5">
         {notifications.map((item) => (
           <div
-            key={item.id}
+            key={item.key}
             className="flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5 sm:p-3"
           >
             <div className="min-w-0">
@@ -63,7 +86,7 @@ export function NotificationSection() {
 
             <button
               type="button"
-              onClick={() => toggleNotification(item.id)}
+              onClick={() => toggleNotification(item.key)}
               aria-pressed={item.enabled}
               className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-out active:scale-95 ${
                 item.enabled

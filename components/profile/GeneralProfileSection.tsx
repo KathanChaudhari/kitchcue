@@ -1,21 +1,59 @@
+import { Profile } from "@/app/types/profile";
 import { ChevronRight, UserRound } from "lucide-react";
 import Link from "next/link";
 
-const profileItems = [
-  { label: "Age", value: "25" },
-  { label: "Gender", value: "Male" },
-  { label: "Lives in", value: "Ahmedabad, India" },
-  { label: "From", value: "Gujarat, India" },
-  { label: "Cooking for", value: "2 people" },
-  { label: "Cooking skill", value: "Intermediate" }
-];
+type GeneralProfileSectionProps = {
+  profile: Profile;
+};
 
-export function GeneralProfileSection() {
+function formatValue(value: string | number | null | undefined) {
+  if (value === null || value === undefined || value === "") {
+    return "Not set";
+  }
+
+  return String(value);
+}
+
+export function GeneralProfileSection({ profile }: GeneralProfileSectionProps) {
+  const preferences = profile.preferences;
+
+  const profileItems = [
+    {
+      label: "Name",
+      value: formatValue(profile.name)
+    },
+    {
+      label: "Email",
+      value: formatValue(profile.email)
+    },
+    {
+      label: "Cooking for",
+      value: preferences?.householdSize
+        ? `${preferences.householdSize} ${
+            preferences.householdSize === 1 ? "person" : "people"
+          }`
+        : "Not set"
+    },
+    {
+      label: "Cooking skill",
+      value: formatValue(preferences?.cookingSkill)
+    },
+    {
+      label: "Cooking time",
+      value: formatValue(preferences?.cookingTime)
+    },
+    {
+      label: "Diet type",
+      value: formatValue(preferences?.dietType)
+    }
+  ];
+
   return (
     <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 sm:p-4">
       <div className="mb-3 flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
         <div className="flex min-w-0 items-center gap-2">
           <UserRound size={16} className="shrink-0 text-[var(--primary-soft)]" />
+
           <h3 className="truncate text-sm font-bold text-[var(--primary-soft)]">
             General Profile
           </h3>
@@ -39,6 +77,7 @@ export function GeneralProfileSection() {
             <p className="truncate text-[10px] font-medium text-[var(--muted)] sm:text-[11px]">
               {item.label}
             </p>
+
             <p className="mt-1 truncate text-[12px] font-bold text-[var(--foreground)] sm:text-[13px]">
               {item.value}
             </p>

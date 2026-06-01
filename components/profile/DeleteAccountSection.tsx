@@ -10,7 +10,8 @@ export function DeleteAccountSection() {
           </p>
 
           <p className="mt-1 text-[11px] leading-relaxed text-[var(--muted)]">
-            Permanently remove your profile, preferences, inventory, and saved kitchen data.
+            Permanently remove your profile, preferences, inventory, and saved
+            kitchen data.
           </p>
         </div>
 

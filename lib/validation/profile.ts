@@ -1,16 +1,17 @@
 import { z } from "zod";
 
 export const profileUpdateSchema = z.object({
-  name: z.string().trim().min(1).optional(),
-  image: z.string().url().nullable().optional(),
-  age: z.coerce.number().int().positive().nullable().optional(),
-  gender: z.string().trim().nullable().optional(),
-  liveIn: z.string().trim().nullable().optional(),
-  from: z.string().trim().nullable().optional(),
-  role: z.string().trim().nullable().optional(),
-  heightCm: z.coerce.number().positive().nullable().optional(),
-  weightKg: z.coerce.number().positive().nullable().optional(),
-  householdSize: z.coerce.number().int().positive().nullable().optional()
+  name: z.string().trim().min(1, "Name is required").optional().nullable(),
+  image: z
+    .string()
+    .trim()
+    .optional()
+    .nullable()
+    .transform((value) => (value === "" ? null : value))
+    .refine(
+      (value) => !value || /^https?:\/\/.+/.test(value),
+      "Image must be a valid URL"
+    )
 });
 
 export const preferencesUpdateSchema = z.object({
