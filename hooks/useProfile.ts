@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Profile, ProfileUpdateInput } from "@/app/types/profile";
-import { getProfile, updateProfile } from "@/lib/client/profile";
+import {
+  getProfile,
+  updateProfile,
+  updatePreferences,
+  PreferencesUpdateInput
+} from "@/lib/client/profile";
 
 export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -50,6 +55,30 @@ export function useProfile() {
     }
   }
 
+  async function savePreferences(data: PreferencesUpdateInput) {
+    try {
+      setIsSaving(true);
+      setError("");
+
+      await updatePreferences(data);
+
+      const updatedProfile = await getProfile();
+      setProfile(updatedProfile);
+
+      return updatedProfile;
+    } catch (profileError) {
+      setError(
+        profileError instanceof Error
+          ? profileError.message
+          : "Failed to update preferences"
+      );
+
+      throw profileError;
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
@@ -60,6 +89,7 @@ export function useProfile() {
     isSaving,
     error,
     reloadProfile: loadProfile,
-    saveProfile
+    saveProfile,
+    savePreferences
   };
 }
