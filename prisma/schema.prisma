@@ -49,6 +49,8 @@ model User {
   emailVerified DateTime?
   image         String?
 
+  age           Int?
+  gender        String?
   liveIn        String?
   from          String?
 

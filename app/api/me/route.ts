@@ -15,8 +15,12 @@ export async function GET() {
         email: true,
         emailVerified: true,
         image: true,
+
+        age: true,
+        gender: true,
         liveIn: true,
         from: true,
+
         createdAt: true,
         updatedAt: true,
 
@@ -47,8 +51,12 @@ export async function PATCH(request: Request) {
         email: true,
         emailVerified: true,
         image: true,
+
+        age: true,
+        gender: true,
         liveIn: true,
         from: true,
+
         createdAt: true,
         updatedAt: true,
 

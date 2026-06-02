@@ -42,6 +42,8 @@ export type UserPreference = {
     emailVerified: string | null;
     image: string | null;
   
+    age: number | null;
+    gender: string | null;
     liveIn: string | null;
     from: string | null;
   
@@ -55,6 +57,8 @@ export type UserPreference = {
   export type ProfileUpdateInput = {
     name?: string | null;
     image?: string | null;
+    age?: number | null;
+    gender?: string | null;
     liveIn?: string | null;
     from?: string | null;
   };
