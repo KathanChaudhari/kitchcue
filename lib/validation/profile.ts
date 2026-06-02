@@ -11,7 +11,9 @@ export const profileUpdateSchema = z.object({
     .refine(
       (value) => !value || /^https?:\/\/.+/.test(value),
       "Image must be a valid URL"
-    )
+    ),
+  liveIn: z.string().trim().optional().nullable(),
+  from: z.string().trim().optional().nullable()
 });
 
 export const preferencesUpdateSchema = z.object({

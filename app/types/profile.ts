@@ -42,6 +42,9 @@ export type UserPreference = {
     emailVerified: string | null;
     image: string | null;
   
+    liveIn: string | null;
+    from: string | null;
+  
     preferences: UserPreference | null;
     notificationSettings: NotificationSetting[];
   
@@ -52,4 +55,6 @@ export type UserPreference = {
   export type ProfileUpdateInput = {
     name?: string | null;
     image?: string | null;
+    liveIn?: string | null;
+    from?: string | null;
   };

@@ -1,17 +1,15 @@
-// src/components/profile/GeneralProfileForm.tsx
-
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
 import { useProfile } from "@/hooks/useProfile";
 
 import { getInputClass } from "@/components/profile/general/styles";
-import { GeneralProfileHeader } from "./general/  GeneralProfileHeader";
-import { ReadOnlyNotice } from "./general/  ReadOnlyNotice";
-import { ProfileField } from "./general/  ProfileField";
-import { HouseholdSizeControl } from "./general/  HouseholdSizeControl";
-import { CookingSkillSelector } from "./general/  CookingSkillSelector";
-import { FormActions } from "./general/  FormActions";
+import { GeneralProfileHeader } from "./general/GeneralProfileHeader";
+import { ReadOnlyNotice } from "./general/ReadOnlyNotice";
+import { ProfileField } from "./general/ProfileField";
+import { HouseholdSizeControl } from "./general/HouseholdSizeControl";
+import { CookingSkillSelector } from "./general/CookingSkillSelector";
+import { FormActions } from "./general/FormActions";
 
 export function GeneralProfileForm() {
   const {
@@ -24,8 +22,12 @@ export function GeneralProfileForm() {
   } = useProfile();
 
   const [isEditing, setIsEditing] = useState(false);
+
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [liveIn, setLiveIn] = useState("");
+  const [from, setFrom] = useState("");
+
   const [peopleCount, setPeopleCount] = useState(1);
   const [cookingSkill, setCookingSkill] = useState("Beginner");
 
@@ -34,6 +36,8 @@ export function GeneralProfileForm() {
 
     setName(profile.name || "");
     setImage(profile.image || "");
+    setLiveIn(profile.liveIn || "");
+    setFrom(profile.from || "");
     setPeopleCount(profile.preferences?.householdSize || 1);
     setCookingSkill(profile.preferences?.cookingSkill || "Beginner");
   }, [profile]);
@@ -43,6 +47,8 @@ export function GeneralProfileForm() {
 
     setName(profile.name || "");
     setImage(profile.image || "");
+    setLiveIn(profile.liveIn || "");
+    setFrom(profile.from || "");
     setPeopleCount(profile.preferences?.householdSize || 1);
     setCookingSkill(profile.preferences?.cookingSkill || "Beginner");
   }
@@ -51,19 +57,22 @@ export function GeneralProfileForm() {
     resetForm();
     setIsEditing(false);
   }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-  
+
     await saveProfile({
       name: name.trim() || null,
-      image: image.trim() || null
+      image: image.trim() || null,
+      liveIn: liveIn.trim() || null,
+      from: from.trim() || null
     });
-  
+
     await savePreferences({
       householdSize: peopleCount,
       cookingSkill
     });
-  
+
     setIsEditing(false);
   }
 
@@ -125,6 +134,26 @@ export function GeneralProfileForm() {
             />
           </ProfileField>
 
+          <ProfileField label="Where do you live?">
+            <input
+              value={liveIn}
+              disabled={!isEditing}
+              onChange={(event) => setLiveIn(event.target.value)}
+              className={getInputClass(isEditing)}
+              placeholder="Ahmedabad, India"
+            />
+          </ProfileField>
+
+          <ProfileField label="Where are you from?">
+            <input
+              value={from}
+              disabled={!isEditing}
+              onChange={(event) => setFrom(event.target.value)}
+              className={getInputClass(isEditing)}
+              placeholder="Gujarat, India"
+            />
+          </ProfileField>
+
           <ProfileField label="Profile image URL">
             <input
               value={image}
@@ -156,7 +185,6 @@ export function GeneralProfileForm() {
           cookingSkill={cookingSkill}
           onChange={setCookingSkill}
         />
-
 
         {isEditing && (
           <FormActions isSaving={isSaving} onCancel={handleCancel} />
