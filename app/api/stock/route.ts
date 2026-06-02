@@ -1,8 +1,8 @@
-
 import { getCurrentUser } from "@/lib/server/auth";
 import { created, handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
 import { stockItemCreateSchema } from "@/lib/validation/stock";
+import { isLowStockItem, mapStockItemWithLevel } from "@/lib/server/stock";
 
 export async function GET(request: Request) {
   try {
@@ -50,15 +50,10 @@ export async function GET(request: Request) {
     });
 
     const filteredItems = lowOnly
-      ? items.filter(
-          (item) =>
-            item.quantity !== null &&
-            item.minimumQuantity !== null &&
-            item.quantity <= item.minimumQuantity
-        )
+      ? items.filter((item) => isLowStockItem(item))
       : items;
 
-    return ok(filteredItems);
+    return ok(filteredItems.map(mapStockItemWithLevel));
   } catch (routeError) {
     return handleApiError(routeError);
   }
@@ -78,7 +73,7 @@ export async function POST(request: Request) {
       }
     });
 
-    return created(item);
+    return created(mapStockItemWithLevel(item));
   } catch (routeError) {
     return handleApiError(routeError);
   }

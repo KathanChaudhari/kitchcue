@@ -5,7 +5,7 @@ import { notificationSettingsUpdateSchema } from "@/lib/validation/profile";
 
 export async function GET(request: Request) {
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const settings = await prisma.notificationSetting.findMany({
       where: { userId: user.id },
@@ -23,7 +23,7 @@ export async function PATCH(request: Request) {
   if (error) return error;
 
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const settings = await prisma.$transaction(
       data.settings.map((setting) =>

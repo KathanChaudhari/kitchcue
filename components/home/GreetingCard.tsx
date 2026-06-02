@@ -1,4 +1,24 @@
-export function GreetingCard() {
+type GreetingCardProps = {
+  name?: string | null;
+  totalItems?: number;
+  lowStockCount?: number;
+};
+
+function getGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+export function GreetingCard({
+  name,
+  totalItems = 0,
+  lowStockCount = 0
+}: GreetingCardProps) {
+  const displayName = name || "Chef";
+
   return (
     <section className="lg:grid lg:overflow-hidden lg:rounded-3xl lg:border lg:border-[var(--border)] lg:bg-[var(--card)] lg:shadow-sm lg:md:grid-cols-[1.3fr_0.7fr]">
       <div className="flex flex-col justify-center lg:p-6">
@@ -7,11 +27,14 @@ export function GreetingCard() {
         </p>
 
         <h2 className="text-2xl font-bold text-[var(--foreground)] lg:mt-2 lg:text-3xl lg:text-[var(--primary)]">
-          Good morning, Chef!
+          {getGreeting()}, {displayName}!
         </h2>
 
         <p className="mt-3 max-w-lg text-base leading-7 text-[var(--foreground-soft)] lg:mt-2 lg:text-sm lg:leading-6">
-          Your kitchen is ready for a new creation.
+          Your kitchen has {totalItems} pantry items
+          {lowStockCount > 0
+            ? ` and ${lowStockCount} item${lowStockCount === 1 ? "" : "s"} need attention.`
+            : " and everything looks stocked."}
         </p>
 
         <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5 lg:flex-row lg:gap-2.5">

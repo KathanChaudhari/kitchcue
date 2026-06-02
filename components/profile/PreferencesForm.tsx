@@ -15,7 +15,7 @@ import {
   healthGoals,
   likedFoods,
   textureOptions
-} from "@/components/profile/preferences/constants";
+} from "@/components/profile/preferences/  constants";
 import { PreferencesHeader } from "@/components/profile/preferences/PreferencesHeader";
 import { PreferencesNotice } from "@/components/profile/preferences/PreferencesNotice";
 import { PreferenceCard } from "@/components/profile/preferences/PreferenceCard";
