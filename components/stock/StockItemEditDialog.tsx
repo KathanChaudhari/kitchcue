@@ -26,14 +26,13 @@ export function StockItemEditDialog({
   );
   const [unit, setUnit] = useState(item.unit || "");
   const [category, setCategory] = useState(item.category || "");
-  const [storageLocation, setStorageLocation] = useState(
-    item.storageLocation || ""
-  );
   const [minimumQuantity, setMinimumQuantity] = useState(
     item.minimumQuantity !== null && item.minimumQuantity !== undefined
       ? String(item.minimumQuantity)
       : ""
   );
+  const [isShoppingList, setIsShoppingList] = useState(item.isShoppingList);
+  const [isPurchased, setIsPurchased] = useState(item.isPurchased);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -47,12 +46,13 @@ export function StockItemEditDialog({
     );
     setUnit(item.unit || "");
     setCategory(item.category || "");
-    setStorageLocation(item.storageLocation || "");
     setMinimumQuantity(
       item.minimumQuantity !== null && item.minimumQuantity !== undefined
         ? String(item.minimumQuantity)
         : ""
     );
+    setIsShoppingList(item.isShoppingList);
+    setIsPurchased(item.isPurchased);
   }, [isOpen, item]);
 
   if (!isOpen) return null;
@@ -65,13 +65,14 @@ export function StockItemEditDialog({
 
       await updateStockItem(item.id, {
         name: name.trim(),
-        quantity: quantity.trim() ? Number(quantity) : undefined,
-        unit: unit.trim() || undefined,
-        category: category.trim() || undefined,
-        storageLocation: storageLocation.trim() || undefined,
+        quantity: quantity.trim() ? Number(quantity) : null,
+        unit: unit.trim() || null,
+        category: category.trim() || null,
         minimumQuantity: minimumQuantity.trim()
           ? Number(minimumQuantity)
-          : undefined
+          : null,
+        isShoppingList,
+        isPurchased
       });
 
       onClose();
@@ -131,6 +132,7 @@ export function StockItemEditDialog({
                 value={quantity}
                 onChange={(event) => setQuantity(event.target.value)}
                 type="number"
+                min="0"
                 className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-medium text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
                 placeholder="1"
               />
@@ -163,31 +165,45 @@ export function StockItemEditDialog({
             />
           </label>
 
-          <div className="grid grid-cols-2 gap-3">
-            <label className="block space-y-1">
+          <label className="block space-y-1">
+            <span className="text-xs font-bold text-[var(--muted)]">
+              Low at
+            </span>
+
+            <input
+              value={minimumQuantity}
+              onChange={(event) => setMinimumQuantity(event.target.value)}
+              type="number"
+              min="0"
+              className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-medium text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
+              placeholder="1"
+            />
+          </label>
+
+          <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3">
+            <label className="flex cursor-pointer items-center justify-between gap-3">
               <span className="text-xs font-bold text-[var(--muted)]">
-                Storage
+                In shopping list
               </span>
 
               <input
-                value={storageLocation}
-                onChange={(event) => setStorageLocation(event.target.value)}
-                className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-medium text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
-                placeholder="Fridge"
+                type="checkbox"
+                checked={isShoppingList}
+                onChange={(event) => setIsShoppingList(event.target.checked)}
+                className="h-4 w-4 accent-[var(--primary)]"
               />
             </label>
 
-            <label className="block space-y-1">
+            <label className="flex cursor-pointer items-center justify-between gap-3">
               <span className="text-xs font-bold text-[var(--muted)]">
-                Low at
+                Refilled
               </span>
 
               <input
-                value={minimumQuantity}
-                onChange={(event) => setMinimumQuantity(event.target.value)}
-                type="number"
-                className="h-10 w-full rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-medium text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
-                placeholder="1"
+                type="checkbox"
+                checked={isPurchased}
+                onChange={(event) => setIsPurchased(event.target.checked)}
+                className="h-4 w-4 accent-[var(--primary)]"
               />
             </label>
           </div>

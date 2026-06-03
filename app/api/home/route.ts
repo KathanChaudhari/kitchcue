@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/lib/server/auth";
 import { handleApiError, ok } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
-import { isLowStockItem, mapStockItemWithLevel } from "@/lib/server/stock";
+import { mapStockItemWithLevel } from "@/lib/server/stock";
 
 export async function GET() {
   try {
@@ -53,17 +53,21 @@ export async function GET() {
     const stockItems = inventoryItems.map(mapStockItemWithLevel);
 
     const lowStockItems = stockItems
-      .filter((item) => isLowStockItem(item))
+      .filter((item) => item.isLowStock)
       .slice(0, 5);
 
-    const shoppingItems = lowStockItems.map((item) => ({
-      id: item.id,
-      name: item.name,
-      quantity: item.quantity,
-      unit: item.unit,
-      category: item.category,
-      reason: "Low stock"
-    }));
+    const shoppingItems = stockItems
+      .filter((item) => item.isShoppingList)
+      .map((item) => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        category: item.category,
+        isShoppingList: item.isShoppingList,
+        isPurchased: item.isPurchased,
+        reason: item.isLowStock ? "Added from stock alerts" : "Added manually"
+      }));
 
     const inventoryActivities = stockItems.slice(0, 5).map((item) => ({
       id: `inventory-${item.id}`,
@@ -116,8 +120,6 @@ export async function GET() {
       lowStockItems,
       shoppingItems,
       recentActivity,
-
-      // You do not have Note model yet.
       notes: []
     });
   } catch (routeError) {

@@ -1,7 +1,8 @@
 import { getCurrentUser } from "@/lib/server/auth";
 import { handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
-import { stockItemCreateSchema } from "@/lib/validation/stock";
+import { stockItemUpdateSchema } from "@/lib/validation/stock";
+import { mapStockItemWithLevel } from "@/lib/server/stock";
 
 type Params = {
   params: {
@@ -10,10 +11,7 @@ type Params = {
 };
 
 export async function PATCH(request: Request, { params }: Params) {
-  const { data, error } = await parseJson(
-    request,
-    stockItemCreateSchema.partial()
-  );
+  const { data, error } = await parseJson(request, stockItemUpdateSchema);
 
   if (error) return error;
 
@@ -41,7 +39,7 @@ export async function PATCH(request: Request, { params }: Params) {
       data
     });
 
-    return ok(updatedItem);
+    return ok(mapStockItemWithLevel(updatedItem));
   } catch (routeError) {
     return handleApiError(routeError);
   }

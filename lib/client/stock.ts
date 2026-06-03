@@ -1,7 +1,10 @@
 // src/lib/client/stock.ts
 
-
-import { CreateInventoryItemInput, InventoryItem } from "@/app/types/stock";
+import {
+  CreateInventoryItemInput,
+  InventoryItem,
+  UpdateInventoryItemInput
+} from "@/app/types/stock";
 import { apiFetch } from "./api";
 
 export async function getStockItems(params?: {
@@ -31,7 +34,7 @@ export async function createStockItem(data: CreateInventoryItemInput) {
 
 export async function updateStockItem(
   itemId: string,
-  data: Partial<CreateInventoryItemInput>
+  data: UpdateInventoryItemInput
 ) {
   return apiFetch<InventoryItem>(`/api/stock/${itemId}`, {
     method: "PATCH",
@@ -42,5 +45,25 @@ export async function updateStockItem(
 export async function deleteStockItem(itemId: string) {
   return apiFetch<{ success: boolean }>(`/api/stock/${itemId}`, {
     method: "DELETE"
+  });
+}
+
+export async function addStockItemToShoppingList(itemId: string) {
+  return updateStockItem(itemId, {
+    isShoppingList: true,
+    isPurchased: false
+  });
+}
+
+export async function markStockItemAsPurchased(itemId: string) {
+  return updateStockItem(itemId, {
+    isPurchased: true
+  });
+}
+
+export async function removeStockItemFromShoppingList(itemId: string) {
+  return updateStockItem(itemId, {
+    isShoppingList: false,
+    isPurchased: false
   });
 }

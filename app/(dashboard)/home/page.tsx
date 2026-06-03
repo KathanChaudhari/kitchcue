@@ -8,9 +8,38 @@ import { NotesCard } from "@/components/home/NotesCard";
 import { RecentActivityList } from "@/components/home/RecentActivityList";
 import { ShoppingListCard } from "@/components/home/ShoppingListCard";
 import { useHomeDashboard } from "@/hooks/useHomeDashboard";
+import { updateStockItem } from "@/lib/client/stock";
 
 export default function HomeTabPage() {
-  const { data, isLoading, error } = useHomeDashboard();
+  const { data, isLoading, error, refetch } = useHomeDashboard();
+
+  async function handleAddToShoppingList(itemId: string) {
+    await updateStockItem(itemId, {
+      isShoppingList: true,
+      isPurchased: false
+    });
+
+    refetch();
+  }
+
+  async function handleUpdateQuantity(itemId: string, quantity: number) {
+    await updateStockItem(itemId, {
+      quantity,
+      isShoppingList: false,
+      isPurchased: true
+    });
+
+    refetch();
+  }
+
+  async function handleRemoveFromShoppingList(itemId: string) {
+    await updateStockItem(itemId, {
+      isShoppingList: false,
+      isPurchased: false
+    });
+
+    refetch();
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 lg:px-5">
@@ -52,8 +81,17 @@ export default function HomeTabPage() {
           />
 
           <div className="grid gap-7 lg:grid-cols-[0.7fr_0.3fr] lg:gap-3">
-            <LowStockCard items={data?.lowStockItems || []} />
-            <ShoppingListCard items={data?.shoppingItems || []} />
+            <LowStockCard
+              items={data?.lowStockItems || []}
+              onAddToShoppingList={handleAddToShoppingList}
+              onUpdateQuantity={handleUpdateQuantity}
+            />
+
+<ShoppingListCard
+  items={data?.shoppingItems || []}
+  onRemoveFromShoppingList={handleRemoveFromShoppingList}
+  onUpdateQuantity={handleUpdateQuantity}
+/>
           </div>
 
           <div className="grid gap-7 lg:grid-cols-2 lg:gap-4">

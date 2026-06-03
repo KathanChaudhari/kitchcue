@@ -52,8 +52,7 @@ export function StockAddDock({ onItemCreated }: StockAddDockProps) {
         name: message.trim(),
         quantity: 1,
         unit: "unit",
-        category: "Other",
-        status: "Available"
+        category: "Other"
       });
 
       closePanel();
