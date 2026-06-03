@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { HomeActivityItem } from "@/app/types/home";
 import { SectionCard } from "@/components/global/SectionCard";
 import {
@@ -40,12 +41,27 @@ function getActivityIcon(type: string) {
 }
 
 export function RecentActivityList({ items }: RecentActivityListProps) {
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleItems = showAll ? items : items.slice(0, 2);
+  const hasMoreItems = items.length > 2;
+
   return (
     <SectionCard>
-      <div className="mb-6">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <h2 className="text-xl font-bold text-[var(--primary)]">
           Recent Activity
         </h2>
+
+        {hasMoreItems ? (
+          <button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="text-xs font-bold text-[var(--primary)] transition hover:opacity-80"
+          >
+            {showAll ? "Show less" : "View more"}
+          </button>
+        ) : null}
       </div>
 
       {items.length === 0 ? (
@@ -55,9 +71,9 @@ export function RecentActivityList({ items }: RecentActivityListProps) {
         </div>
       ) : (
         <div className="space-y-5">
-          {items.map((activity, index) => {
+          {visibleItems.map((activity, index) => {
             const Icon = getActivityIcon(activity.type);
-            const isLast = index === items.length - 1;
+            const isLast = index === visibleItems.length - 1;
 
             return (
               <div key={activity.id} className="flex gap-4">

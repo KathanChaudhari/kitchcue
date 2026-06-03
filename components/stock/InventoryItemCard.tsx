@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, CheckCircle2, ShoppingBasket } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { InventoryItem } from "@/app/types/stock";
 import { StockItemActionMenu } from "@/components/stock/StockItemActionMenu";
 import { StockItemEditDialog } from "@/components/stock/StockItemEditDialog";
@@ -33,37 +33,24 @@ export function InventoryItemCard({
   return (
     <>
       <article className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 sm:w-[calc(50%-0.25rem)] xl:w-[calc(33.333%-0.35rem)]">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="truncate text-sm font-extrabold text-[var(--foreground)]">
-                {item.name}
-              </h3>
+            <h3
+              title={item.name}
+              className="max-w-[11rem] truncate text-sm font-extrabold text-[var(--foreground)] sm:max-w-[13rem]"
+            >
+              {item.name}
+            </h3>
+
+            <div className="mt-1 flex items-center gap-2">
+              <p className="min-w-0 truncate text-xs font-medium text-[var(--muted)]">
+                {amount}
+              </p>
 
               {item.isLowStock ? (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--secondary)_22%,var(--card))] px-2 py-0.5 text-[10px] font-bold text-[var(--secondary)]">
-                  <AlertTriangle className="h-3 w-3" />
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--secondary)_18%,var(--card))] px-1.5 py-0.5 text-[9px] font-bold text-[var(--secondary)]">
+                  <AlertTriangle className="h-2.5 w-2.5" />
                   Low
-                </span>
-              ) : null}
-            </div>
-
-            <p className="mt-0.5 text-xs font-medium text-[var(--muted)]">
-              {amount}
-            </p>
-
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {item.isShoppingList ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--primary)_22%,var(--card))] px-2 py-0.5 text-[10px] font-bold text-[var(--primary-soft)]">
-                  <ShoppingBasket className="h-3 w-3" />
-                  In List
-                </span>
-              ) : null}
-
-              {item.isPurchased ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--secondary)_22%,var(--card))] px-2 py-0.5 text-[10px] font-bold text-[var(--secondary)]">
-                  <CheckCircle2 className="h-3 w-3" />
-                  Refilled
                 </span>
               ) : null}
             </div>
@@ -76,21 +63,11 @@ export function InventoryItemCard({
           />
         </div>
 
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[var(--card-soft)]">
+        <div className="mt-2 h-1 overflow-hidden rounded-full bg-[var(--card-soft)]">
           <div
             className="h-full rounded-full bg-[var(--primary)]"
             style={{ width: `${Math.max(safeLevel, 8)}%` }}
           />
-        </div>
-
-        <div className="mt-1 flex items-center justify-between text-[10px] font-semibold text-[var(--muted)]">
-          <span>
-            {item.minimumQuantity !== null && item.minimumQuantity !== undefined
-              ? `Minimum: ${item.minimumQuantity}${item.unit ? ` ${item.unit}` : ""}`
-              : "Minimum not set"}
-          </span>
-
-          <span>{safeLevel}%</span>
         </div>
       </article>
 

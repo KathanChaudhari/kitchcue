@@ -180,33 +180,7 @@ export function StockItemEditDialog({
             />
           </label>
 
-          <div className="grid grid-cols-2 gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3">
-            <label className="flex cursor-pointer items-center justify-between gap-3">
-              <span className="text-xs font-bold text-[var(--muted)]">
-                In shopping list
-              </span>
-
-              <input
-                type="checkbox"
-                checked={isShoppingList}
-                onChange={(event) => setIsShoppingList(event.target.checked)}
-                className="h-4 w-4 accent-[var(--primary)]"
-              />
-            </label>
-
-            <label className="flex cursor-pointer items-center justify-between gap-3">
-              <span className="text-xs font-bold text-[var(--muted)]">
-                Refilled
-              </span>
-
-              <input
-                type="checkbox"
-                checked={isPurchased}
-                onChange={(event) => setIsPurchased(event.target.checked)}
-                className="h-4 w-4 accent-[var(--primary)]"
-              />
-            </label>
-          </div>
+         
         </div>
 
         <div className="flex items-center justify-end gap-2 border-t border-[var(--border)] px-4 py-3">
