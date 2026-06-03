@@ -15,10 +15,22 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
       .slice(0, 2)
       .toUpperCase() || "K";
 
-  const cookingSkill = preferences?.cookingSkill || "Cooking profile";
-  const householdSize = preferences?.householdSize
-    ? `Cooks for ${preferences.householdSize}`
-    : "Household not set";
+      const personalInfo = [
+        profile.age ? `${profile.age}` : null,
+        profile.gender || null
+      ]
+        .filter(Boolean)
+        .join(" · ");
+      
+      const cookingSkill = preferences?.cookingSkill || null;
+      
+      const householdSize = preferences?.householdSize
+        ? `Cooks for ${preferences.householdSize}`
+        : null;
+
+  const subtitleParts = [profile.liveIn || null, profile.email].filter(Boolean);
+
+  const subtitle = subtitleParts.join(" · ");
 
   return (
     <section className="rounded-2xl border border-[var(--border)] bg-[linear-gradient(135deg,var(--card),color-mix(in_srgb,var(--primary)_10%,var(--card)))] p-3.5 shadow-sm sm:p-5">
@@ -41,18 +53,28 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
           </h2>
 
           <p className="mt-0.5 truncate text-xs text-[var(--muted)] sm:mt-1 sm:text-sm">
-            {profile.email}
+            {subtitle}
           </p>
 
           <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
-            <span className="rounded-lg bg-[color-mix(in_srgb,var(--primary)_28%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--primary-soft)] sm:rounded-full sm:px-3 sm:text-xs">
-              {cookingSkill}
-            </span>
+  {personalInfo ? (
+    <span className="rounded-lg bg-[color-mix(in_srgb,var(--tertiary)_24%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
+      {personalInfo}
+    </span>
+  ) : null}
 
-            <span className="rounded-lg bg-[color-mix(in_srgb,var(--secondary)_30%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
-              {householdSize}
-            </span>
-          </div>
+  {cookingSkill ? (
+    <span className="rounded-lg bg-[color-mix(in_srgb,var(--primary)_28%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--primary-soft)] sm:rounded-full sm:px-3 sm:text-xs">
+      {cookingSkill}
+    </span>
+  ) : null}
+
+  {householdSize ? (
+    <span className="rounded-lg bg-[color-mix(in_srgb,var(--secondary)_30%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
+      {householdSize}
+    </span>
+  ) : null}
+</div>
         </div>
       </div>
     </section>

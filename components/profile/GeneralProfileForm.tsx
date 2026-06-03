@@ -11,6 +11,8 @@ import { HouseholdSizeControl } from "./general/HouseholdSizeControl";
 import { CookingSkillSelector } from "./general/CookingSkillSelector";
 import { FormActions } from "./general/FormActions";
 
+const genderOptions = ["Male", "Female", "Other", "Prefer not to say"];
+
 export function GeneralProfileForm() {
   const {
     profile,
@@ -25,6 +27,8 @@ export function GeneralProfileForm() {
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [liveIn, setLiveIn] = useState("");
   const [from, setFrom] = useState("");
 
@@ -36,6 +40,8 @@ export function GeneralProfileForm() {
 
     setName(profile.name || "");
     setImage(profile.image || "");
+    setAge(profile.age ? String(profile.age) : "");
+    setGender(profile.gender || "");
     setLiveIn(profile.liveIn || "");
     setFrom(profile.from || "");
     setPeopleCount(profile.preferences?.householdSize || 1);
@@ -47,6 +53,8 @@ export function GeneralProfileForm() {
 
     setName(profile.name || "");
     setImage(profile.image || "");
+    setAge(profile.age ? String(profile.age) : "");
+    setGender(profile.gender || "");
     setLiveIn(profile.liveIn || "");
     setFrom(profile.from || "");
     setPeopleCount(profile.preferences?.householdSize || 1);
@@ -64,6 +72,8 @@ export function GeneralProfileForm() {
     await saveProfile({
       name: name.trim() || null,
       image: image.trim() || null,
+      age: age.trim() ? Number(age) : null,
+      gender: gender.trim() || null,
       liveIn: liveIn.trim() || null,
       from: from.trim() || null
     });
@@ -132,6 +142,35 @@ export function GeneralProfileForm() {
               className={getInputClass(false)}
               placeholder="Email"
             />
+          </ProfileField>
+
+          <ProfileField label="Age">
+            <input
+              value={age}
+              disabled={!isEditing}
+              onChange={(event) => setAge(event.target.value)}
+              type="number"
+              min={1}
+              className={getInputClass(isEditing)}
+              placeholder="Your age"
+            />
+          </ProfileField>
+
+          <ProfileField label="Gender">
+            <select
+              value={gender}
+              disabled={!isEditing}
+              onChange={(event) => setGender(event.target.value)}
+              className={`${getInputClass(isEditing)} appearance-none`}
+            >
+              <option value="">Select gender</option>
+
+              {genderOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </ProfileField>
 
           <ProfileField label="Where do you live?">

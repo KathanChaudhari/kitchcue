@@ -23,6 +23,14 @@ export function GeneralProfileSection({ profile }: GeneralProfileSectionProps) {
       value: formatValue(profile.name)
     },
     {
+      label: "Age",
+      value: formatValue(profile.age)
+    },
+    {
+      label: "Gender",
+      value: formatValue(profile.gender)
+    },
+    {
       label: "Lives in",
       value: formatValue(profile.liveIn)
     },
@@ -38,10 +46,7 @@ export function GeneralProfileSection({ profile }: GeneralProfileSectionProps) {
           }`
         : "Not set"
     },
-    {
-      label: "Cooking skill",
-      value: formatValue(preferences?.cookingSkill)
-    }
+    
   ];
 
   return (
