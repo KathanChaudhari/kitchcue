@@ -6,6 +6,7 @@ import { NotificationSection } from "@/components/profile/NotificationSection";
 import { DeleteAccountSection } from "@/components/profile/DeleteAccountSection";
 import { ProfileHeroCard } from "@/components/profile/ProfileHeroCard";
 import { GeneralProfileSection } from "@/components/profile/GeneralProfileSection";
+import { ThemeModeSection } from "@/components/profile/ThemeModeSection";
 import { useProfile } from "@/hooks/useProfile";
 
 export default function ProfilePage() {
@@ -45,6 +46,8 @@ export default function ProfilePage() {
         </div>
 
         <ProfileHeroCard profile={profile} />
+
+        <ThemeModeSection />
 
         <div className="grid gap-3 lg:grid-cols-[1.1fr_0.9fr] lg:gap-4">
           <GeneralProfileSection profile={profile} />

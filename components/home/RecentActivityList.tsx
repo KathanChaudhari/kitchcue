@@ -49,7 +49,7 @@ export function RecentActivityList({ items }: RecentActivityListProps) {
   return (
     <SectionCard>
       <div className="mb-6 flex items-center justify-between gap-3">
-        <h2 className="text-xl font-bold text-[var(--primary)]">
+        <h2 className="text-xl font-bold text-[var(--foreground)]">
           Recent Activity
         </h2>
 

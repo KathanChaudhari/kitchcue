@@ -1,7 +1,7 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
-import { SectionCard } from "@/components/global/SectionCard";
 
 type ThemeMode = "dark" | "light";
 
@@ -16,49 +16,53 @@ export function ThemeModeSection() {
     document.documentElement.classList.toggle("light", nextTheme === "light");
   }, []);
 
-  function updateTheme(nextTheme: ThemeMode) {
+  function toggleTheme() {
+    const nextTheme: ThemeMode = theme === "dark" ? "light" : "dark";
+
     setTheme(nextTheme);
     window.localStorage.setItem("kitchcue-theme", nextTheme);
     document.documentElement.classList.toggle("light", nextTheme === "light");
   }
 
+  const isLight = theme === "light";
+
   return (
-    <SectionCard title="Main settings">
-      <div className="space-y-4">
-        <div>
-          <p className="text-sm font-semibold">Theme mode</p>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            Choose how KitchCue looks across the app.
-          </p>
+    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 sm:p-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--surface)] text-[var(--primary-soft)]">
+            {isLight ? <Sun size={18} /> : <Moon size={18} />}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-bold text-[var(--primary-soft)]">
+              Theme
+            </h3>
+
+            <p className="text-xs text-[var(--muted)]">
+              {isLight ? "Light mode" : "Dark mode"}
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[var(--card-soft)] p-1">
-          {(["dark", "light"] as ThemeMode[]).map((mode) => {
-            const isActive = theme === mode;
-
-            return (
-              <button
-                key={mode}
-                className={`h-11 rounded-xl text-sm font-bold capitalize transition ${
-                  isActive
-                    ? "bg-[var(--primary)] text-[var(--ink)]"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]"
-                }`}
-                type="button"
-                onClick={() => updateTheme(mode)}
-              >
-                {mode}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="grid grid-cols-3 gap-2">
-          <span className="h-9 rounded-xl bg-[var(--primary)]" title="Primary #87a28a" />
-          <span className="h-9 rounded-xl bg-[var(--secondary)]" title="Secondary #b38b6d" />
-          <span className="h-9 rounded-xl bg-[var(--tertiary)]" title="Tertiary #82c4c5" />
-        </div>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label="Toggle theme"
+          aria-pressed={isLight}
+          className={`relative h-8 w-14 rounded-full border border-[var(--border)] transition ${
+            isLight ? "bg-[var(--primary)]" : "bg-[var(--surface)]"
+          }`}
+        >
+          <span
+            className={`absolute top-1 grid h-6 w-6 place-items-center rounded-full bg-[var(--foreground)] text-[var(--background)] shadow-sm transition ${
+              isLight ? "left-7" : "left-1"
+            }`}
+          >
+            {isLight ? <Sun size={13} /> : <Moon size={13} />}
+          </span>
+        </button>
       </div>
-    </SectionCard>
+    </section>
   );
 }

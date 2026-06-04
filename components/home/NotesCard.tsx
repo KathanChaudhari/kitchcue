@@ -32,7 +32,7 @@ export function NotesCard({ notes }: NotesCardProps) {
   return (
     <SectionCard>
       <div className="mb-6 flex items-center justify-between gap-3">
-        <h2 className="text-xl font-bold text-[var(--primary)]">Notices</h2>
+        <h2 className="text-xl font-bold text-[var(--foreground)]">Notices</h2>
 
         {hasMoreNotes ? (
           <button
@@ -53,7 +53,7 @@ export function NotesCard({ notes }: NotesCardProps) {
             </div>
 
             <div className="flex-1">
-              <h3 className="text-sm font-bold text-[var(--primary)]">
+              <h3 className="text-sm font-bold text[var(--foreground)]">
                 No notices yet
               </h3>
 

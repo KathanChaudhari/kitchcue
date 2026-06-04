@@ -43,7 +43,7 @@ export function AppNav() {
   return (
     <nav
       className={`
-        fixed z-10 border-[var(--border)] bg-[var(--card)] backdrop-blur transition-all duration-300
+        fixed z-10 border-[var(--border)] bg-[var(--card)]/95 backdrop-blur transition-all duration-300
 
         inset-x-0 bottom-0 mx-auto max-w-md border-t px-3 pb-3 pt-2
 
@@ -65,6 +65,7 @@ export function AppNav() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--secondary)]">
                 smart way
               </p>
+
               <h2 className="mt-1 text-xl font-bold text-[var(--foreground)]">
                 KitchCue
               </h2>
@@ -74,7 +75,7 @@ export function AppNav() {
           <button
             type="button"
             onClick={() => setIsCollapsed((value) => !value)}
-            className="grid h-10 w-10 place-items-center rounded-2xl bg-[var(--card-soft)] text-sm font-bold text-[var(--muted)] transition hover:border hover:border-[var(--primary)]"
+            className="grid h-10 w-10 place-items-center rounded-2xl border border-transparent bg-[var(--card-soft)] text-sm font-bold text-[var(--muted)] transition hover:border-[var(--primary-muted)] hover:text-[var(--foreground)]"
             aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? "☰" : "‹"}
@@ -100,8 +101,8 @@ export function AppNav() {
                   }
                   ${
                     isActive
-                      ? "bg-[var(--primary)] text-[var(--ink)]"
-                      : "text-[#b7b7b7] hover:bg-[#2f3b31]"
+                      ? "bg-[var(--primary)] text-[var(--on-primary)] shadow-sm"
+                      : "text-[var(--muted)] hover:bg-[#2f3b31] hover:text-[var(--foreground)] [html.light_&]:hover:bg-[var(--card-soft)]"
                   }
                 `}
               >
@@ -118,21 +119,21 @@ export function AppNav() {
         </div>
 
         <div className="mt-auto hidden border-t border-[var(--border)] pt-4 lg:block">
-        <button
-  type="button"
-  onClick={handleLogout}
-  title={isCollapsed ? "Logout" : undefined}
-  className={`flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl text-xs font-bold text-[var(--muted)] transition hover:bg-[#2f3b31] hover:text-[var(--primary-soft)] active:scale-[0.98]
-    ${isCollapsed ? "px-0" : "px-4"}
-  `}
->
-  <span className="text-lg leading-none" aria-hidden="true">
-    ⎋
-  </span>
+  <button
+    type="button"
+    onClick={handleLogout}
+    title={isCollapsed ? "Logout" : undefined}
+    className={`flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl text-xs font-bold text-[var(--muted)] transition hover:bg-[#2f3b31] hover:text-[var(--foreground)] [html.light_&]:hover:bg-[var(--card-soft)] [html.light_&]:hover:text-[var(--foreground)] active:scale-[0.98]
+      ${isCollapsed ? "px-0" : "px-4"}
+    `}
+  >
+    <span className="text-lg leading-none" aria-hidden="true">
+      ⎋
+    </span>
 
-  <span className={isCollapsed ? "hidden" : ""}>Logout</span>
-</button>
-        </div>
+    <span className={isCollapsed ? "hidden" : ""}>Logout</span>
+  </button>
+</div>
       </div>
     </nav>
   );

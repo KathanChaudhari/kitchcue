@@ -39,14 +39,25 @@
 
 html.light {
   color-scheme: light;
+
   --background: #fffaf4;
   --surface: #fffaf4;
   --surface-muted: #f7efe4;
+
   --card: #ffffff;
   --card-soft: #f7efe4;
+
   --border: #eadfce;
+
   --foreground: #20201d;
+  --foreground-soft: #4e564b;
   --muted: #7a6b58;
+
+  --primary: #a8b99f;
+  --primary-soft: #7f9677;
+  --primary-muted: #d7dfd1;
+  --on-primary: #23301f;
+
   --ink: #20201d;
 }
 

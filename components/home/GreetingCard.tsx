@@ -26,10 +26,9 @@ export function GreetingCard({
           Today in your kitchen
         </p>
 
-        <h2 className="text-2xl font-bold text-[var(--foreground)] lg:mt-2 lg:text-3xl lg:text-[var(--primary)]">
-          {getGreeting()}, {displayName}!
-        </h2>
-
+        <h2 className="text-2xl font-bold text-[var(--foreground)] lg:mt-2 lg:text-3xl">
+  {getGreeting()}, {displayName}!
+</h2>
         <p className="mt-3 max-w-lg text-base leading-7 text-[var(--foreground-soft)] lg:mt-2 lg:text-sm lg:leading-6">
           Your kitchen has {totalItems} pantry items
           {lowStockCount > 0

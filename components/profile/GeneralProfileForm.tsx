@@ -107,8 +107,9 @@ export function GeneralProfileForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-[calc(100dvh-7rem)] bg-[var(--card)] p-3.5 shadow-sm sm:p-4 lg:min-h-0 lg:rounded-2xl lg:border lg:border-[var(--border)]"
-    >
+      className={`min-h-[calc(100dvh-7rem)] bg-[var(--card)] p-3.5 shadow-sm transition sm:p-4 lg:min-h-0 lg:rounded-2xl lg:border lg:border-[var(--border)] ${
+        isEditing ? "ring-1 ring-[var(--primary-muted)]" : ""
+      }`}   >
       <GeneralProfileHeader
         isEditing={isEditing}
         onEdit={() => setIsEditing(true)}
