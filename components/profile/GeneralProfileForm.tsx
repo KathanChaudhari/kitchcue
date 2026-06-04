@@ -10,6 +10,8 @@ import { ProfileField } from "./general/ProfileField";
 import { HouseholdSizeControl } from "./general/HouseholdSizeControl";
 import { CookingSkillSelector } from "./general/CookingSkillSelector";
 import { FormActions } from "./general/FormActions";
+import { ProfilePhotoPicker } from "./general/ProfilePhotoPicker";
+import { ProfilePhotoModal } from "./general/ProfilePhotoModal";
 
 const genderOptions = ["Male", "Female", "Other", "Prefer not to say"];
 
@@ -34,6 +36,8 @@ export function GeneralProfileForm() {
 
   const [peopleCount, setPeopleCount] = useState(1);
   const [cookingSkill, setCookingSkill] = useState("Beginner");
+
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   useEffect(() => {
     if (!profile) return;
@@ -64,6 +68,15 @@ export function GeneralProfileForm() {
   function handleCancel() {
     resetForm();
     setIsEditing(false);
+    setIsImageModalOpen(false);
+  }
+
+  function openImageModal() {
+    if (!isEditing) {
+      setIsEditing(true);
+    }
+
+    setIsImageModalOpen(true);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -105,131 +118,134 @@ export function GeneralProfileForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`min-h-[calc(100dvh-7rem)] bg-[var(--card)] p-3.5 shadow-sm transition sm:p-4 lg:min-h-0 lg:rounded-2xl lg:border lg:border-[var(--border)] ${
-        isEditing ? "ring-1 ring-[var(--primary-muted)]" : ""
-      }`}   >
-      <GeneralProfileHeader
-        isEditing={isEditing}
-        onEdit={() => setIsEditing(true)}
-        onCancel={handleCancel}
-      />
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className={`min-h-[calc(100dvh-7rem)] bg-[var(--card)] p-3.5 shadow-sm transition sm:p-4 lg:min-h-0 lg:rounded-2xl lg:border lg:border-[var(--border)] ${
+          isEditing ? "ring-1 ring-[var(--primary-muted)]" : ""
+        }`}
+      >
+        <GeneralProfileHeader
+          isEditing={isEditing}
+          onEdit={() => setIsEditing(true)}
+          onCancel={handleCancel}
+        />
 
-      {!isEditing && <ReadOnlyNotice />}
+        {!isEditing && <ReadOnlyNotice />}
 
-      {error ? (
-        <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2">
-          <p className="text-[11px] font-medium text-red-300">{error}</p>
+        {error ? (
+          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-2">
+            <p className="text-[11px] font-medium text-red-300">{error}</p>
+          </div>
+        ) : null}
+
+        <div className="space-y-4">
+          <ProfilePhotoPicker image={image} onOpen={openImageModal} />
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <ProfileField label="Full name">
+              <input
+                value={name}
+                disabled={!isEditing}
+                onChange={(event) => setName(event.target.value)}
+                className={getInputClass(isEditing)}
+                placeholder="Enter your name"
+              />
+            </ProfileField>
+
+            <ProfileField label="Email">
+              <input
+                value={profile.email}
+                disabled
+                className={getInputClass(false)}
+                placeholder="Email"
+              />
+            </ProfileField>
+
+            <ProfileField label="Age">
+              <input
+                value={age}
+                disabled={!isEditing}
+                onChange={(event) => setAge(event.target.value)}
+                type="number"
+                min={1}
+                className={getInputClass(isEditing)}
+                placeholder="Your age"
+              />
+            </ProfileField>
+
+            <ProfileField label="Gender">
+              <select
+                value={gender}
+                disabled={!isEditing}
+                onChange={(event) => setGender(event.target.value)}
+                className={`${getInputClass(isEditing)} appearance-none`}
+              >
+                <option value="">Select gender</option>
+
+                {genderOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </ProfileField>
+
+            <ProfileField label="Where do you live?">
+              <input
+                value={liveIn}
+                disabled={!isEditing}
+                onChange={(event) => setLiveIn(event.target.value)}
+                className={getInputClass(isEditing)}
+                placeholder="Ahmedabad, India"
+              />
+            </ProfileField>
+
+            <ProfileField label="Where are you from?">
+              <input
+                value={from}
+                disabled={!isEditing}
+                onChange={(event) => setFrom(event.target.value)}
+                className={getInputClass(isEditing)}
+                placeholder="Gujarat, India"
+              />
+            </ProfileField>
+
+            <ProfileField label="Account created">
+              <input
+                value={new Date(profile.createdAt).toLocaleDateString()}
+                disabled
+                className={getInputClass(false)}
+              />
+            </ProfileField>
+          </div>
+
+          <HouseholdSizeControl
+            isEditing={isEditing}
+            peopleCount={peopleCount}
+            onDecrease={() => setPeopleCount((value) => Math.max(1, value - 1))}
+            onIncrease={() => setPeopleCount((value) => value + 1)}
+          />
+
+          <CookingSkillSelector
+            isEditing={isEditing}
+            cookingSkill={cookingSkill}
+            onChange={setCookingSkill}
+          />
+
+          {isEditing && (
+            <FormActions isSaving={isSaving} onCancel={handleCancel} />
+          )}
         </div>
+      </form>
+
+      {isImageModalOpen ? (
+        <ProfilePhotoModal
+          initialImage={image}
+          onClose={() => setIsImageModalOpen(false)}
+          onSave={setImage}
+        />
       ) : null}
-
-      <div className="space-y-4">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <ProfileField label="Full name">
-            <input
-              value={name}
-              disabled={!isEditing}
-              onChange={(event) => setName(event.target.value)}
-              className={getInputClass(isEditing)}
-              placeholder="Enter your name"
-            />
-          </ProfileField>
-
-          <ProfileField label="Email">
-            <input
-              value={profile.email}
-              disabled
-              className={getInputClass(false)}
-              placeholder="Email"
-            />
-          </ProfileField>
-
-          <ProfileField label="Age">
-            <input
-              value={age}
-              disabled={!isEditing}
-              onChange={(event) => setAge(event.target.value)}
-              type="number"
-              min={1}
-              className={getInputClass(isEditing)}
-              placeholder="Your age"
-            />
-          </ProfileField>
-
-          <ProfileField label="Gender">
-            <select
-              value={gender}
-              disabled={!isEditing}
-              onChange={(event) => setGender(event.target.value)}
-              className={`${getInputClass(isEditing)} appearance-none`}
-            >
-              <option value="">Select gender</option>
-
-              {genderOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </ProfileField>
-
-          <ProfileField label="Where do you live?">
-            <input
-              value={liveIn}
-              disabled={!isEditing}
-              onChange={(event) => setLiveIn(event.target.value)}
-              className={getInputClass(isEditing)}
-              placeholder="Ahmedabad, India"
-            />
-          </ProfileField>
-
-          <ProfileField label="Where are you from?">
-            <input
-              value={from}
-              disabled={!isEditing}
-              onChange={(event) => setFrom(event.target.value)}
-              className={getInputClass(isEditing)}
-              placeholder="Gujarat, India"
-            />
-          </ProfileField>
-
-          <ProfileField label="Profile image URL">
-            <input
-              value={image}
-              disabled={!isEditing}
-              onChange={(event) => setImage(event.target.value)}
-              className={getInputClass(isEditing)}
-              placeholder="https://example.com/profile.jpg"
-            />
-          </ProfileField>
-
-          <ProfileField label="Account created">
-            <input
-              value={new Date(profile.createdAt).toLocaleDateString()}
-              disabled
-              className={getInputClass(false)}
-            />
-          </ProfileField>
-        </div>
-
-        <HouseholdSizeControl
-          isEditing={isEditing}
-          peopleCount={peopleCount}
-          onDecrease={() => setPeopleCount((value) => Math.max(1, value - 1))}
-          onIncrease={() => setPeopleCount((value) => value + 1)}
-        />
-
-        <CookingSkillSelector
-          isEditing={isEditing}
-          cookingSkill={cookingSkill}
-          onChange={setCookingSkill}
-        />
-
-        {isEditing && (
-          <FormActions isSaving={isSaving} onCancel={handleCancel} />
-        )}
-      </div>
-    </form>
+    </>
   );
 }

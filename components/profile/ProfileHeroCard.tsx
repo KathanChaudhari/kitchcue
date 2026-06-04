@@ -1,4 +1,6 @@
 import { Profile } from "@/app/types/profile";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 type ProfileHeroCardProps = {
   profile: Profile;
@@ -15,21 +17,25 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
       .slice(0, 2)
       .toUpperCase() || "K";
 
-      const personalInfo = [
-        profile.age ? `${profile.age}` : null,
-        profile.gender || null
-      ]
-        .filter(Boolean)
-        .join(" · ");
-      
-      const cookingSkill = preferences?.cookingSkill || null;
-      
-      const householdSize = preferences?.householdSize
-        ? `Cooks for ${preferences.householdSize}`
-        : null;
+  const personalInfo = [
+    profile.age ? `${profile.age}` : null,
+    profile.gender || null,
+    profile.liveIn || null
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-  const subtitleParts = [profile.liveIn || null, profile.email].filter(Boolean);
+  const cookingSkill = preferences?.cookingSkill || null;
 
+  const householdSize = preferences?.householdSize
+    ? `Cooks for ${preferences.householdSize} ${
+        preferences.householdSize === 1 ? "person" : "people"
+      }`
+    : null;
+
+  const fromInfo = profile.from ? `From ${profile.from}` : null;
+
+  const subtitleParts = [profile.email, fromInfo].filter(Boolean);
   const subtitle = subtitleParts.join(" · ");
 
   return (
@@ -37,6 +43,7 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="flex h-13 w-13 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[var(--border)] bg-[var(--surface-muted)] text-lg font-bold text-[var(--primary-soft)] sm:h-16 sm:w-16 sm:text-xl">
           {profile.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.image}
               alt={profile.name || "Profile"}
@@ -57,25 +64,34 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
           </p>
 
           <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
-  {personalInfo ? (
-    <span className="rounded-lg bg-[color-mix(in_srgb,var(--tertiary)_24%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
-      {personalInfo}
-    </span>
-  ) : null}
+            {personalInfo ? (
+              <span className="rounded-lg bg-[color-mix(in_srgb,var(--tertiary)_24%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
+                {personalInfo}
+              </span>
+            ) : null}
 
-  {cookingSkill ? (
-    <span className="rounded-lg bg-[color-mix(in_srgb,var(--primary)_28%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--primary-soft)] sm:rounded-full sm:px-3 sm:text-xs">
-      {cookingSkill}
-    </span>
-  ) : null}
+            {cookingSkill ? (
+              <span className="rounded-lg bg-[color-mix(in_srgb,var(--primary)_28%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--primary-soft)] sm:rounded-full sm:px-3 sm:text-xs">
+                {cookingSkill}
+              </span>
+            ) : null}
 
-  {householdSize ? (
-    <span className="rounded-lg bg-[color-mix(in_srgb,var(--secondary)_30%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
-      {householdSize}
-    </span>
-  ) : null}
-</div>
+            {householdSize ? (
+              <span className="rounded-lg bg-[color-mix(in_srgb,var(--secondary)_30%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
+                {householdSize}
+              </span>
+            ) : null}
+          </div>
         </div>
+
+        <Link
+          href="/profile/general"
+          aria-label="Open general profile"
+          title="Open general profile"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[color-mix(in_srgb,var(--primary)_18%,var(--card))] text-[var(--primary-soft)] transition hover:bg-[color-mix(in_srgb,var(--primary)_28%,var(--card))] active:scale-[0.96] sm:h-10 sm:w-10"
+        >
+          <ChevronRight size={18} />
+        </Link>
       </div>
     </section>
   );

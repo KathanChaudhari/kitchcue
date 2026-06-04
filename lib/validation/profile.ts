@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-
 export const profileUpdateSchema = z.object({
   name: z.string().trim().min(1, "Name is required").optional().nullable(),
+
   image: z
     .string()
     .trim()
@@ -10,15 +10,18 @@ export const profileUpdateSchema = z.object({
     .nullable()
     .transform((value) => (value === "" ? null : value))
     .refine(
-      (value) => !value || /^https?:\/\/.+/.test(value),
-      "Image must be a valid URL"
+      (value) =>
+        !value ||
+        /^https?:\/\/.+/.test(value) ||
+        /^data:image\/(png|jpeg|jpg|webp);base64,/.test(value),
+      "Image must be a valid URL or uploaded image"
     ),
+
   age: z.coerce.number().int().positive().nullable().optional(),
   gender: z.string().trim().optional().nullable(),
   liveIn: z.string().trim().optional().nullable(),
   from: z.string().trim().optional().nullable()
 });
-
 export const preferencesUpdateSchema = z.object({
   healthGoals: z.array(z.string().trim().min(1)).optional(),
   dietType: z.string().trim().nullable().optional(),

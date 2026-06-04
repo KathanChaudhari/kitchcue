@@ -1,15 +1,42 @@
+"use client";
+
 import Link from "next/link";
-import { Bell, Clock3, Search } from "lucide-react";
+import { Bell, Clock3, Search, UserRound } from "lucide-react";
+import { useProfile } from "@/hooks/useProfile";
 
 type DesktopHeaderProps = {
   title: string;
   searchPlaceholder: string;
 };
 
+function getInitials(name?: string | null, email?: string | null) {
+  const source = name || email || "KitchCue";
+
+  const words = source
+    .replace(/@.*/, "")
+    .split(" ")
+    .filter(Boolean);
+
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+
+  return words
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+}
+
 export function DesktopHeader({
   title,
   searchPlaceholder
 }: DesktopHeaderProps) {
+  const { profile } = useProfile();
+
+  const profileImage = profile?.image || "";
+  const initials = getInitials(profile?.name, profile?.email);
+
   return (
     <header className="hidden items-center gap-4 py-5 lg:flex">
       <label className="relative max-w-4xl flex-1">
@@ -47,12 +74,23 @@ export function DesktopHeader({
         </button>
 
         <Link
-          className="grid h-11 w-11 place-items-center rounded-full bg-[var(--primary)] text-sm font-bold text-[var(--ink)]"
+          className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-[var(--primary)] text-sm font-bold text-[var(--ink)] ring-1 ring-[var(--border)] transition hover:ring-[var(--primary)]"
           href="/profile"
           aria-label="Profile"
           title="Profile"
         >
-          KC
+          {profileImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={profileImage}
+              alt="Profile"
+              className="h-full w-full object-cover"
+            />
+          ) : initials ? (
+            <span>{initials}</span>
+          ) : (
+            <UserRound size={18} />
+          )}
         </Link>
       </div>
     </header>
