@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  AirVent,
-  ChefHat,
-  Loader2,
-  Microwave,
-  Plus,
-  Trash2,
-  Utensils,
-  X
-} from "lucide-react";
+import { Loader2, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 type ApplianceSectionProps = {
@@ -28,16 +19,6 @@ const suggestedAppliances = [
   "Toaster",
   "Refrigerator"
 ];
-
-function getApplianceIcon(name: string) {
-  const normalizedName = name.toLowerCase();
-
-  if (normalizedName.includes("microwave")) return Microwave;
-  if (normalizedName.includes("air")) return AirVent;
-  if (normalizedName.includes("pressure")) return ChefHat;
-
-  return Utensils;
-}
 
 function normalizeAppliance(value: string) {
   return value.trim().replace(/\s+/g, " ");
@@ -159,33 +140,24 @@ export function ApplianceSection({ appliances }: ApplianceSectionProps) {
         </div>
 
         {hasAppliances ? (
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
-            {savedAppliances.map((appliance) => {
-              const Icon = getApplianceIcon(appliance);
-
-              return (
-                <button
-                  type="button"
-                  key={appliance}
-                  onClick={openPopup}
-                  className="flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-2 py-3 text-center text-[12px] font-semibold text-[var(--foreground)] transition hover:border-[var(--primary)] sm:min-h-24 sm:gap-2 sm:rounded-2xl sm:text-sm"
-                >
-                  <Icon
-                    size={20}
-                    className="text-[var(--primary-soft)] sm:size-[22px]"
-                  />
-
-                  <span className="leading-tight">{appliance}</span>
-                </button>
-              );
-            })}
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3 lg:grid-cols-2">
+            {savedAppliances.map((appliance) => (
+              <button
+                type="button"
+                key={appliance}
+                onClick={openPopup}
+                className="flex min-h-16 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-3 text-center text-[12px] font-semibold text-[var(--foreground)] transition hover:border-[var(--primary)] sm:min-h-20 sm:rounded-2xl sm:text-sm"
+              >
+                <span className="line-clamp-2 leading-tight">{appliance}</span>
+              </button>
+            ))}
 
             <button
               type="button"
               onClick={openPopup}
-              className="flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-[var(--border)] bg-transparent px-2 py-3 text-center text-[12px] font-semibold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)] sm:min-h-24 sm:gap-2 sm:rounded-2xl sm:text-sm"
+              className="flex min-h-16 items-center justify-center gap-1.5 rounded-xl border border-dashed border-[var(--border)] bg-transparent px-3 py-3 text-center text-[12px] font-semibold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)] sm:min-h-20 sm:rounded-2xl sm:text-sm"
             >
-              <Plus size={20} className="sm:size-[22px]" />
+              <Plus size={16} />
               <span className="leading-tight">Add more</span>
             </button>
           </div>
@@ -244,32 +216,23 @@ export function ApplianceSection({ appliances }: ApplianceSectionProps) {
 
                 {draftAppliances.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
-                    {draftAppliances.map((appliance) => {
-                      const Icon = getApplianceIcon(appliance);
+                    {draftAppliances.map((appliance) => (
+                      <div
+                        key={appliance}
+                        className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold text-[var(--foreground)]"
+                      >
+                        <span>{appliance}</span>
 
-                      return (
-                        <div
-                          key={appliance}
-                          className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold text-[var(--foreground)]"
+                        <button
+                          type="button"
+                          onClick={() => removeAppliance(appliance)}
+                          className="ml-1 text-[var(--muted)] transition hover:text-[var(--secondary)]"
+                          aria-label={`Remove ${appliance}`}
                         >
-                          <Icon
-                            size={14}
-                            className="text-[var(--primary-soft)]"
-                          />
-
-                          <span>{appliance}</span>
-
-                          <button
-                            type="button"
-                            onClick={() => removeAppliance(appliance)}
-                            className="ml-1 text-[var(--muted)] transition hover:text-[var(--secondary)]"
-                            aria-label={`Remove ${appliance}`}
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
-                      );
-                    })}
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-4 text-center">
@@ -364,7 +327,9 @@ export function ApplianceSection({ appliances }: ApplianceSectionProps) {
                 disabled={isSaving}
                 className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-bold text-[var(--ink)] transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {isSaving ? <Loader2 size={15} className="animate-spin" /> : null}
+                {isSaving ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : null}
                 {isSaving ? "Saving..." : "Save appliances"}
               </button>
             </div>

@@ -33,10 +33,8 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
       }`
     : null;
 
-  const fromInfo = profile.from ? `From ${profile.from}` : null;
-
-  const subtitleParts = [profile.email, fromInfo].filter(Boolean);
-  const subtitle = subtitleParts.join(" · ");
+  
+ 
 
   return (
     <section className="rounded-2xl border border-[var(--border)] bg-[linear-gradient(135deg,var(--card),color-mix(in_srgb,var(--primary)_10%,var(--card)))] p-3.5 shadow-sm sm:p-5">
@@ -59,10 +57,7 @@ export function ProfileHeroCard({ profile }: ProfileHeroCardProps) {
             {profile.name || "KitchCue User"}
           </h2>
 
-          <p className="mt-0.5 truncate text-xs text-[var(--muted)] sm:mt-1 sm:text-sm">
-            {subtitle}
-          </p>
-
+          
           <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 sm:gap-2">
             {personalInfo ? (
               <span className="rounded-lg bg-[color-mix(in_srgb,var(--tertiary)_24%,var(--card))] px-2.5 py-1 text-[10px] font-semibold text-[var(--foreground)] sm:rounded-full sm:px-3 sm:text-xs">
