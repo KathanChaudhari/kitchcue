@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, Pencil, ShoppingBasket, X } from "lucide-react";
+import {
+  Check,
+  CheckCircle2,
+  Pencil,
+  ShoppingBasket,
+  X
+} from "lucide-react";
 import { useState } from "react";
 import { HomeLowStockItem } from "@/app/types/home";
 
@@ -66,20 +72,24 @@ export function LowStockCard({
   }
 
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm lg:p-5">
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
+    <section className="min-w-0 rounded-[1.75rem] bg-[var(--card)] p-4 shadow-sm lg:rounded-2xl lg:border lg:border-[var(--border)] lg:p-5">
+      <div className="mb-4 flex min-w-0 items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--muted)]">
             Kitchen Watch
           </p>
 
-          <h2 className="mt-1 text-xl font-bold text-[var(--foreground)] lg:text-lg">
+          <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-[var(--foreground)] lg:text-lg">
             Stock Alerts
           </h2>
+
+          <p className="mt-1 text-xs font-medium text-[var(--muted)] lg:hidden">
+            Items that need refill soon
+          </p>
         </div>
 
         <Link
-          className="text-sm font-bold text-[var(--primary)] transition hover:opacity-80 lg:text-xs"
+          className="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--primary)_18%,var(--card-soft))] px-3 py-2 text-xs font-bold text-[var(--primary-soft)] transition hover:opacity-80 lg:bg-transparent lg:px-0 lg:py-0 lg:text-[var(--primary)]"
           href="/stock"
         >
           View Pantry
@@ -87,11 +97,11 @@ export function LowStockCard({
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-4 text-sm font-medium text-[var(--muted)]">
+        <div className="rounded-2xl bg-[var(--card-soft)] p-4 text-sm font-medium text-[var(--muted)] lg:border lg:border-[var(--border)]">
           No stock alerts right now. Your pantry looks good.
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
+        <div className="max-h-[520px] space-y-3 overflow-y-auto overflow-x-hidden scrollbar-hide lg:max-h-none lg:space-y-3 lg:overflow-visible">
           {items.map((item) => {
             const level = item.stockLevel ?? 0;
             const isEditing = editingItemId === item.id;
@@ -100,109 +110,136 @@ export function LowStockCard({
             return (
               <div
                 key={item.id}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-4 transition hover:border-[var(--primary)]/60"
+                className="min-w-0 overflow-hidden rounded-2xl bg-[var(--card-soft)] p-4 transition hover:bg-[color-mix(in_srgb,var(--card-soft)_86%,var(--primary)_14%)] lg:border lg:border-[var(--border)] lg:hover:border-[var(--primary)]/60"
               >
-                <div className="min-w-0 flex-1">
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold text-[var(--muted)]">
-                      {level <= 10 ? "Low Stock" : "Running Low"}
-                    </p>
+                <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
+                  <span className="shrink-0 rounded-full bg-[color-mix(in_srgb,var(--secondary)_18%,var(--card))] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--secondary)]">
+                    {level <= 10 ? "Low Stock" : "Running Low"}
+                  </span>
 
-                    <span className="rounded-full bg-[var(--surface-muted)] px-2 py-0.5 text-[10px] font-bold text-[var(--secondary)]">
-                      {level}%
-                    </span>
-                  </div>
-
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <h3 className="truncate text-base font-bold text-[var(--foreground)] lg:text-sm">
-                        {item.name}
-                      </h3>
-
-                      <p className="mt-1 text-xs font-medium text-[var(--muted)]">
-                        {getItemDetail(item)}
-                      </p>
-                    </div>
-
-                    {!isEditing ? (
-                      <div className="flex shrink-0 items-center gap-1.5">
-                        {item.isShoppingList ? (
-                          <span
-                            className="grid h-8 w-8 place-items-center rounded-full bg-[color-mix(in_srgb,var(--primary)_22%,var(--card))] text-[var(--primary-soft)]"
-                            title="Added to shopping list"
-                          >
-                            <CheckCircle2 className="h-4 w-4" />
-                          </span>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => handleAddToList(item.id)}
-                            disabled={isLoading}
-                            title="Add to shopping list"
-                            className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] transition hover:border-[var(--primary)] hover:bg-[var(--primary)]/10 disabled:opacity-50"
-                          >
-                            <ShoppingBasket className="h-4 w-4" />
-                          </button>
-                        )}
-
-                        <button
-                          type="button"
-                          onClick={() => openQuantityEditor(item)}
-                          disabled={isLoading}
-                          title="Update stock quantity"
-                          className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--secondary)] transition hover:border-[var(--secondary)] hover:bg-[var(--secondary)]/10 disabled:opacity-50"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--surface-muted)]">
-                    <div
-                      className="h-full rounded-full bg-[var(--primary)]"
-                      style={{ width: `${Math.max(level, 8)}%` }}
-                    />
-                  </div>
+                  <span className="shrink-0 rounded-full bg-[var(--surface-muted)] px-2.5 py-1 text-[11px] font-extrabold text-[var(--primary-soft)]">
+                    {level}%
+                  </span>
                 </div>
 
-                {isEditing ? (
-                  <div className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2">
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
-                      Update quantity after refill
-                    </label>
+                <div className="flex min-w-0 items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-lg font-extrabold text-[var(--foreground)] lg:text-sm">
+                      {item.name}
+                    </h3>
 
-                    <div className="flex gap-2">
-                      <input
-                        type="number"
-                        min="0"
-                        value={quantityValue}
-                        onChange={(event) =>
-                          setQuantityValue(event.target.value)
-                        }
-                        className="min-w-0 flex-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-xs font-semibold text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
-                        placeholder="New quantity"
-                      />
+                    <p className="mt-1 truncate text-sm font-medium text-[var(--muted)] lg:text-xs">
+                      {getItemDetail(item)}
+                    </p>
+                  </div>
+
+                  {!isEditing ? (
+                    <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
+                      {item.isShoppingList ? (
+                        <span
+                          className="grid h-8 w-8 place-items-center rounded-full bg-[color-mix(in_srgb,var(--primary)_22%,var(--card))] text-[var(--primary-soft)]"
+                          title="Added to shopping list"
+                        >
+                          <CheckCircle2 className="h-4 w-4" />
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleAddToList(item.id)}
+                          disabled={isLoading}
+                          title="Add to shopping list"
+                          className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--primary)] transition hover:border-[var(--primary)] hover:bg-[var(--primary)]/10 disabled:opacity-50"
+                        >
+                          <ShoppingBasket className="h-4 w-4" />
+                        </button>
+                      )}
 
                       <button
                         type="button"
-                        onClick={() => handleSaveQuantity(item.id)}
+                        onClick={() => openQuantityEditor(item)}
                         disabled={isLoading}
-                        className="rounded-lg bg-[var(--primary)] px-3 py-2 text-xs font-bold text-[var(--ink)] transition hover:opacity-90 disabled:opacity-50"
+                        title="Update stock quantity"
+                        className="grid h-8 w-8 place-items-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--secondary)] transition hover:border-[var(--secondary)] hover:bg-[var(--secondary)]/10 disabled:opacity-50"
                       >
-                        Save
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={closeQuantityEditor}
-                        disabled={isLoading}
-                        className="grid h-9 w-9 place-items-center rounded-lg border border-[var(--border)] text-[var(--muted)] transition hover:text-[var(--foreground)] disabled:opacity-50"
-                        title="Cancel"
-                      >
-                        <X className="h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                       </button>
                     </div>
+                  ) : null}
+                </div>
+
+                <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[var(--surface-muted)] lg:mt-3 lg:h-2">
+                  <div
+                    className="h-full rounded-full bg-[var(--primary)]"
+                    style={{ width: `${Math.max(level, 8)}%` }}
+                  />
+                </div>
+
+                {!isEditing ? (
+                  <div className="mt-4 grid min-w-0 grid-cols-2 gap-2 lg:hidden">
+                    {item.isShoppingList ? (
+                      <div className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-[color-mix(in_srgb,var(--primary)_22%,var(--card))] px-3 py-2.5 text-xs font-bold text-[var(--primary-soft)]">
+                        <CheckCircle2 className="h-4 w-4 shrink-0" />
+                        <span className="truncate">Added</span>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleAddToList(item.id)}
+                        disabled={isLoading}
+                        className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-[color-mix(in_srgb,var(--primary)_18%,var(--card))] px-3 py-2.5 text-xs font-bold text-[var(--primary-soft)] transition active:scale-[0.98] disabled:opacity-50"
+                      >
+                        <ShoppingBasket className="h-4 w-4 shrink-0" />
+                        <span className="truncate">Add list</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => openQuantityEditor(item)}
+                      disabled={isLoading}
+                      className="flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-[color-mix(in_srgb,var(--secondary)_18%,var(--card))] px-3 py-2.5 text-xs font-bold text-[var(--secondary)] transition active:scale-[0.98] disabled:opacity-50"
+                    >
+                      <Pencil className="h-4 w-4 shrink-0" />
+                      <span className="truncate">Refilled</span>
+                    </button>
+                  </div>
+                ) : null}
+
+                {isEditing ? (
+                  <div className="mt-3 flex w-full min-w-0 items-center justify-end gap-1.5 overflow-hidden">
+                    <input
+                      type="number"
+                      min="0"
+                      max="99999"
+                      value={quantityValue}
+                      onChange={(event) =>
+                        setQuantityValue(event.target.value.slice(0, 5))
+                      }
+                      className="h-8 w-20 shrink-0 rounded-md border border-[var(--border)] bg-[var(--card)] px-1.5 text-center text-xs font-bold text-[var(--foreground)] outline-none focus:border-[var(--primary)] lg:h-7"
+                      placeholder="Qty"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => handleSaveQuantity(item.id)}
+                      disabled={isLoading}
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-[var(--primary)] text-[var(--ink)] transition hover:opacity-90 disabled:opacity-50 lg:h-7 lg:w-7"
+                      aria-label="Save quantity"
+                      title="Save quantity"
+                    >
+                      <Check className="h-4 w-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={closeQuantityEditor}
+                      disabled={isLoading}
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] disabled:opacity-50 lg:h-7 lg:w-7"
+                      aria-label="Cancel"
+                      title="Cancel"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 ) : null}
               </div>
