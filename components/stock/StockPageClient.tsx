@@ -2,15 +2,17 @@
 
 import { InventoryItem } from "@/app/types/stock";
 import { InventoryList } from "@/components/stock/InventoryList";
+import { ManualStockAddPanel } from "@/components/stock/ManualStockAddPanel";
 import { StockAddDock } from "@/components/stock/StockAddDock";
 import { getStockItems } from "@/lib/client/stock";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Plus, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 export function StockPageClient() {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [search, setSearch] = useState("");
   const [lowOnly, setLowOnly] = useState(false);
+  const [isManualAddOpen, setIsManualAddOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -66,14 +68,27 @@ export function StockPageClient() {
 
       <main className="mx-auto w-full max-w-7xl px-4 pb-28 pt-4 sm:px-5 lg:px-10 lg:pb-8 lg:pt-8 xl:px-14">
         <div className="mb-4 space-y-4 lg:mb-5">
-          <div>
-            <h1 className="text-2xl font-extrabold tracking-tight text-[var(--foreground)] lg:text-[28px]">
-              Current Stocks
-            </h1>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-[var(--foreground)] lg:text-[28px]">
+                Current Stocks
+              </h1>
 
-            <p className="mt-1 text-sm font-medium text-[var(--muted)]">
-              {totalItems} items in your kitchen stock.
-            </p>
+              <p className="mt-1 text-sm font-medium text-[var(--muted)]">
+                {totalItems} items in your kitchen stock.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsManualAddOpen((current) => !current)}
+              className="flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[var(--primary)] px-3 text-sm font-extrabold text-[var(--ink)] transition hover:opacity-90 sm:px-4"
+            >
+              <Plus className="size-4" />
+              <span className="hidden sm:inline">
+                {isManualAddOpen ? "Close" : "Add stock"}
+              </span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2">
@@ -106,6 +121,7 @@ export function StockPageClient() {
           </div>
         </div>
 
+       
         {isLoading ? (
           <div className="rounded-2xl bg-[var(--card)] p-4 text-sm font-medium text-[var(--muted)]">
             Loading stock items...
@@ -115,13 +131,18 @@ export function StockPageClient() {
             {error}
           </div>
         ) : (
-            <InventoryList
+          <InventoryList
             items={items}
             onItemUpdated={loadItems}
             onItemDeleted={loadItems}
           />
         )}
       </main>
+      <ManualStockAddPanel
+          isOpen={isManualAddOpen}
+          onClose={() => setIsManualAddOpen(false)}
+          onItemCreated={loadItems}
+        />
 
       <StockAddDock onItemCreated={loadItems} />
     </>
