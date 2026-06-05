@@ -1,7 +1,15 @@
+import { authOptions } from "@/auth";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await getServerSession(authOptions);
+
+  if (session?.user) {
+    redirect("/home");
+  }
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <main className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6 lg:px-8">
