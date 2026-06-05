@@ -44,7 +44,6 @@ export const authOptions: NextAuthOptions = {
             id: true,
             name: true,
             email: true,
-            image: true,
             passwordHash: true
           }
         });
@@ -65,8 +64,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           name: user.name,
-          email: user.email,
-          image: user.image
+          email: user.email
         };
       }
     }),
@@ -123,6 +121,8 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
       }
+      delete token.picture;
+      delete token.image;
 
       return token;
     },
@@ -130,6 +130,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user && token.id) {
         session.user.id = token.id as string;
+
+        
+        session.user.image = null;
       }
 
       return session;
