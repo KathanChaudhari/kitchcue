@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Check,
   ChevronDown,
   LoaderCircle,
   MoreVertical,
@@ -33,10 +34,12 @@ export function AssistantChatHeader({
   onDeleteChat
 }: AssistantChatHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatDropdownOpen, setIsChatDropdownOpen] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameTitle, setRenameTitle] = useState("");
 
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const chatDropdownRef = useRef<HTMLDivElement | null>(null);
   const renameInputRef = useRef<HTMLInputElement | null>(null);
 
   const selectedChat =
@@ -44,22 +47,29 @@ export function AssistantChatHeader({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      const clickedNode = event.target as Node;
+
       if (
         menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
+        !menuRef.current.contains(clickedNode)
       ) {
         setIsMenuOpen(false);
       }
+
+      if (
+        chatDropdownRef.current &&
+        !chatDropdownRef.current.contains(clickedNode)
+      ) {
+        setIsChatDropdownOpen(false);
+      }
     }
 
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, []);
 
   useEffect(() => {
     if (isRenaming) {
@@ -74,6 +84,7 @@ export function AssistantChatHeader({
     setRenameTitle(selectedChat.title);
     setIsRenaming(true);
     setIsMenuOpen(false);
+    setIsChatDropdownOpen(false);
   }
 
   function cancelRename() {
@@ -84,20 +95,33 @@ export function AssistantChatHeader({
   async function submitRename() {
     const cleanTitle = renameTitle.trim();
 
-    if (!selectedChat || !cleanTitle) return;
+    if (!selectedChat || !cleanTitle || isMutating) return;
 
     await onRenameChat(selectedChat.id, cleanTitle);
+
     setIsRenaming(false);
     setRenameTitle("");
   }
 
   async function handleCreateChat() {
+    if (isMutating) return;
+
     setIsMenuOpen(false);
+    setIsChatDropdownOpen(false);
+
     await onCreateChat();
   }
 
+  function handleSelectChat(sessionId: string) {
+    setIsChatDropdownOpen(false);
+
+    if (sessionId === selectedChatId) return;
+
+    onSelectChat(sessionId);
+  }
+
   async function handleDeleteChat() {
-    if (!selectedChat) return;
+    if (!selectedChat || isMutating) return;
 
     const shouldDelete = window.confirm(
       `Delete "${selectedChat.title}"? This will also delete its messages.`
@@ -106,6 +130,8 @@ export function AssistantChatHeader({
     if (!shouldDelete) return;
 
     setIsMenuOpen(false);
+    setIsChatDropdownOpen(false);
+
     await onDeleteChat(selectedChat.id);
   }
 
@@ -130,7 +156,8 @@ export function AssistantChatHeader({
                   }
                 }}
                 disabled={isMutating}
-                className="h-9 min-w-0 flex-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
+                maxLength={80}
+                className="h-9 min-w-0 flex-1 rounded-lg border border-[var(--border)] bg-[var(--card)] px-3 text-sm font-bold text-[var(--foreground)] outline-none focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Chat title"
               />
 
@@ -138,16 +165,20 @@ export function AssistantChatHeader({
                 type="button"
                 onClick={() => void submitRename()}
                 disabled={!renameTitle.trim() || isMutating}
-                className="h-9 rounded-lg bg-[var(--primary)] px-3 text-xs font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+                className="grid h-9 min-w-[52px] place-items-center rounded-lg bg-[var(--primary)] px-3 text-xs font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Save
+                {isMutating ? (
+                  <LoaderCircle size={15} className="animate-spin" />
+                ) : (
+                  "Save"
+                )}
               </button>
 
               <button
                 type="button"
                 onClick={cancelRename}
                 disabled={isMutating}
-                className="h-9 rounded-lg px-2 text-xs font-bold text-[var(--muted)] transition hover:bg-[var(--card)]"
+                className="h-9 rounded-lg px-2 text-xs font-bold text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -157,36 +188,105 @@ export function AssistantChatHeader({
               <LoaderCircle size={16} className="animate-spin" />
               Loading chats
             </div>
-          ) : chats.length > 0 && selectedChatId ? (
-            <label className="relative inline-block max-w-full">
-              <select
-                value={selectedChatId}
-                onChange={(event) => onSelectChat(event.target.value)}
-                className="h-9 max-w-[250px] appearance-none truncate rounded-lg bg-transparent pr-7 text-base font-extrabold text-[var(--foreground)] outline-none sm:max-w-sm"
+          ) : chats.length > 0 && selectedChat ? (
+            <div
+              ref={chatDropdownRef}
+              className="relative inline-block max-w-full"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setIsChatDropdownOpen((value) => !value);
+                  setIsMenuOpen(false);
+                }}
+                disabled={isMutating}
+                className="flex h-9 max-w-[250px] items-center gap-1.5 rounded-lg text-left text-base font-extrabold text-[var(--foreground)] outline-none transition hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50 sm:max-w-sm"
+                aria-label="Select chat"
+                aria-expanded={isChatDropdownOpen}
               >
-                {chats.map((chat) => (
-                  <option key={chat.id} value={chat.id}>
-                    {chat.title}
-                  </option>
-                ))}
-              </select>
+                <span className="min-w-0 truncate">
+                  {selectedChat.title}
+                </span>
 
-              <ChevronDown
-                size={15}
-                className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[var(--muted)]"
-              />
-            </label>
+                <ChevronDown
+                  size={15}
+                  className={`shrink-0 text-[var(--muted)] transition-transform ${
+                    isChatDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isChatDropdownOpen ? (
+                <div className="absolute left-0 top-full z-40 mt-1.5 w-64 max-w-[calc(100vw-3rem)] overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-xl">
+                  <button
+                    type="button"
+                    onClick={() => void handleCreateChat()}
+                    disabled={isMutating}
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-bold text-[var(--primary)] transition hover:bg-[var(--card-soft)] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <Plus size={15} />
+                    New chat
+                  </button>
+
+                  <div className="my-1 border-t border-[var(--border)]" />
+
+                  <div className="max-h-64 overflow-y-auto">
+                    {chats.map((chat) => {
+                      const isSelected = chat.id === selectedChatId;
+
+                      return (
+                        <button
+                          key={chat.id}
+                          type="button"
+                          onClick={() => handleSelectChat(chat.id)}
+                          className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                            isSelected
+                              ? "bg-[var(--card-soft)] font-bold text-[var(--foreground)]"
+                              : "font-semibold text-[var(--muted)] hover:bg-[var(--card-soft)] hover:text-[var(--foreground)]"
+                          }`}
+                        >
+                          <span className="min-w-0 truncate">
+                            {chat.title}
+                          </span>
+
+                          {isSelected ? (
+                            <Check
+                              size={15}
+                              className="shrink-0 text-[var(--primary)]"
+                            />
+                          ) : null}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+            </div>
           ) : (
-            <p className="text-base font-extrabold text-[var(--foreground)]">
-              Kitchen assistant
-            </p>
+            <button
+              type="button"
+              onClick={() => void handleCreateChat()}
+              disabled={isMutating}
+              className="flex h-9 items-center gap-2 rounded-lg text-base font-extrabold text-[var(--foreground)] transition hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isMutating ? (
+                <LoaderCircle size={16} className="animate-spin" />
+              ) : (
+                <Plus size={16} />
+              )}
+
+              Create first chat
+            </button>
           )}
         </div>
 
         <div ref={menuRef} className="relative shrink-0">
           <button
             type="button"
-            onClick={() => setIsMenuOpen((value) => !value)}
+            onClick={() => {
+              setIsMenuOpen((value) => !value);
+              setIsChatDropdownOpen(false);
+            }}
             disabled={isLoading || isMutating || isRenaming}
             className="grid h-8 w-8 place-items-center rounded-full text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Chat options"
@@ -200,11 +300,11 @@ export function AssistantChatHeader({
           </button>
 
           {isMenuOpen ? (
-            <div className="absolute right-0 top-9 z-30 w-44 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-xl">
+            <div className="absolute right-0 top-full z-40 mt-1.5 w-44 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-xl">
               <button
                 type="button"
                 onClick={() => void handleCreateChat()}
-                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[var(--foreground)] hover:bg-[var(--card-soft)]"
+                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[var(--foreground)] transition hover:bg-[var(--card-soft)]"
               >
                 <Plus size={14} />
                 New chat
@@ -214,7 +314,7 @@ export function AssistantChatHeader({
                 type="button"
                 onClick={openRenameInput}
                 disabled={!selectedChat}
-                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[var(--foreground)] hover:bg-[var(--card-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[var(--foreground)] transition hover:bg-[var(--card-soft)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <Pencil size={14} />
                 Rename chat
@@ -224,7 +324,7 @@ export function AssistantChatHeader({
                 type="button"
                 onClick={() => void handleDeleteChat()}
                 disabled={!selectedChat}
-                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[#d58a72] hover:bg-[var(--card-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold text-[#d58a72] transition hover:bg-[var(--card-soft)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <Trash2 size={14} />
                 Delete chat

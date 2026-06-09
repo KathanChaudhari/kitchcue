@@ -90,9 +90,10 @@ export default function AssistantPage() {
     try {
       setError("");
       setIsMutatingChat(true);
-
-      const newChat = await createAssistantSession("New chat");
-
+  
+      const title = getNextChatTitle(chats);
+      const newChat = await createAssistantSession(title);
+  
       setChats((currentChats) => [newChat, ...currentChats]);
       setSelectedChatId(newChat.id);
       setMessages([]);
@@ -232,4 +233,28 @@ export default function AssistantPage() {
       </div>
     </section>
   );
+}
+
+function getNextChatTitle(chats: AssistantChatSession[]) {
+  const existingNumbers = new Set<number>();
+
+  chats.forEach((chat) => {
+    const match = chat.title.trim().match(/^New chat(?:\s+(\d+))?$/i);
+
+    if (!match) return;
+
+    const number = match[1] ? Number(match[1]) : 1;
+
+    if (Number.isFinite(number)) {
+      existingNumbers.add(number);
+    }
+  });
+
+  let nextNumber = 1;
+
+  while (existingNumbers.has(nextNumber)) {
+    nextNumber += 1;
+  }
+
+  return `New chat ${nextNumber}`;
 }
