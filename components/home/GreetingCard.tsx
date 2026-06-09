@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type GreetingCardProps = {
   name?: string | null;
   totalItems?: number;
@@ -37,13 +39,16 @@ export function GreetingCard({
         </p>
 
         <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5 lg:flex-row lg:gap-2.5">
-          <button className="rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-left text-base font-bold text-[var(--foreground)] shadow-sm transition hover:border-[var(--primary)] lg:rounded-full lg:bg-[var(--primary)] lg:px-5 lg:py-2 lg:text-xs lg:text-[var(--ink)]">
-            + New Recipe
-          </button>
+        <Link
+  href="/assistant"
+  className="block rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-left text-base font-bold text-[var(--foreground)] shadow-sm transition hover:border-[var(--primary)] lg:rounded-full lg:bg-[var(--primary)] lg:px-5 lg:py-2 lg:text-xs lg:text-[var(--ink)]"
+>
+  + New Recipe
+</Link>
 
-          <button className="hidden cursor-pointer rounded-full border border-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 lg:block">
+          {/* <button className="hidden cursor-pointer rounded-full border border-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 lg:block">
             View Meal Plan
-          </button>
+          </button> */}
         </div>
       </div>
 

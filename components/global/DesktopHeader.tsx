@@ -80,7 +80,6 @@ export function DesktopHeader({
           title="Profile"
         >
           {profileImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profileImage}
               alt="Profile"
