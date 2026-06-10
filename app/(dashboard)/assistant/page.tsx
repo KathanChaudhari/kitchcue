@@ -11,9 +11,9 @@ import {
   deleteAssistantSession,
   getAssistantMessages,
   getAssistantSessions,
-  renameAssistantSession
+  renameAssistantSession,
+  streamAssistantMessage
 } from "@/lib/client/assistant";
-
 export default function AssistantPage() {
   const [chats, setChats] = useState<AssistantChatSession[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(
@@ -24,6 +24,7 @@ export default function AssistantPage() {
   const [isLoadingChats, setIsLoadingChats] = useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isMutatingChat, setIsMutatingChat] = useState(false);
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [error, setError] = useState("");
 
   const loadChats = useCallback(async () => {
@@ -172,26 +173,102 @@ export default function AssistantPage() {
     setSelectedChatId(sessionId);
   }
 
-  async function handleMessageSent() {
-    if (!selectedChatId) return;
-
-    await loadMessages(selectedChatId);
-
-    // Move the active conversation to the top.
-    setChats((currentChats) => {
-      const activeChat = currentChats.find(
-        (chat) => chat.id === selectedChatId
+  async function handleSendMessage(content: string) {
+    if (!selectedChatId || !content.trim() || isSendingMessage) {
+      return;
+    }
+  
+    const sessionId = selectedChatId;
+    const trimmedContent = content.trim();
+  
+    const temporaryUserId = `temporary-user-${crypto.randomUUID()}`;
+    const temporaryAssistantId = `temporary-assistant-${crypto.randomUUID()}`;
+  
+    const createdAt = new Date().toISOString();
+  
+    const temporaryUserMessage: AssistantChatMessage = {
+      id: temporaryUserId,
+      sessionId,
+      role: "USER",
+      content: trimmedContent,
+      createdAt
+    };
+  
+    const temporaryAssistantMessage: AssistantChatMessage = {
+      id: temporaryAssistantId,
+      sessionId,
+      role: "ASSISTANT",
+      content: "",
+      createdAt: new Date().toISOString()
+    };
+  
+    try {
+      setError("");
+      setIsSendingMessage(true);
+  
+      // Show the user's message immediately.
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        temporaryUserMessage,
+        temporaryAssistantMessage
+      ]);
+  
+      await streamAssistantMessage(
+        sessionId,
+        trimmedContent,
+        (chunk) => {
+          setMessages((currentMessages) =>
+            currentMessages.map((message) =>
+              message.id === temporaryAssistantId
+                ? {
+                    ...message,
+                    content: message.content + chunk
+                  }
+                : message
+            )
+          );
+        }
       );
-
-      if (!activeChat) return currentChats;
-
-      return [
-        activeChat,
-        ...currentChats.filter(
-          (chat) => chat.id !== selectedChatId
+  
+      /*
+       * Fetch persisted messages after streaming completes.
+       * Do not use loadMessages() here because it activates the
+       * full conversation loading state.
+       */
+      const persistedMessages = await getAssistantMessages(sessionId);
+  
+      if (selectedChatId === sessionId) {
+        setMessages(persistedMessages);
+      }
+  
+      // Move active chat to the top.
+      setChats((currentChats) => {
+        const activeChat = currentChats.find(
+          (chat) => chat.id === sessionId
+        );
+  
+        if (!activeChat) return currentChats;
+  
+        return [
+          activeChat,
+          ...currentChats.filter((chat) => chat.id !== sessionId)
+        ];
+      });
+    } catch (err) {
+      setMessages((currentMessages) =>
+        currentMessages.filter(
+          (message) => message.id !== temporaryAssistantId
         )
-      ];
-    });
+      );
+  
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to send message."
+      );
+    } finally {
+      setIsSendingMessage(false);
+    }
   }
 
   return (
@@ -214,11 +291,12 @@ export default function AssistantPage() {
       ) : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto pb-3 scrollbar-hide">
-        <ChatThread
-          messages={messages}
-          isLoading={isLoadingMessages}
-          hasSelectedChat={Boolean(selectedChatId)}
-        />
+      <ChatThread
+  messages={messages}
+  isLoading={isLoadingMessages}
+  isStreaming={isSendingMessage}
+  hasSelectedChat={Boolean(selectedChatId)}
+/>
       </div>
 
       <div className="shrink-0 bg-[var(--background)] pb-24 pt-2 sm:pb-4 lg:pb-4">
@@ -227,9 +305,10 @@ export default function AssistantPage() {
         </div>
 
         <ChatInput
-          sessionId={selectedChatId}
-          onMessageSent={handleMessageSent}
-        />
+  sessionId={selectedChatId}
+  isSending={isSendingMessage}
+  onSendMessage={handleSendMessage}
+/>
       </div>
     </section>
   );

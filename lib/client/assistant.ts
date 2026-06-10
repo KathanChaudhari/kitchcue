@@ -109,3 +109,69 @@ import {
       response
     );
   }
+
+  type StreamChunkHandler = (chunk: string) => void;
+
+export async function streamAssistantMessage(
+  sessionId: string,
+  content: string,
+  onChunk: StreamChunkHandler
+) {
+  const response = await fetch(
+    `/api/assistant/${sessionId}/messages`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const errorPayload = await response
+      .json()
+      .catch(() => null);
+
+    throw new Error(
+      errorPayload?.error?.message ||
+        errorPayload?.message ||
+        "Unable to send message."
+    );
+  }
+
+  if (!response.body) {
+    throw new Error(
+      "The server did not return a readable response stream."
+    );
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) break;
+
+      const chunk = decoder.decode(value, {
+        stream: true
+      });
+
+      if (chunk) {
+        onChunk(chunk);
+      }
+    }
+
+    const finalChunk = decoder.decode();
+
+    if (finalChunk) {
+      onChunk(finalChunk);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}

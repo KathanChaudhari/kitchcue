@@ -1,96 +1,87 @@
 "use client";
 
-import { createAssistantMessage } from "@/lib/client/assistant";
-import {
-  LoaderCircle,
-  SendHorizontal,
-  SlidersHorizontal
-} from "lucide-react";
+import { LoaderCircle, SendHorizontal } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 type ChatInputProps = {
   sessionId: string | null;
-  onMessageSent: () => Promise<void> | void;
+  isSending?: boolean;
+  onSendMessage: (message: string) => Promise<void>;
 };
 
 export function ChatInput({
   sessionId,
-  onMessageSent
+  isSending = false,
+  onSendMessage
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
 
-    const cleanMessage = message.trim();
+    const trimmedMessage = message.trim();
 
-    if (!cleanMessage || !sessionId || isSending) return;
+    if (!trimmedMessage || !sessionId || isSending) {
+      return;
+    }
+
+    // Clear immediately, so the input feels responsive.
+    setMessage("");
 
     try {
-      setError("");
-      setIsSending(true);
-
-      await createAssistantMessage(sessionId, cleanMessage);
-
-      setMessage("");
-      await onMessageSent();
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to send message."
-      );
-    } finally {
-      setIsSending(false);
+      await onSendMessage(trimmedMessage);
+    } catch {
+      // Restore the text if sending unexpectedly throws.
+      setMessage(trimmedMessage);
     }
   }
 
   return (
-    <div>
-      {error ? (
-        <p className="mb-2 text-xs font-semibold text-[#d58a72]">
-          {error}
-        </p>
-      ) : null}
-
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full items-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg sm:gap-2"
-      >
-        <button
-          type="button"
-          disabled={!sessionId || isSending}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[var(--muted)] transition hover:bg-[var(--card-soft)] hover:text-[var(--foreground)] disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
-          aria-label="Assistant settings"
-        >
-          <SlidersHorizontal size={17} />
-        </button>
-
-        <input
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          disabled={!sessionId || isSending}
-          placeholder={
-            sessionId
-              ? "Ask your kitchen assistant..."
-              : "Create a chat to start messaging"
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full items-end gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg"
+    >
+      <textarea
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        placeholder={
+          sessionId
+            ? "Ask KitchCue anything..."
+            : "Create a chat to start messaging"
+        }
+        disabled={!sessionId || isSending}
+        rows={1}
+        className="max-h-32 min-h-9 flex-1 resize-none bg-transparent px-3 py-2 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-60"
+        onKeyDown={(event) => {
+          if (
+            event.key === "Enter" &&
+            !event.shiftKey &&
+            !event.nativeEvent.isComposing
+          ) {
+            event.preventDefault();
+            event.currentTarget.form?.requestSubmit();
           }
-          className="h-9 min-w-0 flex-1 bg-transparent px-1 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] disabled:cursor-not-allowed"
-        />
+        }}
+      />
 
-        <button
-          type="submit"
-          disabled={!sessionId || !message.trim() || isSending}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--primary)] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40 sm:h-9 sm:w-9"
-          aria-label="Send message"
-        >
-          {isSending ? (
-            <LoaderCircle size={16} className="animate-spin" />
-          ) : (
-            <SendHorizontal size={16} />
-          )}
-        </button>
-      </form>
-    </div>
+      <button
+        type="submit"
+        disabled={
+          !sessionId ||
+          isSending ||
+          !message.trim()
+        }
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--primary)] text-white transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+        aria-label="Send message"
+      >
+        {isSending ? (
+          <LoaderCircle size={17} className="animate-spin" />
+        ) : (
+          <SendHorizontal size={17} />
+        )}
+      </button>
+    </form>
   );
 }
