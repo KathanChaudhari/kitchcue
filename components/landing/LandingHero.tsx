@@ -21,15 +21,15 @@ export function LandingHero() {
             AI Kitchen Intelligence
           </div>
 
-          <h1 className="max-w-[420px] text-[34px] font-black leading-[0.98] tracking-[-0.06em] text-[var(--foreground)] sm:max-w-[680px] sm:text-6xl lg:text-7xl">
-            Master The Art of{" "}
-            <span className="text-[var(--primary)]">Precision</span> Cooking.
-          </h1>
+          <h1 className="max-w-[420px] text-[34px] font-black leading-[0.98] tracking-[-0.06em] text-white sm:max-w-[680px] sm:text-6xl lg:text-7xl">
+  Master The Art of{" "}
+  <span className="text-[var(--primary)]">Precision</span> Cooking.
+</h1>
 
-          <p className="max-w-[340px] text-xs leading-5 text-[var(--foreground)]/90 sm:max-w-xl sm:text-base sm:leading-6">
-            Elevate your culinary journey with smart inventory tracking,
-            atmospheric recipe discovery, and professional kitchen management.
-          </p>
+<p className="max-w-[340px] text-xs leading-5 text-white/90 sm:max-w-xl sm:text-base sm:leading-6">
+  Elevate your culinary journey with smart inventory tracking,
+  atmospheric recipe discovery, and professional kitchen management.
+</p>
 
           <div className="grid gap-3 pt-2 sm:flex sm:flex-wrap">
             <Link
