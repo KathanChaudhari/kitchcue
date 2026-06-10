@@ -20,7 +20,7 @@ export default function AssistantPage() {
     null
   );
   const [messages, setMessages] = useState<AssistantChatMessage[]>([]);
-
+  const [draftMessage, setDraftMessage] = useState("");
   const [isLoadingChats, setIsLoadingChats] = useState(true);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [isMutatingChat, setIsMutatingChat] = useState(false);
@@ -301,12 +301,17 @@ export default function AssistantPage() {
 
       <div className="shrink-0 bg-[var(--background)] pb-24 pt-2 sm:pb-4 lg:pb-4">
         <div className="hidden sm:block">
-          <SuggestedPromptChips />
+        <SuggestedPromptChips
+  disabled={!selectedChatId || isSendingMessage}
+  onPromptSelect={setDraftMessage}
+/>
         </div>
 
         <ChatInput
   sessionId={selectedChatId}
+  value={draftMessage}
   isSending={isSendingMessage}
+  onValueChange={setDraftMessage}
   onSendMessage={handleSendMessage}
 />
       </div>
