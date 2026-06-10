@@ -5,7 +5,7 @@ import { chatSessionCreateSchema } from "@/lib/validation/chat";
 
 export async function GET(request: Request) {
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const sessions = await prisma.chatSession.findMany({
       where: {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   if (error) return error;
 
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const session = await prisma.chatSession.create({
       data: {
