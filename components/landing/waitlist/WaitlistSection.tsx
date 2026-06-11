@@ -8,11 +8,7 @@ import {
   ClipboardList,
   LoaderCircle
 } from "lucide-react";
-
-type WaitlistResponse = {
-  success: boolean;
-  message: string;
-};
+import { joinWaitlist } from "@/lib/client/waitlist";
 
 export function WaitlistSection() {
   const [email, setEmail] = useState("");
@@ -34,21 +30,7 @@ export function WaitlistSection() {
     setMessage("");
 
     try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: normalizedEmail
-        })
-      });
-
-      const data = (await response.json()) as WaitlistResponse;
-
-      if (!response.ok) {
-        throw new Error(data.message || "Unable to join the waitlist.");
-      }
+      const data = await joinWaitlist(normalizedEmail);
 
       setIsJoined(true);
       setEmail("");
@@ -70,7 +52,7 @@ export function WaitlistSection() {
       className="scroll-mt-16 px-4 py-16 lg:px-6 lg:py-24"
     >
       <div className="mx-auto max-w-5xl">
-        {/* Waitlist section */}
+        {/* Waitlist */}
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7 lg:p-12">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--primary)] lg:text-xs">
@@ -119,7 +101,13 @@ export function WaitlistSection() {
                   type="email"
                   name="email"
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+
+                    if (message) {
+                      setMessage("");
+                    }
+                  }}
                   placeholder="Enter your email address"
                   autoComplete="email"
                   disabled={isSubmitting}
@@ -134,13 +122,17 @@ export function WaitlistSection() {
                 >
                   {isSubmitting ? (
                     <>
-                      <LoaderCircle size={16} className="animate-spin" />
+                      <LoaderCircle
+                        size={16}
+                        className="animate-spin"
+                        aria-hidden="true"
+                      />
                       Joining...
                     </>
                   ) : (
                     <>
                       Join the Waitlist
-                      <ArrowRight size={16} />
+                      <ArrowRight size={16} aria-hidden="true" />
                     </>
                   )}
                 </button>
@@ -165,11 +157,11 @@ export function WaitlistSection() {
           </div>
         </div>
 
-        {/* Survey section */}
+        {/* Survey */}
         <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-7 lg:mt-10 lg:p-12">
           <div className="grid gap-7 lg:grid-cols-[auto_1fr_auto] lg:items-center">
             <div className="flex size-12 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--secondary)_14%,transparent)] text-[var(--secondary)]">
-              <ClipboardList size={22} />
+              <ClipboardList size={22} aria-hidden="true" />
             </div>
 
             <div>
@@ -198,7 +190,7 @@ export function WaitlistSection() {
               className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:border-[var(--secondary)] hover:bg-[var(--surface-container-high)] lg:w-auto"
             >
               Take the Food Survey
-              <ArrowRight size={15} />
+              <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
         </div>
