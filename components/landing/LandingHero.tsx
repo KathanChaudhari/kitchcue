@@ -18,17 +18,16 @@ export function LandingHero() {
         <div className="max-w-md space-y-5 sm:max-w-2xl sm:space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--primary)_35%,transparent)] bg-[color-mix(in_srgb,var(--primary)_13%,transparent)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--primary)] sm:text-xs sm:normal-case sm:tracking-normal">
             <Sparkles size={12} />
-            AI Kitchen Intelligence
+            AI FOR KITCHEN
           </div>
 
           <h1 className="max-w-[420px] text-[34px] font-black leading-[0.98] tracking-[-0.06em] text-white sm:max-w-[680px] sm:text-6xl lg:text-7xl">
-  Master The Art of{" "}
-  <span className="text-[var(--primary)]">Precision</span> Cooking.
+
+  <span className="text-[var(--primary)]">WHAT TO COOK?</span> 
 </h1>
 
 <p className="max-w-[340px] text-xs leading-5 text-white/90 sm:max-w-xl sm:text-base sm:leading-6">
-  Elevate your culinary journey with smart inventory tracking,
-  atmospheric recipe discovery, and professional kitchen management.
+  What we are trying to do is simple yet most time consuming task of everyday, when you get asked what should I cook? or you ask yourselft what should I eat and spent next 30 minutes searching that, we are here to minimise that.
 </p>
 
           <div className="grid gap-3 pt-2 sm:flex sm:flex-wrap">
@@ -40,11 +39,11 @@ export function LandingHero() {
             </Link>
 
             <Link
-              href="#features"
-              className="inline-flex h-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:bg-white/5 sm:w-auto sm:text-sm"
-            >
-              Explore Features
-            </Link>
+  href="#features"
+  className="inline-flex h-12 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:bg-[var(--surface-muted)] sm:w-auto sm:text-sm"
+>
+  Explore Features
+</Link>
           </div>
         </div>
       </div>

@@ -1,14 +1,11 @@
 import {
     Archive,
     Bot,
-    Brain,
     ChefHat,
     ClipboardList,
     Flame,
     HeartPulse,
-    Leaf,
     PackageCheck,
-    ScanLine,
     Sparkles,
     Trophy,
     Utensils
@@ -25,7 +22,7 @@ import {
     {
       title: "Kitchen AI Assistant",
       description:
-        "Real-time guidance tailored to your equipment and skill level. It’s like having a sous-chef by your side.",
+        "Cook with ingredients you have, plan out based on your preferneces",
       icon: Bot,
       tone: "primary"
     },
@@ -56,7 +53,7 @@ import {
               </p>
   
               <h2 className="mt-2 text-2xl font-black tracking-[-0.04em] text-[var(--foreground)] sm:text-3xl lg:text-4xl">
-                Tools professional chefs use, redesigned for your home.
+                Let's change how your kitchen works, make it smart.
               </h2>
             </div>
   

@@ -34,7 +34,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push("/onboarding");
+      router.push("/home");
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
