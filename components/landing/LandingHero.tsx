@@ -22,12 +22,13 @@ export function LandingHero() {
           </div>
 
           <h1 className="max-w-[420px] text-[34px] font-black leading-[0.98] tracking-[-0.06em] text-white sm:max-w-[680px] sm:text-6xl lg:text-7xl">
-
-  <span className="text-[var(--primary)]">WHAT TO COOK?</span> 
+  WHAT SHOULD I{" "}
+  <span className="text-[var(--primary)]">COOK?</span>
 </h1>
 
-<p className="max-w-[340px] text-xs leading-5 text-white/90 sm:max-w-xl sm:text-base sm:leading-6">
-  What we are trying to do is simple yet most time consuming task of everyday, when you get asked what should I cook? or you ask yourselft what should I eat and spent next 30 minutes searching that, we are here to minimise that.
+<p className="max-w-[380px] text-sm leading-5 text-white/90 sm:max-w-xl sm:text-lg sm:leading-7">
+  Decide what to cook or eat in less time, without scrolling through endless
+  recipes.
 </p>
 
           <div className="grid gap-3 pt-2 sm:flex sm:flex-wrap">
