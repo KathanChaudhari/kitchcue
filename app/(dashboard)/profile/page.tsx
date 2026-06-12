@@ -1,5 +1,8 @@
 "use client";
 
+import { signOut } from "next-auth/react";
+import { LogOut } from "lucide-react";
+
 import { PreferenceSummarySection } from "@/components/profile/PreferenceSummarySection";
 import { ApplianceSection } from "@/components/profile/ApplianceSection";
 import { NotificationSection } from "@/components/profile/NotificationSection";
@@ -10,6 +13,12 @@ import { useProfile } from "@/hooks/useProfile";
 
 export default function ProfilePage() {
   const { profile, isLoading, error } = useProfile();
+
+  async function handleLogout() {
+    await signOut({
+      callbackUrl: "/login"
+    });
+  }
 
   if (isLoading) {
     return (
@@ -54,6 +63,17 @@ export default function ProfilePage() {
       </div>
 
       <NotificationSection settings={profile.notificationSettings} />
+
+      <div className="lg:hidden">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-4 text-xs font-bold text-[var(--muted)] transition hover:bg-[#2f3b31] hover:text-[var(--foreground)] active:scale-[0.98] [html.light_&]:hover:bg-[var(--card-soft)] [html.light_&]:hover:text-[var(--foreground)]"
+        >
+          <LogOut size={17} aria-hidden="true" />
+          <span>Logout</span>
+        </button>
+      </div>
 
       <DeleteAccountSection />
     </div>

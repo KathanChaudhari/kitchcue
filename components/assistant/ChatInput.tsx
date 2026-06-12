@@ -1,12 +1,10 @@
 "use client";
 
-import {
-  LoaderCircle,
-  SendHorizontal
-} from "lucide-react";
+import { LoaderCircle, SendHorizontal } from "lucide-react";
 import {
   FormEvent,
-  KeyboardEvent
+  KeyboardEvent,
+  useCallback
 } from "react";
 
 type ChatInputProps = {
@@ -24,30 +22,36 @@ export function ChatInput({
   onValueChange,
   onSendMessage
 }: ChatInputProps) {
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
-
+  const sendMessage = useCallback(async () => {
     const trimmedMessage = value.trim();
 
-    if (
-      !trimmedMessage ||
-      !sessionId ||
-      isSending
-    ) {
+    if (!trimmedMessage || !sessionId || isSending) {
       return;
     }
 
-    // Clear the input immediately.
     onValueChange("");
 
     try {
       await onSendMessage(trimmedMessage);
-    } catch {
-      // Restore the message when sending fails unexpectedly.
+    } catch (error) {
+      console.error("Failed to send message:", error);
+
+      // Restore the message if sending fails.
       onValueChange(trimmedMessage);
     }
+  }, [
+    value,
+    sessionId,
+    isSending,
+    onValueChange,
+    onSendMessage
+  ]);
+
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    await sendMessage();
   }
 
   function handleKeyDown(
@@ -59,14 +63,19 @@ export function ChatInput({
       !event.nativeEvent.isComposing
     ) {
       event.preventDefault();
-      event.currentTarget.form?.requestSubmit();
+      void sendMessage();
     }
   }
+
+  const isDisabled =
+    !sessionId ||
+    isSending ||
+    !value.trim();
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full items-end gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg"
+      className="relative z-10 flex w-full items-end gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-1.5 shadow-lg"
     >
       <textarea
         value={value}
@@ -81,26 +90,29 @@ export function ChatInput({
         }
         disabled={!sessionId || isSending}
         rows={1}
-        className="max-h-32 min-h-9 flex-1 resize-none bg-transparent px-3 py-2 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-60"
+        className="max-h-32 min-h-10 min-w-0 flex-1 resize-none bg-transparent px-3 py-2 text-base text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm"
       />
 
       <button
-        type="submit"
-        disabled={
-          !sessionId ||
-          isSending ||
-          !value.trim()
-        }
+        type="button"
+        disabled={isDisabled}
         aria-label="Send message"
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--primary)] text-white transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+        onClick={() => {
+          void sendMessage();
+        }}
+        className="relative z-20 grid h-10 w-10 shrink-0 touch-manipulation place-items-center rounded-lg bg-[var(--primary)] text-white transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSending ? (
           <LoaderCircle
             size={17}
             className="animate-spin"
+            aria-hidden="true"
           />
         ) : (
-          <SendHorizontal size={17} />
+          <SendHorizontal
+            size={17}
+            aria-hidden="true"
+          />
         )}
       </button>
     </form>

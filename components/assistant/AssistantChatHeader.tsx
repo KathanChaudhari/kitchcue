@@ -263,20 +263,10 @@ export function AssistantChatHeader({
               ) : null}
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => void handleCreateChat()}
-              disabled={isMutating}
-              className="flex h-9 items-center gap-2 rounded-lg text-base font-extrabold text-[var(--foreground)] transition hover:text-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isMutating ? (
-                <LoaderCircle size={16} className="animate-spin" />
-              ) : (
-                <Plus size={16} />
-              )}
-
-              Create first chat
-            </button>
+            <div className="flex h-9 items-center gap-2 text-sm font-bold text-[var(--muted)]">
+            <LoaderCircle size={16} className="animate-spin" />
+            Preparing chat
+          </div>
           )}
         </div>
 
