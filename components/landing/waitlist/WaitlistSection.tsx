@@ -89,54 +89,54 @@ export function WaitlistSection() {
               </div>
             ) : (
               <form
-                onSubmit={handleSubmit}
-                className="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
+              onSubmit={handleSubmit}
+              className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+            >
+              <label htmlFor="waitlist-email" className="sr-only">
+                Email address
+              </label>
+            
+              <input
+                id="waitlist-email"
+                type="email"
+                name="email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+            
+                  if (message) {
+                    setMessage("");
+                  }
+                }}
+                placeholder="Enter your email address"
+                autoComplete="email"
+                disabled={isSubmitting}
+                required
+                className="h-14 min-h-14 w-full flex-none appearance-none rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-0 text-base text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:min-h-12 sm:min-w-0 sm:flex-1 sm:text-sm"
+              />
+            
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex h-14 min-h-14 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-7 text-xs font-bold text-[var(--ink)] shadow-[0_0_30px_color-mix(in_srgb,var(--primary)_25%,transparent)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:h-12 sm:min-h-12 sm:w-auto lg:text-sm"
               >
-                <label htmlFor="waitlist-email" className="sr-only">
-                  Email address
-                </label>
-
-                <input
-                  id="waitlist-email"
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-
-                    if (message) {
-                      setMessage("");
-                    }
-                  }}
-                  placeholder="Enter your email address"
-                  autoComplete="email"
-                  disabled={isSubmitting}
-                  required
-                  className="h-12 min-w-0 flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60"
-                />
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-7 text-xs font-bold text-[var(--ink)] shadow-[0_0_30px_color-mix(in_srgb,var(--primary)_25%,transparent)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 lg:text-sm"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <LoaderCircle
-                        size={16}
-                        className="animate-spin"
-                        aria-hidden="true"
-                      />
-                      Joining...
-                    </>
-                  ) : (
-                    <>
-                      Join the Waitlist
-                      <ArrowRight size={16} aria-hidden="true" />
-                    </>
-                  )}
-                </button>
-              </form>
+                {isSubmitting ? (
+                  <>
+                    <LoaderCircle
+                      size={16}
+                      className="animate-spin"
+                      aria-hidden="true"
+                    />
+                    Joining...
+                  </>
+                ) : (
+                  <>
+                    Join the Waitlist
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            </form>
             )}
 
             {!isJoined && message && (
@@ -157,7 +157,6 @@ export function WaitlistSection() {
           </div>
         </div>
 
-        {/* Survey */}
         <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--card-soft)] p-7 lg:mt-10 lg:p-12">
           <div className="grid gap-7 lg:grid-cols-[auto_1fr_auto] lg:items-center">
             <div className="flex size-12 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--secondary)_14%,transparent)] text-[var(--secondary)]">
@@ -170,7 +169,7 @@ export function WaitlistSection() {
               </p>
 
               <h3 className="mt-2 text-xl font-black tracking-[-0.04em] text-[var(--foreground)] lg:text-3xl">
-                Better suggestions start with real food habits.
+                Better suggestions start with real food DATA.
               </h3>
 
               <p className="mt-3 max-w-2xl text-xs leading-5 text-[var(--muted)] lg:text-sm lg:leading-6">
@@ -181,7 +180,7 @@ export function WaitlistSection() {
 
               <p className="mt-3 max-w-2xl text-xs leading-5 text-[var(--foreground)]/85 lg:text-sm lg:leading-6">
                 You&apos;ll help shape KitchCue&apos;s recommendations and get a
-                direct say in what we build next.
+                 say in what we build next.
               </p>
             </div>
 

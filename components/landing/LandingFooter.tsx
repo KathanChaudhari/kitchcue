@@ -1,58 +1,59 @@
+import Link from "next/link";
+
+const footerLinks = [
+  {
+    label: "Features",
+    href: "#features"
+  },
+  {
+    label: "Roadmap",
+    href: "#roadmap"
+  },
+  {
+    label: "Join the Waitlist",
+    href: "#waitlist"
+  }
+];
+
 export function LandingFooter() {
   return (
-    <footer className="rounded-t-xl border border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_92%,black)] px-4 pb-10 pt-10 lg:px-6">
+    <footer className="border-t border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_94%,black)] px-4 py-10 lg:px-6">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-sm text-center lg:max-w-none lg:text-left">
-          <h3 className="text-sm font-black text-[var(--foreground)]">
-            KitchCue
-          </h3>
+        <div className="flex flex-col items-center gap-7 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+          <div>
+            <Link
+              href="/"
+              className="text-sm font-black tracking-tight text-[var(--foreground)]"
+            >
+              KitchCue
+            </Link>
 
-          <p className="mx-auto mt-4 max-w-xs text-xs leading-5 text-[var(--foreground)]/85 lg:mx-0">
-            Empowering culinary precision through atmospheric technology.
-          </p>
-        </div>
-
-        <div className="mt-8 grid grid-cols-2 gap-8 border-b border-[var(--border)] pb-8 text-center text-xs lg:grid-cols-4 lg:text-left">
-          <FooterColumn title="Platform" items={platformLinks} />
-          <FooterColumn title="Company" items={companyLinks} />
-
-          <div className="col-span-2 hidden lg:block">
-            <h4 className="font-bold text-[var(--foreground)]">Connect</h4>
-
-            <div className="mt-4 space-y-3 text-[var(--foreground)]/75">
-              <p>Contact Us</p>
-              <p>Cookie Settings</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 flex flex-col items-center justify-between gap-4 text-center text-[11px] text-[var(--foreground)]/75 lg:flex-row lg:text-left">
-          <div className="flex flex-wrap justify-center gap-4 lg:gap-6">
-            <p>Privacy Policy</p>
-            <p>Terms of Service</p>
-            <p>Cookie Settings</p>
+            <p className="mx-auto mt-3 max-w-sm text-xs leading-5 text-[var(--muted)] lg:mx-0">
+  Decide what to cook, track your kitchen, and plan everyday meals with your
+  AI assistant.
+</p>
           </div>
 
-          <p>© 2026 KitchCue Intelligence. Precision in every plate.</p>
+          <nav
+            aria-label="Footer navigation"
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-medium lg:justify-end"
+          >
+            {footerLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[var(--muted)] transition hover:text-[var(--primary)]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="mt-8 border-t border-[var(--border)] pt-6 text-center text-[11px] text-[var(--muted)] lg:text-left">
+          <p>© 2026 KitchCue. Built for everyday kitchens.</p>
         </div>
       </div>
     </footer>
-  );
-}
-
-const platformLinks = ["Features", "Integrations", "Enterprise"];
-const companyLinks = ["About Us", "Careers", "Contact"];
-
-function FooterColumn({ title, items }: { title: string; items: string[] }) {
-  return (
-    <div>
-      <h4 className="font-bold text-[var(--foreground)]">{title}</h4>
-
-      <div className="mt-4 space-y-3 text-[var(--foreground)]/75">
-        {items.map((item) => (
-          <p key={item}>{item}</p>
-        ))}
-      </div>
-    </div>
   );
 }
