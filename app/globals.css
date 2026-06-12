@@ -58,9 +58,16 @@ html.light {
   --primary-muted: #d7dfd1;
   --on-primary: #23301f;
 
+  --secondary: #a65f32;
+  --secondary-muted: #c9875e;
+  --secondary-container: #f3ddcc;
+  --on-secondary-container: #6d3518;
+
+  --tertiary: #357f80;
+  --error: #b3261e;
+
   --ink: #20201d;
 }
-
 body {
   min-height: 100vh;
   background: var(--background);

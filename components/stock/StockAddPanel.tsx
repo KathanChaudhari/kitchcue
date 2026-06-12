@@ -14,9 +14,13 @@ type StockAddPanelProps = {
   cameraInputRef: React.RefObject<HTMLInputElement | null>;
   onMessageChange: (value: string) => void;
   onClose: () => void;
-  onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onImageChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void;
   onSubmit: () => void;
   isSubmitting?: boolean;
+  assistantMessage?: string;
+  error?: string;
 };
 
 const titleByMode = {
@@ -26,11 +30,12 @@ const titleByMode = {
 };
 
 const helperByMode = {
-  text: "Tell me what you want to add. Example: “Add 1 kg tomatoes, 2 milk packets, and 12 eggs.”",
+  text:
+    "Tell KitchCue what you bought. It will identify the items, quantities, units, and categories.",
   audio:
-    "Speak your stock update. Example: “I bought potatoes, milk, curd and bananas.”",
+    "Speak your stock update. Voice input is coming soon.",
   picture:
-    "Upload a receipt, grocery photo, or pantry image. I’ll check what items can be added."
+    "Upload a receipt, grocery photo, or pantry image."
 };
 
 export function StockAddPanel({
@@ -43,7 +48,9 @@ export function StockAddPanel({
   onClose,
   onImageChange,
   onSubmit,
-  isSubmitting = false
+  isSubmitting = false,
+  assistantMessage = "",
+  error = ""
 }: StockAddPanelProps) {
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,16 +58,24 @@ export function StockAddPanel({
     function handleClickOutside(event: MouseEvent) {
       if (
         panelRef.current &&
-        !panelRef.current.contains(event.target as Node)
+        !panelRef.current.contains(
+          event.target as Node
+        )
       ) {
         onClose();
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
     };
   }, [onClose]);
 
@@ -84,6 +99,7 @@ export function StockAddPanel({
           <button
             type="button"
             onClick={onClose}
+            aria-label="Close stock assistant"
             className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full border border-[color-mix(in_srgb,var(--tertiary)_28%,var(--border))] bg-[color-mix(in_srgb,var(--tertiary)_14%,var(--card-soft))] text-[var(--foreground)] transition hover:border-[color-mix(in_srgb,var(--tertiary)_45%,var(--border))] hover:bg-[color-mix(in_srgb,var(--tertiary)_24%,var(--card-soft))]"
           >
             <X className="size-4" />
@@ -108,6 +124,8 @@ export function StockAddPanel({
           onImageChange={onImageChange}
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
+          assistantMessage={assistantMessage}
+          error={error}
         />
       </div>
     </div>

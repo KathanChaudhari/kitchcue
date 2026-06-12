@@ -1,6 +1,5 @@
-// src/lib/client/stock.ts
-
 import {
+  AiStockResponse,
   CreateInventoryItemInput,
   InventoryItem,
   UpdateInventoryItemInput
@@ -65,5 +64,22 @@ export async function removeStockItemFromShoppingList(itemId: string) {
   return updateStockItem(itemId, {
     isShoppingList: false,
     isPurchased: false
+  });
+}
+
+export type AddStockWithAiResponse = AiStockResponse & {
+  createdItems: InventoryItem[];
+};
+
+export async function addStockItemsWithAi(
+  message: string,
+  conversation: string[] = []
+) {
+  return apiFetch<AddStockWithAiResponse>("/api/stock/ai", {
+    method: "POST",
+    body: JSON.stringify({
+      message,
+      conversation
+    })
   });
 }
