@@ -70,3 +70,21 @@ export async function PATCH(request: Request) {
     return handleApiError(routeError);
   }
 }
+
+export async function DELETE() {
+  try {
+    const user = await getCurrentUser();
+
+    await prisma.user.delete({
+      where: {
+        id: user.id
+      }
+    });
+
+    return ok({
+      message: "Your account has been deleted."
+    });
+  } catch (routeError) {
+    return handleApiError(routeError);
+  }
+}

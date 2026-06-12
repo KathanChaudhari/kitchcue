@@ -23,6 +23,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -32,6 +33,8 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -49,10 +52,10 @@ model User {
   emailVerified DateTime?
   image         String?
 
-  age           Int?
-  gender        String?
-  liveIn        String?
-  from          String?
+  age    Int?
+  gender String?
+  liveIn String?
+  from   String?
 
   passwordHash String?
 
@@ -96,7 +99,7 @@ model UserPreference {
 }
 
 model InventoryItem {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   userId          String
   name            String
   quantity        Float?
@@ -105,13 +108,15 @@ model InventoryItem {
   minimumQuantity Float?
   expiryDate      DateTime?
 
-  isShoppingList  Boolean  @default(false)
-  isPurchased     Boolean  @default(false)
+  isShoppingList Boolean @default(false)
+  isPurchased    Boolean @default(false)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model ChatSession {
@@ -119,7 +124,8 @@ model ChatSession {
   userId String
   title  String? @default("New chat")
 
-  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   messages ChatMessage[]
 
   createdAt DateTime @default(now())
@@ -155,6 +161,8 @@ model Notification {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model NotificationSetting {
@@ -172,6 +180,7 @@ model NotificationSetting {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, key])
+  @@index([userId])
 }
 
 model WaitlistEntry {

@@ -43,3 +43,13 @@ export function updatePreferences(data: PreferencesUpdateInput) {
     body: JSON.stringify(data)
   });
 }
+
+type DeleteAccountResponse = {
+  message: string;
+};
+
+export function deleteAccount() {
+  return apiFetch<DeleteAccountResponse>("/api/me", {
+    method: "DELETE"
+  });
+}
