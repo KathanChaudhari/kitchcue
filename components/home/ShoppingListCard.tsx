@@ -118,7 +118,13 @@ export function ShoppingListCard({
             Nothing added to your shopping list yet.
           </div>
         ) : (
-          <div className="divide-y divide-[var(--border)]">
+          <div
+  className={`divide-y divide-[var(--border)] overflow-x-hidden ${
+    items.length > 5
+      ? "max-h-[305px] overflow-y-auto"
+      : "overflow-y-visible"
+  }`}
+>
             {items.map((item) => {
               const isSelected = selectedIdSet.has(item.id);
               const isEditing = editingItemId === item.id;
@@ -243,7 +249,7 @@ export function ShoppingListCard({
         ) : (
           <>
             <ShoppingBasket className="h-4 w-4" />
-            Go to Blinkit
+            Shop now
           </>
         )}
       </button>

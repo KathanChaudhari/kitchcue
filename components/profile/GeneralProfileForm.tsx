@@ -211,13 +211,6 @@ export function GeneralProfileForm() {
               />
             </ProfileField>
 
-            <ProfileField label="Account created">
-              <input
-                value={new Date(profile.createdAt).toLocaleDateString()}
-                disabled
-                className={getInputClass(false)}
-              />
-            </ProfileField>
           </div>
 
           <HouseholdSizeControl

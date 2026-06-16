@@ -17,8 +17,8 @@ const prompts = [
     icon: Utensils
   },
   {
-    label: "Add milk",
-    prompt: "Add milk to my shopping list.",
+    label: "suggest something spicy?",
+    prompt: "Suggest a spicy food for dinner",
     icon: ShoppingCart
   },
   {

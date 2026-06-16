@@ -101,8 +101,13 @@ export function LowStockCard({
           No stock alerts right now. Your pantry looks good.
         </div>
       ) : (
-        <div className="max-h-[520px] space-y-3 overflow-y-auto overflow-x-hidden scrollbar-hide lg:max-h-none lg:space-y-3 lg:overflow-visible">
-          {items.map((item) => {
+        <div
+        className={`space-y-3 scrollbar-hide overflow-x-hidden ${
+          items.length > 3
+            ? "max-h-[570px] overflow-y-auto pr-1 lg:max-h-[390px]"
+            : "overflow-y-visible"
+        }`}
+      >   {items.map((item) => {
             const level = item.stockLevel ?? 0;
             const isEditing = editingItemId === item.id;
             const isLoading = loadingItemId === item.id;
