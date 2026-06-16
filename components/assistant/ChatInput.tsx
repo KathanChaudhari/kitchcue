@@ -36,7 +36,6 @@ export function ChatInput({
     } catch (error) {
       console.error("Failed to send message:", error);
 
-      // Restore the message if sending fails.
       onValueChange(trimmedMessage);
     }
   }, [
