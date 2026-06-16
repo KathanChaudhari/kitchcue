@@ -119,7 +119,7 @@ export function ShoppingListCard({
           </div>
         ) : (
           <div
-  className={`divide-y divide-[var(--border)] overflow-x-hidden ${
+  className={`divide-y scrollbar-hide divide-[var(--border)] overflow-x-hidden ${
     items.length > 5
       ? "max-h-[305px] overflow-y-auto"
       : "overflow-y-visible"

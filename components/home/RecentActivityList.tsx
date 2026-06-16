@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { HomeActivityItem } from "@/app/types/home";
 import { SectionCard } from "@/components/global/SectionCard";
 import {
@@ -41,27 +40,12 @@ function getActivityIcon(type: string) {
 }
 
 export function RecentActivityList({ items }: RecentActivityListProps) {
-  const [showAll, setShowAll] = useState(false);
-
-  const visibleItems = showAll ? items : items.slice(0, 2);
-  const hasMoreItems = items.length > 2;
-
   return (
     <SectionCard>
       <div className="mb-6 flex items-center justify-between gap-3">
         <h2 className="text-xl font-bold text-[var(--foreground)]">
           Recent Activity
         </h2>
-
-        {hasMoreItems ? (
-          <button
-            type="button"
-            onClick={() => setShowAll((prev) => !prev)}
-            className="text-xs font-bold text-[var(--primary)] transition hover:opacity-80"
-          >
-            {showAll ? "Show less" : "View more"}
-          </button>
-        ) : null}
       </div>
 
       {items.length === 0 ? (
@@ -70,24 +54,31 @@ export function RecentActivityList({ items }: RecentActivityListProps) {
           to see updates here.
         </div>
       ) : (
-        <div className="space-y-5">
-          {visibleItems.map((activity, index) => {
+        <div
+          style={{ scrollbarGutter: "stable" }}
+          className={`space-y-5 scrollbar-hide overflow-x-hidden pr-1 ${
+            items.length > 2
+              ? "max-h-[390px] overflow-y-auto"
+              : "overflow-y-visible"
+          }`}
+        >
+          {items.map((activity, index) => {
             const Icon = getActivityIcon(activity.type);
-            const isLast = index === visibleItems.length - 1;
+            const isLast = index === items.length - 1;
 
             return (
               <div key={activity.id} className="flex gap-4">
                 <div className="flex flex-col items-center">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--primary)] bg-[var(--surface-muted)]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--primary)] bg-[var(--surface-muted)]">
                     <Icon className="h-5 w-5 text-[var(--primary)]" />
                   </div>
 
-                  {!isLast && (
-                    <div className="mt-2 h-full w-px bg-[var(--border)]" />
-                  )}
+                  {!isLast ? (
+                    <div className="mt-2 h-full min-h-6 w-px bg-[var(--border)]" />
+                  ) : null}
                 </div>
 
-                <div className="flex-1 pb-5">
+                <div className="min-w-0 flex-1 pb-5">
                   <p className="mb-3 text-xs font-medium text-[var(--muted)]">
                     {formatActivityTime(activity.createdAt)}
                   </p>
@@ -97,7 +88,7 @@ export function RecentActivityList({ items }: RecentActivityListProps) {
                       {activity.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                    <p className="mt-2 break-words text-sm leading-6 text-[var(--muted)]">
                       {activity.description}
                     </p>
                   </div>
