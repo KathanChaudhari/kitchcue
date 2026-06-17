@@ -170,7 +170,7 @@ export function StockItemEditDialog({
             <input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Milk, Rice, Tomato..."
+              placeholder=""
               disabled={isSaving}
               className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60"
             />
@@ -239,7 +239,7 @@ export function StockItemEditDialog({
                 step="any"
                 value={quantity}
                 onChange={(event) => setQuantity(event.target.value)}
-                placeholder="2"
+                placeholder=""
                 disabled={isSaving}
                 className="h-11 w-full min-w-0 rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60"
               />
@@ -280,7 +280,7 @@ export function StockItemEditDialog({
               }
               placeholder="Alert me when stock reaches this level"
               disabled={isSaving}
-              className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--primary)] disabled:cursor-not-allowed disabled:opacity-60"
             />
           </label>
 

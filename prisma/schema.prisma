@@ -99,9 +99,11 @@ model UserPreference {
 }
 
 model InventoryItem {
-  id              String    @id @default(cuid())
-  userId          String
-  name            String
+  id             String  @id @default(cuid())
+  userId         String
+  name           String
+  normalizedName String?
+
   quantity        Float?
   unit            String?
   category        String?
@@ -117,6 +119,7 @@ model InventoryItem {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([userId, normalizedName])
 }
 
 model ChatSession {

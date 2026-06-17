@@ -66,7 +66,6 @@ export function StockPageClient() {
 
   return (
     <>
-      {/* Desktop search bar */}
       <div className="hidden border-b border-[var(--border)] bg-[var(--background)] lg:block">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-end px-10 xl:px-14">
           <label className="relative w-full max-w-sm">
@@ -123,7 +122,6 @@ export function StockPageClient() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Mobile search bar */}
             <label className="relative min-w-0 flex-1 lg:hidden">
               <span className="sr-only">Search inventory</span>
 

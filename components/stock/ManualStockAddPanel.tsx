@@ -122,7 +122,7 @@ export function ManualStockAddPanel({
             <input
               value={name}
               onChange={(event) => setName(event.target.value)}
-              placeholder="Milk, Rice, Tomato..."
+              placeholder=""
               className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)]"
             />
           </label>
@@ -171,7 +171,7 @@ export function ManualStockAddPanel({
                 min="0"
                 value={quantity}
                 onChange={(event) => setQuantity(event.target.value)}
-                placeholder="2"
+                placeholder=""
                 className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)]"
               />
             </label>
@@ -202,7 +202,7 @@ export function ManualStockAddPanel({
               value={minimumQuantity}
               onChange={(event) => setMinimumQuantity(event.target.value)}
               placeholder="Alert me when stock reaches this level"
-              className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] focus:border-[var(--primary)]"
+              className="h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted)]/50 focus:border-[var(--primary)]"
             />
           </label>
   

@@ -105,18 +105,11 @@ export function StockAddDock({
       setMessage("");
 
       if (result.action === "add") {
-        /*
-         * The API route has already saved the returned
-         * items to Prisma at this point.
-         */
+      
         await onItemCreated?.();
       }
 
-      /*
-       * When action === "ask", keep the panel open.
-       * The user can type an answer, and the conversation
-       * history is sent back to Gemini.
-       */
+    
     } catch (submitError) {
       setError(
         submitError instanceof Error

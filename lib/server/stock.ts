@@ -14,7 +14,9 @@ export function getStockLevel(
   }
 
   return Math.min(
-    Math.round((item.quantity / item.minimumQuantity) * 100),
+    Math.round(
+      (item.quantity / item.minimumQuantity) * 100
+    ),
     100
   );
 }
@@ -35,7 +37,9 @@ export function isLowStockItem(
   return item.quantity <= item.minimumQuantity;
 }
 
-export function mapStockItemWithLevel(item: InventoryItem) {
+export function mapStockItemWithLevel(
+  item: InventoryItem
+) {
   const stockLevel = getStockLevel(item);
   const isLowStock = isLowStockItem(item);
 
@@ -57,4 +61,13 @@ export function mapStockItemWithLevel(item: InventoryItem) {
     stockLevel,
     isLowStock
   };
+}
+
+export function normalizeStockItemName(
+  name: string
+) {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }

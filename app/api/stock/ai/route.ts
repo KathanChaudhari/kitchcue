@@ -1,7 +1,8 @@
 import { getCurrentUser } from "@/lib/server/auth";
 import { handleApiError, ok } from "@/lib/server/api";
 import { interpretStockMessage } from "@/lib/server/ai/interpret-stock-message";
-import { prisma } from "@/lib/server/prisma";
+import { addOrUpdateStockItem } from "@/lib/server/stock/add-or-update-stock-item";
+import { mapStockItemWithLevel } from "@/lib/server/stock";
 
 export async function POST(request: Request) {
   try {
@@ -13,13 +14,12 @@ export async function POST(request: Request) {
         ? body.message.trim()
         : "";
 
-    const conversation =
-      Array.isArray(body.conversation)
-        ? body.conversation.filter(
-            (entry: any): entry is string =>
-              typeof entry === "string"
-          )
-        : [];
+    const conversation = Array.isArray(body.conversation)
+      ? body.conversation.filter(
+          (entry: unknown): entry is string =>
+            typeof entry === "string"
+        )
+      : [];
 
     if (!message) {
       return Response.json(
@@ -45,19 +45,21 @@ export async function POST(request: Request) {
       });
     }
 
-    const createdItems = await prisma.$transaction(
-      aiResponse.items.map((item) =>
-        prisma.inventoryItem.create({
-          data: {
-            userId: user.id,
-            name: item.name,
-            quantity: item.quantity,
-            unit: item.unit,
-            category: item.category
-          }
-        })
-      )
-    );
+    const createdItems = [];
+
+    for (const item of aiResponse.items) {
+      const savedItem = await addOrUpdateStockItem({
+        userId: user.id,
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        category: item.category
+      });
+
+      createdItems.push(
+        mapStockItemWithLevel(savedItem)
+      );
+    }
 
     return ok({
       ...aiResponse,

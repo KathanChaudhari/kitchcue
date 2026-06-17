@@ -164,7 +164,7 @@ export function StockAddInput({
               placeholder={
                 assistantMessage
                   ? "Reply here..."
-                  : "Try: I bought 3 pieces of cheese and 2 mangoes"
+                  : "Add 3 pcs of cheese and 2kg potato"
               }
               className="min-h-14 min-w-0 flex-1 resize-none rounded-xl bg-transparent px-2 py-2 text-base font-medium text-[var(--foreground)] outline-none placeholder:text-[var(--muted)] disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm"
             />
