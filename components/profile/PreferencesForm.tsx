@@ -167,12 +167,7 @@ export function PreferencesForm() {
               isEditing={isEditing}
             />
 
-            <CustomChipInput
-              placeholder="Add allergy and press Enter"
-              isEditing={isEditing}
-              selected={selectedAllergies}
-              onChange={setSelectedAllergies}
-            />
+         
           </PreferenceCard>
 
           <PreferenceCard
@@ -188,12 +183,6 @@ export function PreferencesForm() {
               isEditing={isEditing}
             />
 
-            <CustomChipInput
-              placeholder="Add condition and press Enter"
-              isEditing={isEditing}
-              selected={selectedConditions}
-              onChange={setSelectedConditions}
-            />
           </PreferenceCard>
         </div>
 
@@ -211,12 +200,7 @@ export function PreferencesForm() {
               isEditing={isEditing}
             />
 
-            <CustomChipInput
-              placeholder="Add liked food and press Enter"
-              isEditing={isEditing}
-              selected={selectedLikes}
-              onChange={setSelectedLikes}
-            />
+          
           </PreferenceCard>
 
           <PreferenceCard
@@ -232,12 +216,7 @@ export function PreferencesForm() {
               isEditing={isEditing}
             />
 
-            <CustomChipInput
-              placeholder="Add disliked food and press Enter"
-              isEditing={isEditing}
-              selected={selectedDislikes}
-              onChange={setSelectedDislikes}
-            />
+           
           </PreferenceCard>
         </div>
 
