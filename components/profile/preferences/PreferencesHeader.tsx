@@ -15,11 +15,11 @@ export function PreferencesHeader({
   onCancel
 }: PreferencesHeaderProps) {
   return (
-    <div className="mb-4 flex items-start justify-between gap-3 border-b border-[var(--border)] pb-3">
-      <div className="flex min-w-0 items-start gap-2">
+    <div className="mb-4 flex items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+      <div className="flex min-w-0 items-center gap-2">
         <Link
           href="/profile"
-          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--surface)] active:scale-95 sm:hidden"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground)] transition hover:bg-[var(--surface)] active:scale-95 sm:hidden"
           aria-label="Back to profile"
         >
           <ArrowLeft size={15} />
@@ -27,18 +27,12 @@ export function PreferencesHeader({
 
         <Sparkles
           size={16}
-          className="mt-1 hidden shrink-0 text-[var(--primary-soft)] sm:block"
+          className="hidden shrink-0 text-[var(--primary-soft)] sm:block"
         />
 
-        <div className="min-w-0">
-          <h2 className="text-sm font-bold text-[var(--primary-soft)]">
-            Preference setup
-          </h2>
-
-          <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--muted)]">
-            Improve meal ideas, shopping suggestions, and reminders.
-          </p>
-        </div>
+        <h2 className="truncate text-sm font-bold text-[var(--primary-soft)] sm:text-base">
+          Preference setup
+        </h2>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">

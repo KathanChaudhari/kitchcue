@@ -66,13 +66,12 @@ function PreferenceGroup({
 
 function getSpiceLabel(level: number | null | undefined) {
   if (!level) return "Not set";
-  if (level <= 1) return "Very mild";
-  if (level === 2) return "Mild";
+  if (level === 1) return "Mild";
+  if (level === 2) return "Light";
   if (level === 3) return "Medium";
-  if (level === 4) return "Spicy";
-  return "Very spicy";
+  if (level === 4) return "Hot";
+  return "Very hot";
 }
-
 export function PreferenceSummarySection({
   preferences
 }: PreferenceSummarySectionProps) {
