@@ -28,11 +28,6 @@ type RouteContext = {
   }>;
 };
 
-/**
- * GET /api/assistant/[sessionId]/messages
- *
- * Returns every message belonging to the selected chat session.
- */
 export async function GET(
   _request: Request,
   context: RouteContext
@@ -70,12 +65,6 @@ export async function GET(
   }
 }
 
-/**
- * POST /api/assistant/[sessionId]/messages
- *
- * Saves the user's message, loads kitchen context,
- * generates a Gemini response, and saves the response.
- */
 export async function POST(
   request: Request,
   context: RouteContext
@@ -124,23 +113,25 @@ export async function POST(
         take: 12
       });
 
-    const recentMessages: AssistantHistoryMessage[] =
-      previousMessages
-        .reverse()
-        .filter(
-          (
-            message
-          ): message is {
-            role: "user" | "assistant";
-            content: string;
-          } =>
-            message.role === "user" ||
-            message.role === "assistant"
-        )
-        .map((message) => ({
-          role: message.role,
-          content: message.content
-        }));
+      type PreviousChatMessage = {
+        role: string;
+        content: string;
+      };
+      
+      const recentMessages: AssistantHistoryMessage[] =
+        previousMessages
+          .reverse()
+          .filter(
+            (
+              message: PreviousChatMessage
+            ): message is AssistantHistoryMessage =>
+              message.role === "user" ||
+              message.role === "assistant"
+          )
+          .map((message) => ({
+            role: message.role,
+            content: message.content
+          }));
 
     const userMessage =
       await prisma.chatMessage.create({
