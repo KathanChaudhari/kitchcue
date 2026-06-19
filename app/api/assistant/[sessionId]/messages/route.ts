@@ -113,25 +113,13 @@ export async function POST(
         take: 12
       });
 
-      type PreviousChatMessage = {
-        role: string;
-        content: string;
-      };
-      
-      const recentMessages: AssistantHistoryMessage[] =
-        previousMessages
-          .reverse()
-          .filter(
-            (
-              message: PreviousChatMessage
-            ): message is AssistantHistoryMessage =>
-              message.role === "user" ||
-              message.role === "assistant"
-          )
-          .map((message) => ({
-            role: message.role,
-            content: message.content
-          }));
+    const recentMessages: AssistantHistoryMessage[] =
+      previousMessages
+        .reverse()
+        .map((message) => ({
+          role: message.role as "user" | "assistant",
+          content: message.content
+        }));
 
     const userMessage =
       await prisma.chatMessage.create({
