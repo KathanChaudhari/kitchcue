@@ -13,15 +13,17 @@ import {
 import { normalizeUnit } from "@/lib/server/stock/quantity-conversion";
 
 type Params = {
-  params: {
+  params: Promise<{
     itemId: string;
-  };
+  }>;
 };
 
 export async function PATCH(
   request: Request,
   { params }: Params
 ) {
+  const { itemId } = await params;
+
   const { data, error } = await parseJson(
     request,
     stockItemUpdateSchema
@@ -35,7 +37,7 @@ export async function PATCH(
     const existingItem =
       await prisma.inventoryItem.findFirst({
         where: {
-          id: params.itemId,
+          id: itemId,
           userId: user.id
         }
       });
@@ -122,13 +124,15 @@ export async function DELETE(
   _request: Request,
   { params }: Params
 ) {
+  const { itemId } = await params;
+
   try {
     const user = await getCurrentUser();
 
     const existingItem =
       await prisma.inventoryItem.findFirst({
         where: {
-          id: params.itemId,
+          id: itemId,
           userId: user.id
         }
       });

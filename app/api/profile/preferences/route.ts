@@ -15,9 +15,9 @@ const defaultPreferences = {
   appliances: []
 };
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const preferences = await prisma.userPreference.upsert({
       where: { userId: user.id },
@@ -39,7 +39,7 @@ export async function PATCH(request: Request) {
   if (error) return error;
 
   try {
-    const user = await getCurrentUser(request);
+    const user = await getCurrentUser();
 
     const preferences = await prisma.userPreference.upsert({
       where: { userId: user.id },
