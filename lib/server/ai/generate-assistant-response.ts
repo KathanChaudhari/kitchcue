@@ -151,7 +151,7 @@ async function generateWithRetry(contents: string) {
         config: {
           systemInstruction: KITCHCUE_SYSTEM_PROMPT,
           temperature: 0.4,
-          maxOutputTokens: 1200
+          maxOutputTokens: 5000
         }
       });
     } catch (error) {
@@ -214,7 +214,7 @@ async function streamWithRetry(
           config: {
             systemInstruction: KITCHCUE_SYSTEM_PROMPT,
             temperature: 0.4,
-            maxOutputTokens: 1200
+            maxOutputTokens: 5000
           }
         });
 
