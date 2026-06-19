@@ -28,6 +28,11 @@ type RouteContext = {
   }>;
 };
 
+type PreviousChatMessage = {
+  role: string;
+  content: string;
+};
+
 export async function GET(
   _request: Request,
   context: RouteContext
@@ -95,7 +100,7 @@ export async function POST(
       return fail("Chat session not found", 404);
     }
 
-    const previousMessages =
+    const previousMessages: PreviousChatMessage[] =
       await prisma.chatMessage.findMany({
         where: {
           sessionId,
@@ -116,7 +121,7 @@ export async function POST(
     const recentMessages: AssistantHistoryMessage[] =
       previousMessages
         .reverse()
-        .map((message) => ({
+        .map((message: PreviousChatMessage) => ({
           role: message.role as "user" | "assistant",
           content: message.content
         }));
