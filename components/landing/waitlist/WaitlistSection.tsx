@@ -15,13 +15,13 @@ export function WaitlistSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [message, setMessage] = useState("");
-
+  const FOOD_SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfe0zwdZGwAYMtXk9ThbOkQBtgtueGBrXKlWFcPAM1DwK4EZw/viewform";
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const normalizedEmail = email.trim();
 
-    if (!normalizedEmail) {
+    if (!normalizedEmail) { 
       setMessage("Please enter your email address.");
       return;
     }
@@ -184,13 +184,15 @@ export function WaitlistSection() {
               </p>
             </div>
 
-            <Link
-              href="/survey"
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:border-[var(--secondary)] hover:bg-[var(--surface-container-high)] lg:w-auto"
-            >
-              Take the Food Survey
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
+            <a
+  href={FOOD_SURVEY_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] px-6 text-xs font-bold text-[var(--foreground)] transition hover:border-[var(--secondary)] hover:bg-[var(--surface-container-high)] lg:w-auto"
+>
+  Take the Food Survey
+  <ArrowRight size={15} aria-hidden="true" />
+</a>
           </div>
         </div>
       </div>
