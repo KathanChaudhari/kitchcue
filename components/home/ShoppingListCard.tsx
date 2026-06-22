@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CheckCircle2, Pencil, ShoppingBasket, X } from "lucide-react";
+import { Check, Pencil, ShoppingBasket, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { HomeShoppingItem } from "@/app/types/home";
 
@@ -119,12 +119,12 @@ export function ShoppingListCard({
           </div>
         ) : (
           <div
-  className={`divide-y scrollbar-hide divide-[var(--border)] overflow-x-hidden ${
-    items.length > 5
-      ? "max-h-[305px] overflow-y-auto"
-      : "overflow-y-visible"
-  }`}
->
+            className={`divide-y scrollbar-hide divide-[var(--border)] overflow-x-hidden ${
+              items.length > 5
+                ? "max-h-[305px] overflow-y-auto"
+                : "overflow-y-visible"
+            }`}
+          >
             {items.map((item) => {
               const isSelected = selectedIdSet.has(item.id);
               const isEditing = editingItemId === item.id;
@@ -168,16 +168,16 @@ export function ShoppingListCard({
                     </p>
 
                     {isSelected ? (
-  <button
-    type="button"
-    onClick={() => openQuantityEditor(item)}
-    disabled={isLoading}
-    className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-[var(--primary)] px-2 text-[10px] font-bold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 disabled:opacity-50"
-  >
-    <Pencil className="h-3 w-3" />
-    Add
-  </button>
-) : null}
+                      <button
+                        type="button"
+                        onClick={() => openQuantityEditor(item)}
+                        disabled={isLoading}
+                        className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-[var(--primary)] px-2 text-[10px] font-bold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 disabled:opacity-50"
+                      >
+                        <Pencil className="h-3 w-3" />
+                        Add
+                      </button>
+                    ) : null}
 
                     {onRemoveFromShoppingList ? (
                       <button
@@ -192,67 +192,48 @@ export function ShoppingListCard({
                     ) : null}
                   </div>
                   {isEditing ? (
-  <div className="mt-2 flex items-center justify-end gap-1.5">
-    <input
-      type="number"
-      min="0"
-      max="99999"
-      value={quantityValue}
-      onChange={(event) => setQuantityValue(event.target.value.slice(0, 5))}
-      className="h-7 w-20 rounded-md border border-[var(--border)] bg-[var(--card)] px-1.5 text-center text-xs font-bold text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
-      placeholder="Qty"
-    />
+                    <div className="mt-2 flex items-center justify-end gap-1.5">
+                      <input
+                        type="number"
+                        min="0"
+                        max="99999"
+                        value={quantityValue}
+                        onChange={(event) =>
+                          setQuantityValue(event.target.value.slice(0, 5))
+                        }
+                        className="h-7 w-20 rounded-md border border-[var(--border)] bg-[var(--card)] px-1.5 text-center text-xs font-bold text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
+                        placeholder="Qty"
+                      />
 
-    <button
-      type="button"
-      onClick={() => handleSaveQuantity(item.id)}
-      disabled={isLoading}
-      className="grid h-7 w-7 place-items-center rounded-md bg-[var(--primary)] text-[var(--ink)] transition hover:opacity-90 disabled:opacity-50"
-      aria-label="Save quantity"
-      title="Save quantity"
-    >
-      <Check className="h-4 w-4" />
-    </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveQuantity(item.id)}
+                        disabled={isLoading}
+                        className="grid h-7 w-7 place-items-center rounded-md bg-[var(--primary)] text-[var(--ink)] transition hover:opacity-90 disabled:opacity-50"
+                        aria-label="Save quantity"
+                        title="Save quantity"
+                      >
+                        <Check className="h-4 w-4" />
+                      </button>
 
-    <button
-      type="button"
-      onClick={closeQuantityEditor}
-      disabled={isLoading}
-      className="grid h-7 w-7 place-items-center rounded-md text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] disabled:opacity-50"
-      aria-label="Cancel"
-      title="Cancel"
-    >
-      <X className="h-3.5 w-3.5" />
-    </button>
-  </div>
-) : null}
+                      <button
+                        type="button"
+                        onClick={closeQuantityEditor}
+                        disabled={isLoading}
+                        className="grid h-7 w-7 place-items-center rounded-md text-[var(--muted)] transition hover:bg-[var(--card)] hover:text-[var(--foreground)] disabled:opacity-50"
+                        aria-label="Cancel"
+                        title="Cancel"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
               );
             })}
           </div>
         )}
       </div>
-
-      <button
-        type="button"
-        className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition ${
-          allSelected
-            ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--ink)]"
-            : "border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)]/10"
-        }`}
-      >
-        {allSelected ? (
-          <>
-            <CheckCircle2 className="h-4 w-4" />
-            Added
-          </>
-        ) : (
-          <>
-            <ShoppingBasket className="h-4 w-4" />
-            Shop now
-          </>
-        )}
-      </button>
     </section>
   );
 }

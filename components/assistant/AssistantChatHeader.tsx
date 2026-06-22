@@ -264,9 +264,9 @@ export function AssistantChatHeader({
             </div>
           ) : (
             <div className="flex h-9 items-center gap-2 text-sm font-bold text-[var(--muted)]">
-            <LoaderCircle size={16} className="animate-spin" />
-            Preparing chat
-          </div>
+              <LoaderCircle size={16} className="animate-spin" />
+              Preparing chat
+            </div>
           )}
         </div>
 

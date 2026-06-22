@@ -102,12 +102,13 @@ export function LowStockCard({
         </div>
       ) : (
         <div
-        className={`space-y-3 scrollbar-hide overflow-x-hidden ${
-          items.length > 3
-            ? "max-h-[570px] overflow-y-auto pr-1 lg:max-h-[390px]"
-            : "overflow-y-visible"
-        }`}
-      >   {items.map((item) => {
+          className={`space-y-3 scrollbar-hide overflow-x-hidden ${
+            items.length > 3
+              ? "max-h-[570px] overflow-y-auto pr-1 lg:max-h-[390px]"
+              : "overflow-y-visible"
+          }`}
+        >
+          {items.map((item) => {
             const level = item.stockLevel ?? 0;
             const isEditing = editingItemId === item.id;
             const isLoading = loadingItemId === item.id;

@@ -29,8 +29,8 @@ export function GreetingCard({
         </p>
 
         <h2 className="text-2xl font-bold text-[var(--foreground)] lg:mt-2 lg:text-3xl">
-  {getGreeting()}, {displayName}!
-</h2>
+          {getGreeting()}, {displayName}!
+        </h2>
         <p className="mt-3 max-w-lg text-base leading-7 text-[var(--foreground-soft)] lg:mt-2 lg:text-sm lg:leading-6">
           Your kitchen has {totalItems} pantry items
           {lowStockCount > 0
@@ -39,16 +39,12 @@ export function GreetingCard({
         </p>
 
         <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:mt-5 lg:flex-row lg:gap-2.5">
-        <Link
-  href="/assistant"
-  className="block rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-left text-base font-bold text-[var(--foreground)] shadow-sm transition hover:border-[var(--primary)] lg:rounded-full lg:bg-[var(--primary)] lg:px-5 lg:py-2 lg:text-xs lg:text-[var(--ink)]"
->
-  + New Recipe
-</Link>
-
-          {/* <button className="hidden cursor-pointer rounded-full border border-[var(--primary)] px-5 py-2 text-xs font-semibold text-[var(--primary)] transition hover:bg-[var(--primary)]/10 lg:block">
-            View Meal Plan
-          </button> */}
+          <Link
+            href="/assistant"
+            className="block rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-left text-base font-bold text-[var(--foreground)] shadow-sm transition hover:border-[var(--primary)] lg:rounded-full lg:bg-[var(--primary)] lg:px-5 lg:py-2 lg:text-xs lg:text-[var(--ink)]"
+          >
+            + New Recipe
+          </Link>
         </div>
       </div>
 

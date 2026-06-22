@@ -53,7 +53,7 @@ export function NotesCard({ notes }: NotesCardProps) {
             </div>
 
             <div className="flex-1">
-              <h3 className="text-sm font-bold text[var(--foreground)]">
+              <h3 className="text-sm font-bold text-[var(--foreground)]">
                 No notices yet
               </h3>
 

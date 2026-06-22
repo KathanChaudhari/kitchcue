@@ -87,11 +87,11 @@ export default function HomeTabPage() {
               onUpdateQuantity={handleUpdateQuantity}
             />
 
-<ShoppingListCard
-  items={data?.shoppingItems || []}
-  onRemoveFromShoppingList={handleRemoveFromShoppingList}
-  onUpdateQuantity={handleUpdateQuantity}
-/>
+            <ShoppingListCard
+              items={data?.shoppingItems || []}
+              onRemoveFromShoppingList={handleRemoveFromShoppingList}
+              onUpdateQuantity={handleUpdateQuantity}
+            />
           </div>
 
           <div className="grid gap-7 lg:grid-cols-2 lg:gap-4">
