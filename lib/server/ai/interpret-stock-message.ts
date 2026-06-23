@@ -1,40 +1,35 @@
-import type {
-    AiStockResponse
-  } from "@/app/types/stock";
-  import { gemini } from "@/lib/server/ai/gemini";
-  import {
-    aiStockResponseSchema
-  } from "@/lib/validation/stock-ai";
-  import { Type } from "@google/genai";
-  
-  type InterpretStockMessageParams = {
-    message: string;
-    conversation?: string[];
-  };
-  
-  export async function interpretStockMessage({
-    message,
-    conversation = []
-  }: InterpretStockMessageParams): Promise<AiStockResponse> {
-    const normalizedMessage = message.trim();
-  
-    if (!normalizedMessage) {
-      throw new Error("Stock message is required.");
-    }
-  
-    const conversationText =
-      conversation.length > 0
-        ? conversation.join("\n")
-        : "No previous conversation.";
-  
-    const response =
-      await gemini.models.generateContent({
-        model:
-          process.env.GEMINI_STOCK_MODEL ??
-          process.env.GEMINI_CHAT_MODEL ??
-          "gemini-2.5-flash",
-  
-        contents: `
+import type { AiStockResponse } from "@/app/types/stock";
+import { gemini } from "@/lib/server/ai/gemini";
+import { aiStockResponseSchema } from "@/lib/validation/stock-ai";
+import { Type } from "@google/genai";
+
+type InterpretStockMessageParams = {
+  message: string;
+  conversation?: string[];
+};
+
+export async function interpretStockMessage({
+  message,
+  conversation = [],
+}: InterpretStockMessageParams): Promise<AiStockResponse> {
+  const normalizedMessage = message.trim();
+
+  if (!normalizedMessage) {
+    throw new Error("Stock message is required.");
+  }
+
+  const conversationText =
+    conversation.length > 0
+      ? conversation.join("\n")
+      : "No previous conversation.";
+
+  const response = await gemini.models.generateContent({
+    model:
+      process.env.GEMINI_STOCK_MODEL ??
+      process.env.GEMINI_CHAT_MODEL ??
+      "gemini-2.5-flash",
+
+    contents: `
   You are KitchCue's conversational kitchen-stock assistant.
   
   Your job is to understand what groceries the user bought and either:
@@ -86,121 +81,99 @@ import type {
   - Do not add anything when action is "ask".
   - When action is "add", include a brief confirmation message.
   `,
-  
-        config: {
-          temperature: 0.1,
-          responseMimeType: "application/json",
-  
-          responseSchema: {
-            type: Type.OBJECT,
-  
-            properties: {
-              action: {
-                type: Type.STRING,
-                enum: ["add", "ask"]
+
+    config: {
+      temperature: 0.1,
+      responseMimeType: "application/json",
+
+      responseSchema: {
+        type: Type.OBJECT,
+
+        properties: {
+          action: {
+            type: Type.STRING,
+            enum: ["add", "ask"],
+          },
+
+          message: {
+            type: Type.STRING,
+            description: "A short confirmation or clarification question",
+          },
+
+          items: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+
+              properties: {
+                name: {
+                  type: Type.STRING,
+                },
+
+                quantity: {
+                  type: Type.NUMBER,
+                },
+
+                unit: {
+                  type: Type.STRING,
+                  enum: [
+                    "kg",
+                    "g",
+                    "litre",
+                    "ml",
+                    "pcs",
+                    "pack",
+                    "bottle",
+                    "box",
+                  ],
+                },
+
+                category: {
+                  type: Type.STRING,
+                  enum: [
+                    "Vegetables",
+                    "Fruits",
+                    "Dairy",
+                    "Grains",
+                    "Spices",
+                    "Snacks",
+                    "Beverages",
+                    "Other",
+                  ],
+                },
               },
-  
-              message: {
-                type: Type.STRING,
-                description:
-                  "A short confirmation or clarification question"
-              },
-  
-              items: {
-                type: Type.ARRAY,
-                items: {
-                  type: Type.OBJECT,
-  
-                  properties: {
-                    name: {
-                      type: Type.STRING
-                    },
-  
-                    quantity: {
-                      type: Type.NUMBER
-                    },
-  
-                    unit: {
-                      type: Type.STRING,
-                      enum: [
-                        "kg",
-                        "g",
-                        "litre",
-                        "ml",
-                        "pcs",
-                        "pack",
-                        "bottle",
-                        "box"
-                      ]
-                    },
-  
-                    category: {
-                      type: Type.STRING,
-                      enum: [
-                        "Vegetables",
-                        "Fruits",
-                        "Dairy",
-                        "Grains",
-                        "Spices",
-                        "Snacks",
-                        "Beverages",
-                        "Other"
-                      ]
-                    }
-                  },
-  
-                  required: [
-                    "name",
-                    "quantity",
-                    "unit",
-                    "category"
-                  ]
-                }
-              }
+
+              required: ["name", "quantity", "unit", "category"],
             },
-  
-            required: [
-              "action",
-              "message",
-              "items"
-            ]
-          }
-        }
-      });
-  
-    const responseText = response.text?.trim();
-  
-    if (!responseText) {
-      throw new Error(
-        "Gemini returned an empty stock response."
-      );
-    }
-  
-    let parsedResponse: unknown;
-  
-    try {
-      parsedResponse = JSON.parse(responseText);
-    } catch {
-      throw new Error(
-        "Gemini returned invalid stock JSON."
-      );
-    }
-  
-    const validation =
-      aiStockResponseSchema.safeParse(
-        parsedResponse
-      );
-  
-    if (!validation.success) {
-      console.error(
-        "Invalid AI stock response:",
-        validation.error.flatten()
-      );
-  
-      throw new Error(
-        "Gemini returned an unsupported stock response."
-      );
-    }
-  
-    return validation.data;
+          },
+        },
+
+        required: ["action", "message", "items"],
+      },
+    },
+  });
+
+  const responseText = response.text?.trim();
+
+  if (!responseText) {
+    throw new Error("Gemini returned an empty stock response.");
   }
+
+  let parsedResponse: unknown;
+
+  try {
+    parsedResponse = JSON.parse(responseText);
+  } catch {
+    throw new Error("Gemini returned invalid stock JSON.");
+  }
+
+  const validation = aiStockResponseSchema.safeParse(parsedResponse);
+
+  if (!validation.success) {
+    console.error("Invalid AI stock response:", validation.error.flatten());
+
+    throw new Error("Gemini returned an unsupported stock response.");
+  }
+
+  return validation.data;
+}

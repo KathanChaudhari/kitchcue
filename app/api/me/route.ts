@@ -25,8 +25,8 @@ export async function GET() {
         updatedAt: true,
 
         preferences: true,
-        notificationSettings: true
-      }
+        notificationSettings: true,
+      },
     });
 
     return ok(profile);
@@ -61,8 +61,8 @@ export async function PATCH(request: Request) {
         updatedAt: true,
 
         preferences: true,
-        notificationSettings: true
-      }
+        notificationSettings: true,
+      },
     });
 
     return ok(updatedUser);
@@ -77,12 +77,12 @@ export async function DELETE() {
 
     await prisma.user.delete({
       where: {
-        id: user.id
-      }
+        id: user.id,
+      },
     });
 
     return ok({
-      message: "Your account has been deleted."
+      message: "Your account has been deleted.",
     });
   } catch (routeError) {
     return handleApiError(routeError);

@@ -5,16 +5,7 @@ export const aiStockItemSchema = z.object({
 
   quantity: z.number().positive(),
 
-  unit: z.enum([
-    "kg",
-    "g",
-    "litre",
-    "ml",
-    "pcs",
-    "pack",
-    "bottle",
-    "box"
-  ]),
+  unit: z.enum(["kg", "g", "litre", "ml", "pcs", "pack", "bottle", "box"]),
 
   category: z.enum([
     "Vegetables",
@@ -24,38 +15,30 @@ export const aiStockItemSchema = z.object({
     "Spices",
     "Snacks",
     "Beverages",
-    "Other"
-  ])
+    "Other",
+  ]),
 });
 
 export const aiStockResponseSchema = z
   .object({
     action: z.enum(["add", "ask"]),
     message: z.string().trim().min(1),
-    items: z.array(aiStockItemSchema).max(30)
+    items: z.array(aiStockItemSchema).max(30),
   })
   .superRefine((value, context) => {
-    if (
-      value.action === "add" &&
-      value.items.length === 0
-    ) {
+    if (value.action === "add" && value.items.length === 0) {
       context.addIssue({
         code: "custom",
         path: ["items"],
-        message:
-          "Items are required when action is add."
+        message: "Items are required when action is add.",
       });
     }
 
-    if (
-      value.action === "ask" &&
-      value.items.length > 0
-    ) {
+    if (value.action === "ask" && value.items.length > 0) {
       context.addIssue({
         code: "custom",
         path: ["items"],
-        message:
-          "Items must be empty when asking a question."
+        message: "Items must be empty when asking a question.",
       });
     }
   });

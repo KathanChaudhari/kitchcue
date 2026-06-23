@@ -1,10 +1,5 @@
 import { getCurrentUser } from "@/lib/server/auth";
-import {
-  fail,
-  handleApiError,
-  ok,
-  parseJson
-} from "@/lib/server/api";
+import { fail, handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
 import { z } from "zod";
 
@@ -13,7 +8,7 @@ const chatSessionUpdateSchema = z.object({
     .string()
     .trim()
     .min(1, "Chat title is required")
-    .max(80, "Chat title cannot exceed 80 characters")
+    .max(80, "Chat title cannot exceed 80 characters"),
 });
 
 type RouteContext = {
@@ -22,14 +17,8 @@ type RouteContext = {
   }>;
 };
 
-export async function PATCH(
-  request: Request,
-  context: RouteContext
-) {
-  const { data, error } = await parseJson(
-    request,
-    chatSessionUpdateSchema
-  );
+export async function PATCH(request: Request, context: RouteContext) {
+  const { data, error } = await parseJson(request, chatSessionUpdateSchema);
 
   if (error) return error;
 
@@ -40,27 +29,26 @@ export async function PATCH(
     const session = await prisma.chatSession.findFirst({
       where: {
         id: sessionId,
-        userId: user.id
+        userId: user.id,
       },
       select: {
-        id: true
-      }
+        id: true,
+      },
     });
 
     if (!session) {
       return fail("Chat session not found", 404);
     }
 
-    const updatedSession =
-      await prisma.chatSession.update({
-        where: {
-          id: sessionId
-        },
-        data: {
-          title: data.title,
-          updatedAt: new Date()
-        }
-      });
+    const updatedSession = await prisma.chatSession.update({
+      where: {
+        id: sessionId,
+      },
+      data: {
+        title: data.title,
+        updatedAt: new Date(),
+      },
+    });
 
     return ok(updatedSession);
   } catch (routeError) {
@@ -68,10 +56,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  context: RouteContext
-) {
+export async function DELETE(request: Request, context: RouteContext) {
   try {
     const user = await getCurrentUser();
     const { sessionId } = await context.params;
@@ -79,11 +64,11 @@ export async function DELETE(
     const session = await prisma.chatSession.findFirst({
       where: {
         id: sessionId,
-        userId: user.id
+        userId: user.id,
       },
       select: {
-        id: true
-      }
+        id: true,
+      },
     });
 
     if (!session) {
@@ -92,13 +77,13 @@ export async function DELETE(
 
     await prisma.chatSession.delete({
       where: {
-        id: sessionId
-      }
+        id: sessionId,
+      },
     });
 
     return ok({
       deleted: true,
-      id: sessionId
+      id: sessionId,
     });
   } catch (routeError) {
     return handleApiError(routeError);

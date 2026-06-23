@@ -26,10 +26,10 @@ export function fail(message: string, status = 400, details?: unknown) {
     {
       error: {
         message,
-        details
-      }
+        details,
+      },
     },
-    { status }
+    { status },
   );
 }
 
@@ -39,19 +39,19 @@ export async function parseJson<T>(request: Request, schema: ZodSchema<T>) {
 
     return {
       data: schema.parse(body),
-      error: null
+      error: null,
     };
   } catch (error) {
     if (error instanceof ZodError) {
       return {
         data: null,
-        error: fail("Invalid request body", 422, error.flatten())
+        error: fail("Invalid request body", 422, error.flatten()),
       };
     }
 
     return {
       data: null,
-      error: fail("Request body must be valid JSON", 400)
+      error: fail("Request body must be valid JSON", 400),
     };
   }
 }

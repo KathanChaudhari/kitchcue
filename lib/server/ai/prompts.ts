@@ -71,9 +71,7 @@ function formatList(values: string[]) {
   return values.join(", ");
 }
 
-export function buildKitchenContextPrompt(
-  context: KitchenContext
-) {
+export function buildKitchenContextPrompt(context: KitchenContext) {
   const inventory =
     context.inventory.length === 0
       ? "No inventory items are currently recorded."
@@ -85,24 +83,18 @@ export function buildKitchenContextPrompt(
                 : `${item.quantity}${item.unit ? ` ${item.unit}` : ""}`;
 
             const details = [
-              item.category
-                ? `category: ${item.category}`
-                : null,
+              item.category ? `category: ${item.category}` : null,
               item.minimumQuantity !== null
                 ? `minimum quantity: ${item.minimumQuantity}${
                     item.unit ? ` ${item.unit}` : ""
                   }`
                 : null,
-              item.expiryDate
-                ? `expiry date: ${item.expiryDate}`
-                : null,
-              item.isLowStock ? "low stock: yes" : null
+              item.expiryDate ? `expiry date: ${item.expiryDate}` : null,
+              item.isLowStock ? "low stock: yes" : null,
             ].filter(Boolean);
 
             return `- ${item.name}: ${quantity}${
-              details.length > 0
-                ? ` (${details.join(", ")})`
-                : ""
+              details.length > 0 ? ` (${details.join(", ")})` : ""
             }`;
           })
           .join("\n");
@@ -130,48 +122,20 @@ User:
 - Name: ${formatValue(context.user.name)}
 
 Cooking preferences:
-- Health goals: ${formatList(
-    context.preferences.healthGoals
-  )}
-- Diet type: ${formatValue(
-    context.preferences.dietType
-  )}
-- Allergies: ${formatList(
-    context.preferences.allergies
-  )}
-- Medical conditions: ${formatList(
-    context.preferences.medicalConditions
-  )}
-- Liked ingredients: ${formatList(
-    context.preferences.likedIngredients
-  )}
-- Disliked ingredients: ${formatList(
-    context.preferences.dislikedIngredients
-  )}
-- Preferred cuisines: ${formatList(
-    context.preferences.cuisinePreferences
-  )}
-- Texture preferences: ${formatList(
-    context.preferences.texturePreferences
-  )}
-- Cooking styles: ${formatList(
-    context.preferences.cookingStyles
-  )}
-- Cooking skill: ${formatValue(
-    context.preferences.cookingSkill
-  )}
-- Preferred cooking time: ${formatValue(
-    context.preferences.cookingTime
-  )}
-- Available appliances: ${formatList(
-    context.preferences.appliances
-  )}
-- Household size: ${formatValue(
-    context.preferences.householdSize
-  )}
-- Spice level: ${formatValue(
-    context.preferences.spiceLevel
-  )}
+- Health goals: ${formatList(context.preferences.healthGoals)}
+- Diet type: ${formatValue(context.preferences.dietType)}
+- Allergies: ${formatList(context.preferences.allergies)}
+- Medical conditions: ${formatList(context.preferences.medicalConditions)}
+- Liked ingredients: ${formatList(context.preferences.likedIngredients)}
+- Disliked ingredients: ${formatList(context.preferences.dislikedIngredients)}
+- Preferred cuisines: ${formatList(context.preferences.cuisinePreferences)}
+- Texture preferences: ${formatList(context.preferences.texturePreferences)}
+- Cooking styles: ${formatList(context.preferences.cookingStyles)}
+- Cooking skill: ${formatValue(context.preferences.cookingSkill)}
+- Preferred cooking time: ${formatValue(context.preferences.cookingTime)}
+- Available appliances: ${formatList(context.preferences.appliances)}
+- Household size: ${formatValue(context.preferences.householdSize)}
+- Spice level: ${formatValue(context.preferences.spiceLevel)}
 
 CURRENT INVENTORY:
 ${inventory}

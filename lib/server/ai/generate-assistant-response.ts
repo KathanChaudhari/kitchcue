@@ -1,9 +1,6 @@
 import { gemini } from "./gemini";
 import { type KitchenContext } from "./build-kitchen-context";
-import {
-  buildKitchenContextPrompt,
-  KITCHCUE_SYSTEM_PROMPT
-} from "./prompts";
+import { buildKitchenContextPrompt, KITCHCUE_SYSTEM_PROMPT } from "./prompts";
 
 export type AssistantHistoryMessage = {
   role: "user" | "assistant";
@@ -16,41 +13,35 @@ export type GenerateAssistantResponseInput = {
   recentMessages?: AssistantHistoryMessage[];
 };
 
-type AssistantChunkHandler = (
-  chunk: string
-) => void | Promise<void>;
+type AssistantChunkHandler = (chunk: string) => void | Promise<void>;
 
 const DEFAULT_MODEL = "gemini-2.5-flash-lite";
 const MAX_RETRIES = 3;
 
 function cleanRecentMessages(
-  messages: AssistantHistoryMessage[]
+  messages: AssistantHistoryMessage[],
 ): AssistantHistoryMessage[] {
   return messages
     .filter(
       (message) =>
         message.content.trim().length > 0 &&
-        (message.role === "user" ||
-          message.role === "assistant")
+        (message.role === "user" || message.role === "assistant"),
     )
     .slice(-12)
     .map((message) => ({
       role: message.role,
-      content: message.content.trim()
+      content: message.content.trim(),
     }));
 }
 
-function formatConversationHistory(
-  messages: AssistantHistoryMessage[]
-) {
+function formatConversationHistory(messages: AssistantHistoryMessage[]) {
   if (messages.length === 0) {
     return "No previous conversation messages.";
   }
 
   return messages
     .map((message) => {
-      const speaker =
-        message.role === "user" ? "User" : "KitchCue";
+      const speaker = message.role === "user" ? "User" : "KitchCue";
 
       return `${speaker}: ${message.content}`;
     })
@@ -60,7 +51,7 @@ function formatConversationHistory(
 function buildContents({
   message,
   kitchenContext,
-  recentMessages = []
+  recentMessages = [],
 }: GenerateAssistantResponseInput) {
   const cleanedMessage = message.trim();
 
@@ -70,11 +61,9 @@ function buildContents({
 
   const history = cleanRecentMessages(recentMessages);
 
-  const kitchenContextPrompt =
-    buildKitchenContextPrompt(kitchenContext);
+  const kitchenContextPrompt = buildKitchenContextPrompt(kitchenContext);
 
-  const conversationHistory =
-    formatConversationHistory(history);
+  const conversationHistory = formatConversationHistory(history);
 
   return `
 KITCHCUE APPLICATION CONTEXT
@@ -135,44 +124,34 @@ function getRetryDelay(attempt: number) {
 async function generateWithRetry(contents: string) {
   let lastError: unknown;
 
-  for (
-    let attempt = 0;
-    attempt <= MAX_RETRIES;
-    attempt += 1
-  ) {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
     try {
       return await gemini.models.generateContent({
-        model:
-          process.env.GEMINI_CHAT_MODEL ??
-          DEFAULT_MODEL,
+        model: process.env.GEMINI_CHAT_MODEL ?? DEFAULT_MODEL,
 
         contents,
 
         config: {
           systemInstruction: KITCHCUE_SYSTEM_PROMPT,
           temperature: 0.4,
-          maxOutputTokens: 5000
-        }
+          maxOutputTokens: 5000,
+        },
       });
     } catch (error) {
       lastError = error;
 
-      if (
-        !isRetryableError(error) ||
-        attempt === MAX_RETRIES
-      ) {
+      if (!isRetryableError(error) || attempt === MAX_RETRIES) {
         throw error;
       }
 
-      const delayMilliseconds =
-        getRetryDelay(attempt);
+      const delayMilliseconds = getRetryDelay(attempt);
 
       console.warn(
         `Gemini request failed with status ${getErrorStatus(
-          error
+          error,
         )}. Retrying attempt ${
           attempt + 1
-        }/${MAX_RETRIES} after ${delayMilliseconds}ms.`
+        }/${MAX_RETRIES} after ${delayMilliseconds}ms.`,
       );
 
       await delay(delayMilliseconds);
@@ -191,32 +170,25 @@ async function generateWithRetry(contents: string) {
  */
 async function streamWithRetry(
   contents: string,
-  onChunk: AssistantChunkHandler
+  onChunk: AssistantChunkHandler,
 ) {
   let lastError: unknown;
 
-  for (
-    let attempt = 0;
-    attempt <= MAX_RETRIES;
-    attempt += 1
-  ) {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
     let hasEmittedContent = false;
 
     try {
-      const response =
-        await gemini.models.generateContentStream({
-          model:
-            process.env.GEMINI_CHAT_MODEL ??
-            DEFAULT_MODEL,
+      const response = await gemini.models.generateContentStream({
+        model: process.env.GEMINI_CHAT_MODEL ?? DEFAULT_MODEL,
 
-          contents,
+        contents,
 
-          config: {
-            systemInstruction: KITCHCUE_SYSTEM_PROMPT,
-            temperature: 0.4,
-            maxOutputTokens: 5000
-          }
-        });
+        config: {
+          systemInstruction: KITCHCUE_SYSTEM_PROMPT,
+          temperature: 0.4,
+          maxOutputTokens: 5000,
+        },
+      });
 
       for await (const chunk of response) {
         const text = chunk.text ?? "";
@@ -241,22 +213,18 @@ async function streamWithRetry(
         throw error;
       }
 
-      if (
-        !isRetryableError(error) ||
-        attempt === MAX_RETRIES
-      ) {
+      if (!isRetryableError(error) || attempt === MAX_RETRIES) {
         throw error;
       }
 
-      const delayMilliseconds =
-        getRetryDelay(attempt);
+      const delayMilliseconds = getRetryDelay(attempt);
 
       console.warn(
         `Gemini stream failed with status ${getErrorStatus(
-          error
+          error,
         )}. Retrying attempt ${
           attempt + 1
-        }/${MAX_RETRIES} after ${delayMilliseconds}ms.`
+        }/${MAX_RETRIES} after ${delayMilliseconds}ms.`,
       );
 
       await delay(delayMilliseconds);
@@ -268,7 +236,7 @@ async function streamWithRetry(
 
 export async function streamAssistantResponse(
   input: GenerateAssistantResponseInput,
-  onChunk: AssistantChunkHandler
+  onChunk: AssistantChunkHandler,
 ): Promise<void> {
   const contents = buildContents(input);
 
@@ -280,14 +248,12 @@ export async function streamAssistantResponse(
   });
 
   if (!fullResponse.trim()) {
-    throw new Error(
-      "The Gemini response did not contain any text"
-    );
+    throw new Error("The Gemini response did not contain any text");
   }
 }
 
 export async function generateAssistantResponse(
-  input: GenerateAssistantResponseInput
+  input: GenerateAssistantResponseInput,
 ): Promise<string> {
   const contents = buildContents(input);
 
@@ -296,9 +262,7 @@ export async function generateAssistantResponse(
   const assistantContent = response.text?.trim();
 
   if (!assistantContent) {
-    throw new Error(
-      "The Gemini response did not contain any text"
-    );
+    throw new Error("The Gemini response did not contain any text");
   }
 
   return assistantContent;

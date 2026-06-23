@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const name = data.name.trim();
 
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (existingUser) {
@@ -36,8 +36,8 @@ export async function POST(request: Request) {
             dislikedIngredients: [],
             texturePreferences: [],
             cookingStyles: [],
-            appliances: []
-          }
+            appliances: [],
+          },
         },
         notificationSettings: {
           create: [
@@ -45,24 +45,24 @@ export async function POST(request: Request) {
               key: "expiry_reminders",
               title: "Expiry reminders",
               description: "Notify me when food items are close to expiry",
-              enabled: true
+              enabled: true,
             },
             {
               key: "low_stock",
               title: "Low stock alerts",
               description: "Notify me when pantry items are running low",
-              enabled: true
-            }
-          ]
-        }
+              enabled: true,
+            },
+          ],
+        },
       },
       select: {
         id: true,
         name: true,
         email: true,
         image: true,
-        createdAt: true
-      }
+        createdAt: true,
+      },
     });
 
     return created(user);

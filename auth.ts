@@ -11,7 +11,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
 
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
   },
 
   providers: [
@@ -21,12 +21,12 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: {
           label: "Email",
-          type: "email"
+          type: "email",
         },
         password: {
           label: "Password",
-          type: "password"
-        }
+          type: "password",
+        },
       },
 
       async authorize(credentials) {
@@ -44,8 +44,8 @@ export const authOptions: NextAuthOptions = {
             id: true,
             name: true,
             email: true,
-            passwordHash: true
-          }
+            passwordHash: true,
+          },
         });
 
         if (!user || !user.passwordHash) {
@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
 
         const isValidPassword = await comparePassword(
           parsed.data.password,
-          user.passwordHash
+          user.passwordHash,
         );
 
         if (!isValidPassword) {
@@ -64,15 +64,15 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           name: user.name,
-          email: user.email
+          email: user.email,
         };
-      }
+      },
     }),
 
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-    })
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
 
   events: {
@@ -90,8 +90,8 @@ export const authOptions: NextAuthOptions = {
           dislikedIngredients: [],
           texturePreferences: [],
           cookingStyles: [],
-          appliances: []
-        }
+          appliances: [],
+        },
       });
 
       await prisma.notificationSetting.createMany({
@@ -101,19 +101,19 @@ export const authOptions: NextAuthOptions = {
             key: "expiry_reminders",
             title: "Expiry reminders",
             description: "Notify me when food items are close to expiry",
-            enabled: true
+            enabled: true,
           },
           {
             userId: user.id,
             key: "low_stock",
             title: "Low stock alerts",
             description: "Notify me when pantry items are running low",
-            enabled: true
-          }
+            enabled: true,
+          },
         ],
-        skipDuplicates: true
+        skipDuplicates: true,
       });
-    }
+    },
   },
 
   callbacks: {
@@ -131,15 +131,14 @@ export const authOptions: NextAuthOptions = {
       if (session.user && token.id) {
         session.user.id = token.id as string;
 
-        
         session.user.image = null;
       }
 
       return session;
-    }
+    },
   },
 
   pages: {
-    signIn: "/login"
-  }
+    signIn: "/login",
+  },
 };

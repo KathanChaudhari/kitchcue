@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     const settings = await prisma.notificationSetting.findMany({
       where: { userId: user.id },
-      orderBy: { createdAt: "asc" }
+      orderBy: { createdAt: "asc" },
     });
 
     return ok(settings);
@@ -19,7 +19,10 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  const { data, error } = await parseJson(request, notificationSettingsUpdateSchema);
+  const { data, error } = await parseJson(
+    request,
+    notificationSettingsUpdateSchema,
+  );
   if (error) return error;
 
   try {
@@ -31,23 +34,23 @@ export async function PATCH(request: Request) {
           where: {
             userId_key: {
               userId: user.id,
-              key: setting.key
-            }
+              key: setting.key,
+            },
           },
           update: {
             title: setting.title,
             description: setting.description,
-            enabled: setting.enabled
+            enabled: setting.enabled,
           },
           create: {
             userId: user.id,
             key: setting.key,
             title: setting.title ?? setting.key,
             description: setting.description,
-            enabled: setting.enabled
-          }
-        })
-      )
+            enabled: setting.enabled,
+          },
+        }),
+      ),
     );
 
     return ok(settings);

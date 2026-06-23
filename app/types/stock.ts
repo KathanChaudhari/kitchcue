@@ -39,7 +39,7 @@ export const stockCategories = [
   "Spices",
   "Snacks",
   "Beverages",
-  "Other"
+  "Other",
 ] as const;
 
 export const stockUnits = [
@@ -50,14 +50,12 @@ export const stockUnits = [
   "pcs",
   "pack",
   "bottle",
-  "box"
+  "box",
 ] as const;
 
-export type StockCategory =
-  (typeof stockCategories)[number];
+export type StockCategory = (typeof stockCategories)[number];
 
-export type StockUnit =
-  (typeof stockUnits)[number];
+export type StockUnit = (typeof stockUnits)[number];
 
 export type AiStockItem = {
   name: string;

@@ -14,9 +14,9 @@ export async function getHomeDashboard(): Promise<HomeDashboardData> {
   const response = await fetch("/api/home", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    cache: "no-store"
+    cache: "no-store",
   });
 
   const payload = await response.json();

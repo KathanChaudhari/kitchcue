@@ -15,39 +15,39 @@ export async function GET() {
             id: true,
             name: true,
             email: true,
-            image: true
-          }
+            image: true,
+          },
         }),
 
         prisma.inventoryItem.findMany({
           where: {
-            userId: user.id
+            userId: user.id,
           },
           orderBy: {
-            updatedAt: "desc"
+            updatedAt: "desc",
           },
-          take: 50
+          take: 50,
         }),
 
         prisma.notification.findMany({
           where: {
-            userId: user.id
+            userId: user.id,
           },
           orderBy: {
-            createdAt: "desc"
+            createdAt: "desc",
           },
-          take: 5
+          take: 5,
         }),
 
         prisma.chatSession.findMany({
           where: {
-            userId: user.id
+            userId: user.id,
           },
           orderBy: {
-            updatedAt: "desc"
+            updatedAt: "desc",
           },
-          take: 5
-        })
+          take: 5,
+        }),
       ]);
 
     const stockItems = inventoryItems.map(mapStockItemWithLevel);
@@ -66,7 +66,7 @@ export async function GET() {
         category: item.category,
         isShoppingList: item.isShoppingList,
         isPurchased: item.isPurchased,
-        reason: item.isLowStock ? "Added from stock alerts" : "Added manually"
+        reason: item.isLowStock ? "Added from stock alerts" : "Added manually",
       }));
 
     const inventoryActivities = stockItems.slice(0, 5).map((item) => ({
@@ -76,7 +76,7 @@ export async function GET() {
         ? `Inventory item in ${item.category}`
         : "Inventory item updated",
       type: "inventory",
-      createdAt: item.updatedAt
+      createdAt: item.updatedAt,
     }));
 
     const notificationActivities = notifications.map((notification) => ({
@@ -84,7 +84,7 @@ export async function GET() {
       title: notification.title,
       description: notification.message,
       type: notification.type || "notification",
-      createdAt: notification.createdAt
+      createdAt: notification.createdAt,
     }));
 
     const chatActivities = chatSessions.map((session) => ({
@@ -92,17 +92,17 @@ export async function GET() {
       title: session.title || "New chat",
       description: "Assistant conversation updated",
       type: "assistant",
-      createdAt: session.updatedAt
+      createdAt: session.updatedAt,
     }));
 
     const recentActivity = [
       ...inventoryActivities,
       ...notificationActivities,
-      ...chatActivities
+      ...chatActivities,
     ]
       .sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
       .slice(0, 6);
 
@@ -113,14 +113,14 @@ export async function GET() {
         totalInventoryItems: stockItems.length,
         lowStockCount: stockItems.filter((item) => item.isLowStock).length,
         unreadNotificationCount: notifications.filter(
-          (notification) => !notification.isRead
-        ).length
+          (notification) => !notification.isRead,
+        ).length,
       },
 
       lowStockItems,
       shoppingItems,
       recentActivity,
-      notes: []
+      notes: [],
     });
   } catch (routeError) {
     return handleApiError(routeError);

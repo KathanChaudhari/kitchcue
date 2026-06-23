@@ -49,7 +49,7 @@ export type KitchenContext = {
 
 function isItemLowStock(
   quantity: number | null,
-  minimumQuantity: number | null
+  minimumQuantity: number | null,
 ) {
   if (quantity === null || minimumQuantity === null) {
     return false;
@@ -67,11 +67,11 @@ function formatExpiryDate(expiryDate: Date | null) {
 }
 
 export async function buildKitchenContext(
-  userId: string
+  userId: string,
 ): Promise<KitchenContext> {
   const user = await prisma.user.findUnique({
     where: {
-      id: userId
+      id: userId,
     },
     select: {
       name: true,
@@ -91,8 +91,8 @@ export async function buildKitchenContext(
           cookingTime: true,
           appliances: true,
           householdSize: true,
-          spiceLevel: true
-        }
+          spiceLevel: true,
+        },
       },
 
       inventoryItems: {
@@ -105,13 +105,13 @@ export async function buildKitchenContext(
           minimumQuantity: true,
           expiryDate: true,
           isShoppingList: true,
-          isPurchased: true
+          isPurchased: true,
         },
         orderBy: {
-          updatedAt: "desc"
-        }
-      }
-    }
+          updatedAt: "desc",
+        },
+      },
+    },
   });
 
   if (!user) {
@@ -128,10 +128,7 @@ export async function buildKitchenContext(
       category: item.category,
       minimumQuantity: item.minimumQuantity,
       expiryDate: formatExpiryDate(item.expiryDate),
-      isLowStock: isItemLowStock(
-        item.quantity,
-        item.minimumQuantity
-      )
+      isLowStock: isItemLowStock(item.quantity, item.minimumQuantity),
     }));
 
   const shoppingList = user.inventoryItems
@@ -142,43 +139,32 @@ export async function buildKitchenContext(
       quantity: item.quantity,
       unit: item.unit,
       category: item.category,
-      isPurchased: item.isPurchased
+      isPurchased: item.isPurchased,
     }));
 
   return {
     user: {
-      name: user.name
+      name: user.name,
     },
 
     preferences: {
       healthGoals: user.preferences?.healthGoals ?? [],
       dietType: user.preferences?.dietType ?? null,
       allergies: user.preferences?.allergies ?? [],
-      medicalConditions:
-        user.preferences?.medicalConditions ?? [],
-      likedIngredients:
-        user.preferences?.likedIngredients ?? [],
-      dislikedIngredients:
-        user.preferences?.dislikedIngredients ?? [],
-      cuisinePreferences:
-        user.preferences?.cuisinePreferences ?? [],
-      texturePreferences:
-        user.preferences?.texturePreferences ?? [],
-      cookingStyles:
-        user.preferences?.cookingStyles ?? [],
-      cookingSkill:
-        user.preferences?.cookingSkill ?? null,
-      cookingTime:
-        user.preferences?.cookingTime ?? null,
-      appliances:
-        user.preferences?.appliances ?? [],
-      householdSize:
-        user.preferences?.householdSize ?? null,
-      spiceLevel:
-        user.preferences?.spiceLevel ?? null
+      medicalConditions: user.preferences?.medicalConditions ?? [],
+      likedIngredients: user.preferences?.likedIngredients ?? [],
+      dislikedIngredients: user.preferences?.dislikedIngredients ?? [],
+      cuisinePreferences: user.preferences?.cuisinePreferences ?? [],
+      texturePreferences: user.preferences?.texturePreferences ?? [],
+      cookingStyles: user.preferences?.cookingStyles ?? [],
+      cookingSkill: user.preferences?.cookingSkill ?? null,
+      cookingTime: user.preferences?.cookingTime ?? null,
+      appliances: user.preferences?.appliances ?? [],
+      householdSize: user.preferences?.householdSize ?? null,
+      spiceLevel: user.preferences?.spiceLevel ?? null,
     },
 
     inventory,
-    shoppingList
+    shoppingList,
   };
 }

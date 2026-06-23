@@ -14,9 +14,9 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Email is required."
+          message: "Email is required.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -24,29 +24,29 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Please enter a valid email address."
+          message: "Please enter a valid email address.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     await prisma.waitlistEntry.upsert({
       where: {
-        email
+        email,
       },
       update: {},
       create: {
-        email
-      }
+        email,
+      },
     });
 
     return NextResponse.json(
       {
         success: true,
         message:
-          "Thank you for joining the waitlist! We’ll let you know when early access is ready."
+          "Thank you for joining the waitlist! We’ll let you know when early access is ready.",
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("Waitlist signup failed:", error);
@@ -54,9 +54,9 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Something went wrong. Please try again."
+        message: "Something went wrong. Please try again.",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

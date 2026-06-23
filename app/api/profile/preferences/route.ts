@@ -12,7 +12,7 @@ const defaultPreferences = {
   dislikedIngredients: [],
   texturePreferences: [],
   cookingStyles: [],
-  appliances: []
+  appliances: [],
 };
 
 export async function GET() {
@@ -24,8 +24,8 @@ export async function GET() {
       update: {},
       create: {
         userId: user.id,
-        ...defaultPreferences
-      }
+        ...defaultPreferences,
+      },
     });
 
     return ok(preferences);
@@ -47,8 +47,8 @@ export async function PATCH(request: Request) {
       create: {
         userId: user.id,
         ...defaultPreferences,
-        ...data
-      }
+        ...data,
+      },
     });
 
     return ok(preferences);

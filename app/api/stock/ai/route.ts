@@ -9,15 +9,11 @@ export async function POST(request: Request) {
     const user = await getCurrentUser();
     const body = await request.json();
 
-    const message =
-      typeof body.message === "string"
-        ? body.message.trim()
-        : "";
+    const message = typeof body.message === "string" ? body.message.trim() : "";
 
     const conversation = Array.isArray(body.conversation)
       ? body.conversation.filter(
-          (entry: unknown): entry is string =>
-            typeof entry === "string"
+          (entry: unknown): entry is string => typeof entry === "string",
         )
       : [];
 
@@ -25,23 +21,23 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          message: "Please enter what you bought."
+          message: "Please enter what you bought.",
         },
         {
-          status: 400
-        }
+          status: 400,
+        },
       );
     }
 
     const aiResponse = await interpretStockMessage({
       message,
-      conversation
+      conversation,
     });
 
     if (aiResponse.action === "ask") {
       return ok({
         ...aiResponse,
-        createdItems: []
+        createdItems: [],
       });
     }
 
@@ -53,17 +49,15 @@ export async function POST(request: Request) {
         name: item.name,
         quantity: item.quantity,
         unit: item.unit,
-        category: item.category
+        category: item.category,
       });
 
-      createdItems.push(
-        mapStockItemWithLevel(savedItem)
-      );
+      createdItems.push(mapStockItemWithLevel(savedItem));
     }
 
     return ok({
       ...aiResponse,
-      createdItems
+      createdItems,
     });
   } catch (routeError) {
     return handleApiError(routeError);

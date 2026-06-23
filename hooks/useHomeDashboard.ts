@@ -26,7 +26,7 @@ export function useHomeDashboard() {
       setError(
         loadError instanceof Error
           ? loadError.message
-          : "Failed to load dashboard"
+          : "Failed to load dashboard",
       );
     } finally {
       setIsLoading(false);
@@ -49,6 +49,6 @@ export function useHomeDashboard() {
     error,
 
     refresh,
-    refetch: refresh
+    refetch: refresh,
   };
 }

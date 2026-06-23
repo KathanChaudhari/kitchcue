@@ -7,14 +7,13 @@ if (!apiKey) {
 }
 
 const ai = new GoogleGenAI({
-  apiKey
+  apiKey,
 });
 
 async function main() {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents:
-      "Reply with exactly: Gemini is connected."
+    contents: "Reply with exactly: Gemini is connected.",
   });
 
   console.log(response.text);

@@ -6,7 +6,7 @@ import {
   getProfile,
   updateProfile,
   updatePreferences,
-  PreferencesUpdateInput
+  PreferencesUpdateInput,
 } from "@/lib/client/profile";
 
 export function useProfile() {
@@ -26,7 +26,7 @@ export function useProfile() {
       setError(
         profileError instanceof Error
           ? profileError.message
-          : "Failed to load profile"
+          : "Failed to load profile",
       );
     } finally {
       setIsLoading(false);
@@ -46,7 +46,7 @@ export function useProfile() {
       setError(
         profileError instanceof Error
           ? profileError.message
-          : "Failed to update profile"
+          : "Failed to update profile",
       );
 
       throw profileError;
@@ -70,7 +70,7 @@ export function useProfile() {
       setError(
         profileError instanceof Error
           ? profileError.message
-          : "Failed to update preferences"
+          : "Failed to update preferences",
       );
 
       throw profileError;
@@ -90,6 +90,6 @@ export function useProfile() {
     error,
     reloadProfile: loadProfile,
     saveProfile,
-    savePreferences
+    savePreferences,
   };
 }

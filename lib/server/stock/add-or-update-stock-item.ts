@@ -3,7 +3,7 @@ import { normalizeStockItemName } from "@/lib/server/stock";
 import {
   areUnitsCompatible,
   convertQuantity,
-  normalizeUnit
+  normalizeUnit,
 } from "@/lib/server/stock/quantity-conversion";
 
 type AddOrUpdateStockItemInput = {
@@ -16,39 +16,30 @@ type AddOrUpdateStockItemInput = {
   expiryDate?: Date | string | null;
 };
 
-export async function addOrUpdateStockItem(
-  input: AddOrUpdateStockItemInput
-) {
-  const normalizedName =
-    normalizeStockItemName(input.name);
+export async function addOrUpdateStockItem(input: AddOrUpdateStockItemInput) {
+  const normalizedName = normalizeStockItemName(input.name);
 
-  const incomingUnit = input.unit
-    ? normalizeUnit(input.unit)
-    : null;
+  const incomingUnit = input.unit ? normalizeUnit(input.unit) : null;
 
-  let existingItem =
-    await prisma.inventoryItem.findFirst({
-      where: {
-        userId: input.userId,
-        normalizedName
-      }
-    });
+  let existingItem = await prisma.inventoryItem.findFirst({
+    where: {
+      userId: input.userId,
+      normalizedName,
+    },
+  });
 
   // Support rows created before normalizedName existed.
   if (!existingItem) {
-    const legacyItems =
-      await prisma.inventoryItem.findMany({
-        where: {
-          userId: input.userId,
-          normalizedName: null
-        }
-      });
+    const legacyItems = await prisma.inventoryItem.findMany({
+      where: {
+        userId: input.userId,
+        normalizedName: null,
+      },
+    });
 
     existingItem =
       legacyItems.find(
-        (item) =>
-          normalizeStockItemName(item.name) ===
-          normalizedName
+        (item) => normalizeStockItemName(item.name) === normalizedName,
       ) ?? null;
   }
 
@@ -61,40 +52,27 @@ export async function addOrUpdateStockItem(
         quantity: input.quantity ?? null,
         unit: incomingUnit,
         category: input.category ?? null,
-        minimumQuantity:
-          input.minimumQuantity ?? null,
-        expiryDate: input.expiryDate
-          ? new Date(input.expiryDate)
-          : null
-      }
+        minimumQuantity: input.minimumQuantity ?? null,
+        expiryDate: input.expiryDate ? new Date(input.expiryDate) : null,
+      },
     });
   }
 
   const incomingQuantity = input.quantity;
 
   // Existing item does not yet have measurable stock.
-  if (
-    existingItem.quantity === null ||
-    existingItem.unit === null
-  ) {
+  if (existingItem.quantity === null || existingItem.unit === null) {
     return prisma.inventoryItem.update({
       where: {
-        id: existingItem.id
+        id: existingItem.id,
       },
       data: {
         normalizedName,
-        quantity:
-          incomingQuantity ??
-          existingItem.quantity,
-        unit:
-          incomingUnit ?? existingItem.unit,
-        category:
-          input.category ??
-          existingItem.category,
-        minimumQuantity:
-          input.minimumQuantity ??
-          existingItem.minimumQuantity
-      }
+        quantity: incomingQuantity ?? existingItem.quantity,
+        unit: incomingUnit ?? existingItem.unit,
+        category: input.category ?? existingItem.category,
+        minimumQuantity: input.minimumQuantity ?? existingItem.minimumQuantity,
+      },
     });
   }
 
@@ -105,64 +83,51 @@ export async function addOrUpdateStockItem(
   ) {
     return prisma.inventoryItem.update({
       where: {
-        id: existingItem.id
+        id: existingItem.id,
       },
       data: {
-        normalizedName
-      }
+        normalizedName,
+      },
     });
   }
 
-  if (
-    !areUnitsCompatible(
-      existingItem.unit,
-      incomingUnit
-    )
-  ) {
+  if (!areUnitsCompatible(existingItem.unit, incomingUnit)) {
     throw new Error(
       `${existingItem.name} already exists in ` +
         `${existingItem.unit}, but the new quantity ` +
-        `uses ${incomingUnit}.`
+        `uses ${incomingUnit}.`,
     );
   }
 
   const quantityToAdd = convertQuantity(
     incomingQuantity,
     incomingUnit,
-    existingItem.unit
+    existingItem.unit,
   );
 
-  const existingCategory =
-    existingItem.category
-      ?.trim()
-      .toLowerCase();
+  const existingCategory = existingItem.category?.trim().toLowerCase();
 
-  const incomingCategory =
-    input.category
-      ?.trim()
-      .toLowerCase();
+  const incomingCategory = input.category?.trim().toLowerCase();
 
   const shouldUpdateCategory =
-    (!existingCategory ||
-      existingCategory === "other") &&
+    (!existingCategory || existingCategory === "other") &&
     Boolean(incomingCategory) &&
     incomingCategory !== "other";
 
   return prisma.inventoryItem.update({
     where: {
-      id: existingItem.id
+      id: existingItem.id,
     },
     data: {
       normalizedName,
       quantity: {
-        increment: quantityToAdd
+        increment: quantityToAdd,
       },
-      ...(shouldUpdateCategory &&
-      input.category
+      ...(shouldUpdateCategory && input.category
         ? {
-            category: input.category
+            category: input.category,
           }
-        : {})
-    }
+        : {}),
+    },
   });
 }

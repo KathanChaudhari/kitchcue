@@ -1,7 +1,7 @@
 import { InventoryItem } from "@prisma/client";
 
 export function getStockLevel(
-  item: Pick<InventoryItem, "quantity" | "minimumQuantity">
+  item: Pick<InventoryItem, "quantity" | "minimumQuantity">,
 ) {
   if (
     item.quantity === null ||
@@ -14,15 +14,13 @@ export function getStockLevel(
   }
 
   return Math.min(
-    Math.round(
-      (item.quantity / item.minimumQuantity) * 100
-    ),
-    100
+    Math.round((item.quantity / item.minimumQuantity) * 100),
+    100,
   );
 }
 
 export function isLowStockItem(
-  item: Pick<InventoryItem, "quantity" | "minimumQuantity">
+  item: Pick<InventoryItem, "quantity" | "minimumQuantity">,
 ) {
   if (
     item.quantity === null ||
@@ -37,9 +35,7 @@ export function isLowStockItem(
   return item.quantity <= item.minimumQuantity;
 }
 
-export function mapStockItemWithLevel(
-  item: InventoryItem
-) {
+export function mapStockItemWithLevel(item: InventoryItem) {
   const stockLevel = getStockLevel(item);
   const isLowStock = isLowStockItem(item);
 
@@ -59,15 +55,10 @@ export function mapStockItemWithLevel(
     isPurchased: item.isPurchased,
 
     stockLevel,
-    isLowStock
+    isLowStock,
   };
 }
 
-export function normalizeStockItemName(
-  name: string
-) {
-  return name
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
+export function normalizeStockItemName(name: string) {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
 }

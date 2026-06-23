@@ -9,24 +9,24 @@ export async function GET(request: Request) {
 
     const sessions = await prisma.chatSession.findMany({
       where: {
-        userId: user.id
+        userId: user.id,
       },
       include: {
         messages: {
           orderBy: {
-            createdAt: "asc"
+            createdAt: "asc",
           },
-          take: 1
+          take: 1,
         },
         _count: {
           select: {
-            messages: true
-          }
-        }
+            messages: true,
+          },
+        },
       },
       orderBy: {
-        updatedAt: "desc"
-      }
+        updatedAt: "desc",
+      },
     });
 
     return ok(sessions);
@@ -45,8 +45,8 @@ export async function POST(request: Request) {
     const session = await prisma.chatSession.create({
       data: {
         userId: user.id,
-        title: data.title?.trim() || "New chat"
-      }
+        title: data.title?.trim() || "New chat",
+      },
     });
 
     return created(session);

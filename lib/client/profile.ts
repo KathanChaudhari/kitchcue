@@ -2,7 +2,7 @@ import { apiFetch } from "@/lib/client/api";
 import {
   Profile,
   ProfileUpdateInput,
-  UserPreference
+  UserPreference,
 } from "@/app/types/profile";
 
 export function getProfile() {
@@ -12,7 +12,7 @@ export function getProfile() {
 export function updateProfile(data: ProfileUpdateInput) {
   return apiFetch<Profile>("/api/me", {
     method: "PATCH",
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 }
 
@@ -40,7 +40,7 @@ export function getPreferences() {
 export function updatePreferences(data: PreferencesUpdateInput) {
   return apiFetch<UserPreference>("/api/profile/preferences", {
     method: "PATCH",
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 }
 
@@ -50,6 +50,6 @@ type DeleteAccountResponse = {
 
 export function deleteAccount() {
   return apiFetch<DeleteAccountResponse>("/api/me", {
-    method: "DELETE"
+    method: "DELETE",
   });
 }

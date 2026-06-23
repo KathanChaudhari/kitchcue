@@ -14,13 +14,13 @@ export const profileUpdateSchema = z.object({
         !value ||
         /^https?:\/\/.+/.test(value) ||
         /^data:image\/(png|jpeg|jpg|webp);base64,/.test(value),
-      "Image must be a valid URL or uploaded image"
+      "Image must be a valid URL or uploaded image",
     ),
 
   age: z.coerce.number().int().positive().nullable().optional(),
   gender: z.string().trim().optional().nullable(),
   liveIn: z.string().trim().optional().nullable(),
-  from: z.string().trim().optional().nullable()
+  from: z.string().trim().optional().nullable(),
 });
 export const preferencesUpdateSchema = z.object({
   healthGoals: z.array(z.string().trim().min(1)).optional(),
@@ -36,7 +36,7 @@ export const preferencesUpdateSchema = z.object({
   cookingTime: z.string().trim().nullable().optional(),
   appliances: z.array(z.string().trim().min(1)).optional(),
   householdSize: z.coerce.number().int().positive().nullable().optional(),
-  spiceLevel: z.coerce.number().int().min(1).max(5).nullable().optional()
+  spiceLevel: z.coerce.number().int().min(1).max(5).nullable().optional(),
 });
 
 export const notificationSettingsUpdateSchema = z.object({
@@ -45,7 +45,7 @@ export const notificationSettingsUpdateSchema = z.object({
       key: z.string().trim().min(1),
       title: z.string().trim().min(1).optional(),
       description: z.string().trim().nullable().optional(),
-      enabled: z.boolean()
-    })
-  )
+      enabled: z.boolean(),
+    }),
+  ),
 });

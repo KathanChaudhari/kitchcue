@@ -1,16 +1,10 @@
 import { buildKitchenContext } from "@/lib/server/ai/build-kitchen-context";
 import {
   generateAssistantResponse,
-  type AssistantHistoryMessage
+  type AssistantHistoryMessage,
 } from "@/lib/server/ai/generate-assistant-response";
 import { getCurrentUser } from "@/lib/server/auth";
-import {
-  created,
-  fail,
-  handleApiError,
-  ok,
-  parseJson
-} from "@/lib/server/api";
+import { created, fail, handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
 import { z } from "zod";
 
@@ -19,7 +13,7 @@ const chatMessageCreateSchema = z.object({
     .string()
     .trim()
     .min(1, "Message is required")
-    .max(4000, "Message is too long")
+    .max(4000, "Message is too long"),
 });
 
 type RouteContext = {
@@ -33,10 +27,7 @@ type PreviousChatMessage = {
   content: string;
 };
 
-export async function GET(
-  _request: Request,
-  context: RouteContext
-) {
+export async function GET(_request: Request, context: RouteContext) {
   try {
     const user = await getCurrentUser();
     const { sessionId } = await context.params;
@@ -44,11 +35,11 @@ export async function GET(
     const session = await prisma.chatSession.findFirst({
       where: {
         id: sessionId,
-        userId: user.id
+        userId: user.id,
       },
       select: {
-        id: true
-      }
+        id: true,
+      },
     });
 
     if (!session) {
@@ -57,11 +48,11 @@ export async function GET(
 
     const messages = await prisma.chatMessage.findMany({
       where: {
-        sessionId
+        sessionId,
       },
       orderBy: {
-        createdAt: "asc"
-      }
+        createdAt: "asc",
+      },
     });
 
     return ok(messages);
@@ -70,14 +61,8 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: Request,
-  context: RouteContext
-) {
-  const { data, error } = await parseJson(
-    request,
-    chatMessageCreateSchema
-  );
+export async function POST(request: Request, context: RouteContext) {
+  const { data, error } = await parseJson(request, chatMessageCreateSchema);
 
   if (error) return error;
 
@@ -88,12 +73,12 @@ export async function POST(
     const session = await prisma.chatSession.findFirst({
       where: {
         id: sessionId,
-        userId: user.id
+        userId: user.id,
       },
       select: {
         id: true,
-        title: true
-      }
+        title: true,
+      },
     });
 
     if (!session) {
@@ -105,49 +90,44 @@ export async function POST(
         where: {
           sessionId,
           role: {
-            in: ["user", "assistant"]
-          }
+            in: ["user", "assistant"],
+          },
         },
         select: {
           role: true,
-          content: true
+          content: true,
         },
         orderBy: {
-          createdAt: "desc"
+          createdAt: "desc",
         },
-        take: 12
+        take: 12,
       });
 
-    const recentMessages: AssistantHistoryMessage[] =
-      previousMessages
-        .reverse()
-        .map((message: PreviousChatMessage) => ({
-          role: message.role as "user" | "assistant",
-          content: message.content
-        }));
+    const recentMessages: AssistantHistoryMessage[] = previousMessages
+      .reverse()
+      .map((message: PreviousChatMessage) => ({
+        role: message.role as "user" | "assistant",
+        content: message.content,
+      }));
 
-    const userMessage =
-      await prisma.chatMessage.create({
-        data: {
-          sessionId,
-          role: "user",
-          content: data.content
-        }
-      });
+    const userMessage = await prisma.chatMessage.create({
+      data: {
+        sessionId,
+        role: "user",
+        content: data.content,
+      },
+    });
 
-    const kitchenContext = await buildKitchenContext(
-      user.id
-    );
+    const kitchenContext = await buildKitchenContext(user.id);
 
     let assistantReply: string;
 
     try {
-      assistantReply =
-        await generateAssistantResponse({
-          message: data.content,
-          kitchenContext,
-          recentMessages
-        });
+      assistantReply = await generateAssistantResponse({
+        message: data.content,
+        kitchenContext,
+        recentMessages,
+      });
     } catch (aiError) {
       console.error("Gemini request failed:", aiError);
 
@@ -155,27 +135,26 @@ export async function POST(
         "I couldn't generate an AI response right now. Please check the Gemini API key and quota, then try again.";
     }
 
-    const assistantMessage =
-      await prisma.chatMessage.create({
-        data: {
-          sessionId,
-          role: "assistant",
-          content: assistantReply
-        }
-      });
+    const assistantMessage = await prisma.chatMessage.create({
+      data: {
+        sessionId,
+        role: "assistant",
+        content: assistantReply,
+      },
+    });
 
     await prisma.chatSession.update({
       where: {
-        id: sessionId
+        id: sessionId,
       },
       data: {
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
 
     return created({
       userMessage,
-      assistantMessage
+      assistantMessage,
     });
   } catch (routeError) {
     return handleApiError(routeError);
