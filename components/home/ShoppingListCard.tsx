@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Pencil, ShoppingBasket, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { HomeShoppingItem } from "@/app/types/home";
 
 type ShoppingListCardProps = {
@@ -15,32 +15,9 @@ export function ShoppingListCard({
   onRemoveFromShoppingList,
   onUpdateQuantity
 }: ShoppingListCardProps) {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [quantityValue, setQuantityValue] = useState("");
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
-
-  const selectedCount = selectedIds.length;
-  const allSelected = items.length > 0 && selectedCount === items.length;
-
-  const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-
-  function toggleItem(itemId: string) {
-    setSelectedIds((prev) =>
-      prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
-        : [...prev, itemId]
-    );
-  }
-
-  function toggleSelectAll() {
-    if (allSelected) {
-      setSelectedIds([]);
-      return;
-    }
-
-    setSelectedIds(items.map((item) => item.id));
-  }
 
   function openQuantityEditor(item: HomeShoppingItem) {
     setEditingItemId(item.id);
@@ -64,8 +41,6 @@ export function ShoppingListCard({
     try {
       setLoadingItemId(itemId);
       await onUpdateQuantity?.(itemId, nextQuantity);
-
-      setSelectedIds((prev) => prev.filter((id) => id !== itemId));
       closeQuantityEditor();
     } finally {
       setLoadingItemId(null);
@@ -101,16 +76,6 @@ export function ShoppingListCard({
               {items.length} Queued
             </h3>
           </div>
-
-          {selectedCount > 0 ? (
-            <button
-              type="button"
-              onClick={toggleSelectAll}
-              className="text-xs font-bold text-[var(--primary)] transition hover:opacity-80"
-            >
-              {allSelected ? "Clear" : "Select all"}
-            </button>
-          ) : null}
         </div>
 
         {items.length === 0 ? (
@@ -126,7 +91,6 @@ export function ShoppingListCard({
             }`}
           >
             {items.map((item) => {
-              const isSelected = selectedIdSet.has(item.id);
               const isEditing = editingItemId === item.id;
               const isLoading = loadingItemId === item.id;
 
@@ -136,38 +100,11 @@ export function ShoppingListCard({
                   className="px-4 py-3 transition hover:bg-[var(--surface)]"
                 >
                   <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => toggleItem(item.id)}
-                      className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border transition ${
-                        isSelected
-                          ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--ink)]"
-                          : "border-[var(--border)] bg-transparent text-transparent hover:border-[var(--primary)]"
-                      }`}
-                      aria-label={`Select ${item.name}`}
-                    >
-                      <svg
-                        className="h-3 w-3"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                      >
-                        <path d="M5 13l4 4L19 7" />
-                      </svg>
-                    </button>
-
-                    <p
-                      className={`min-w-0 flex-1 truncate text-sm font-bold ${
-                        isSelected
-                          ? "text-[var(--primary-soft)]"
-                          : "text-[var(--foreground)]"
-                      }`}
-                    >
+                    <p className="min-w-0 flex-1 truncate text-sm font-bold text-[var(--foreground)]">
                       {item.name}
                     </p>
 
-                    {isSelected ? (
+                    {!isEditing ? (
                       <button
                         type="button"
                         onClick={() => openQuantityEditor(item)}

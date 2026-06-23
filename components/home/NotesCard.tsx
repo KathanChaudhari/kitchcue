@@ -16,13 +16,6 @@ function getNoticeIcon(index: number) {
   return NotebookText;
 }
 
-function getNoticeTone(index: number) {
-  if (index === 0) return "warning";
-  if (index === 1) return "success";
-
-  return "default";
-}
-
 export function NotesCard({ notes }: NotesCardProps) {
   const [showAll, setShowAll] = useState(false);
 
@@ -68,7 +61,7 @@ export function NotesCard({ notes }: NotesCardProps) {
         <div className="space-y-4">
           {visibleNotes.map((note, index) => {
             const Icon = getNoticeIcon(index);
-            const tone = getNoticeTone(index);
+            const isWarning = index === 0;
 
             return (
               <div
@@ -76,7 +69,7 @@ export function NotesCard({ notes }: NotesCardProps) {
                 className={`
                   rounded-2xl border p-4
                   ${
-                    tone === "warning"
+                    isWarning
                       ? "border-[var(--secondary-container)] bg-[var(--surface-muted)]"
                       : "border-[var(--border)] bg-[var(--card-soft)]"
                   }
@@ -87,7 +80,7 @@ export function NotesCard({ notes }: NotesCardProps) {
                     className={`
                       flex h-10 w-10 shrink-0 items-center justify-center rounded-full
                       ${
-                        tone === "warning"
+                        isWarning
                           ? "bg-[var(--secondary-container)]"
                           : "bg-[var(--surface-high)]"
                       }
@@ -97,7 +90,7 @@ export function NotesCard({ notes }: NotesCardProps) {
                       className={`
                         h-5 w-5
                         ${
-                          tone === "warning"
+                          isWarning
                             ? "text-[var(--secondary)]"
                             : "text-[var(--primary)]"
                         }
@@ -110,7 +103,7 @@ export function NotesCard({ notes }: NotesCardProps) {
                       className={`
                         truncate text-sm font-bold
                         ${
-                          tone === "warning"
+                          isWarning
                             ? "text-[var(--secondary)]"
                             : "text-[var(--primary)]"
                         }
