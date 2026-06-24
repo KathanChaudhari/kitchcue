@@ -11,7 +11,7 @@ import { useHomeDashboard } from "@/hooks/useHomeDashboard";
 import { updateStockItem } from "@/lib/client/stock";
 
 export default function HomeTabPage() {
-  const { data, isLoading, error, refetch } = useHomeDashboard();
+  const { data, isLoading, error, refresh } = useHomeDashboard();
 
   async function handleAddToShoppingList(itemId: string) {
     await updateStockItem(itemId, {
@@ -19,7 +19,7 @@ export default function HomeTabPage() {
       isPurchased: false
     });
 
-    refetch();
+    refresh();
   }
 
   async function handleUpdateQuantity(itemId: string, quantity: number) {
@@ -29,7 +29,7 @@ export default function HomeTabPage() {
       isPurchased: true
     });
 
-    refetch();
+    refresh();
   }
 
   async function handleRemoveFromShoppingList(itemId: string) {
@@ -38,7 +38,7 @@ export default function HomeTabPage() {
       isPurchased: false
     });
 
-    refetch();
+    refresh();
   }
 
   return (

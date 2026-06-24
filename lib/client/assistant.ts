@@ -84,21 +84,6 @@ export async function getAssistantMessages(sessionId: string) {
   return parseResponse<AssistantChatMessage[]>(response);
 }
 
-export async function createAssistantMessage(
-  sessionId: string,
-  content: string,
-) {
-  const response = await fetch(`/api/assistant/${sessionId}/messages`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ content }),
-  });
-
-  return parseResponse<AssistantChatMessage | AssistantChatMessage[]>(response);
-}
-
 type StreamChunkHandler = (chunk: string) => void;
 
 export async function streamAssistantMessage(

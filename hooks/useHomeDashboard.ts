@@ -7,17 +7,11 @@ import { getHomeDashboard } from "@/lib/client/home";
 export function useHomeDashboard() {
   const [data, setData] = useState<HomeDashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadDashboard = useCallback(async (showFullLoading = true) => {
+  const loadDashboard = useCallback(async () => {
     try {
-      if (showFullLoading) {
-        setIsLoading(true);
-      } else {
-        setIsRefreshing(true);
-      }
-
+      setIsLoading(true);
       setError(null);
 
       const dashboard = await getHomeDashboard();
@@ -30,25 +24,22 @@ export function useHomeDashboard() {
       );
     } finally {
       setIsLoading(false);
-      setIsRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    loadDashboard(true);
+    loadDashboard();
   }, [loadDashboard]);
 
   async function refresh() {
-    await loadDashboard(false);
+    await loadDashboard();
   }
 
   return {
     data,
     isLoading,
-    isRefreshing,
     error,
 
-    refresh,
-    refetch: refresh,
+    refresh
   };
 }

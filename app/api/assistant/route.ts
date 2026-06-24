@@ -3,26 +3,13 @@ import { created, handleApiError, ok, parseJson } from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
 import { chatSessionCreateSchema } from "@/lib/validation/chat";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await getCurrentUser();
 
     const sessions = await prisma.chatSession.findMany({
       where: {
         userId: user.id,
-      },
-      include: {
-        messages: {
-          orderBy: {
-            createdAt: "asc",
-          },
-          take: 1,
-        },
-        _count: {
-          select: {
-            messages: true,
-          },
-        },
       },
       orderBy: {
         updatedAt: "desc",

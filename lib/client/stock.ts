@@ -47,26 +47,6 @@ export async function deleteStockItem(itemId: string) {
   });
 }
 
-export async function addStockItemToShoppingList(itemId: string) {
-  return updateStockItem(itemId, {
-    isShoppingList: true,
-    isPurchased: false,
-  });
-}
-
-export async function markStockItemAsPurchased(itemId: string) {
-  return updateStockItem(itemId, {
-    isPurchased: true,
-  });
-}
-
-export async function removeStockItemFromShoppingList(itemId: string) {
-  return updateStockItem(itemId, {
-    isShoppingList: false,
-    isPurchased: false,
-  });
-}
-
 export type AddStockWithAiResponse = AiStockResponse & {
   createdItems: InventoryItem[];
 };
