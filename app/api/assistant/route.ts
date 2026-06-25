@@ -1,5 +1,10 @@
 import { getCurrentUser } from "@/lib/server/auth";
-import { created, handleApiError, ok, parseJson } from "@/lib/server/api";
+import {
+  created,
+  handleApiError,
+  ok,
+  parseJson
+} from "@/lib/server/api";
 import { prisma } from "@/lib/server/prisma";
 import { chatSessionCreateSchema } from "@/lib/validation/chat";
 

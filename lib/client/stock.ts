@@ -1,8 +1,8 @@
 import {
-  AiStockResponse,
-  CreateInventoryItemInput,
-  InventoryItem,
-  UpdateInventoryItemInput,
+  type AiStockResponse,
+  type CreateInventoryItemInput,
+  type InventoryItem,
+  type UpdateInventoryItemInput,
 } from "@/app/types/stock";
 import { apiFetch } from "./api";
 
