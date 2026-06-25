@@ -40,6 +40,6 @@ export function useHomeDashboard() {
     isLoading,
     error,
 
-    refresh
+    refresh,
   };
 }
