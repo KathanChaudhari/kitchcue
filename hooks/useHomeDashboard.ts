@@ -31,7 +31,7 @@ export function useHomeDashboard() {
     loadDashboard();
   }, [loadDashboard]);
 
-  async function refresh() {
+  async function refresh(): Promise<void> {
     await loadDashboard();
   }
 

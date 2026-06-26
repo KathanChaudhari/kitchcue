@@ -8,7 +8,7 @@ import {
 import { prisma } from "@/lib/server/prisma";
 import { chatSessionCreateSchema } from "@/lib/validation/chat";
 
-export async function GET() {
+export async function GET(): Promise<Response> {
   try {
     const user = await getCurrentUser();
 
@@ -27,7 +27,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request): Promise<Response> {
   const { data, error } = await parseJson(request, chatSessionCreateSchema);
   if (error) return error;
 
